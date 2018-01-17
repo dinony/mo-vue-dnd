@@ -1,9 +1,9 @@
 import './context.scss'
-import bus from './bus'
+import bus from '../bus'
 import {
   DND_ITEM_SELECTED,
   DND_ITEM_UNSELECTED
-} from './events'
+} from '../events'
 
 const StateEnum = {
   INIT: 0,

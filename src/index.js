@@ -14,15 +14,15 @@ new Vue({
     }
   },
   render() {
+    const slots = {
+      default: props => <div class="dndItem">{props}</div>
+    }
+
     return (
       <DnDContext>
         <div class="dndWrapper">
-          <DnDItems items={this.left} scopedSlots={{
-            default: props => <div class="dndItem">{props}</div>
-          }}/>
-          <DnDItems items={this.right} scopedSlots={{
-            default: props => <div class="dndItem">{props}</div>
-          }}/>
+          <DnDItems items={this.left} scopedSlots={slots}/>
+          <DnDItems items={this.right} scopedSlots={slots}/>
         </div>
       </DnDContext>
     )

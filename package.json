@@ -10,7 +10,12 @@
     "build:dev": "cross-env NODE_ENV=development webpack --progress",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
-  "keywords": [],
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "Drag and drop"
+  ],
   "author": "Onur Dogangönül <contact@dinony.com>",
   "license": "MIT",
   "devDependencies": {

@@ -1,3 +1,5 @@
+import debounce from 'lodash.debounce'
+
 import './context.scss'
 import bus from './bus'
 import {
@@ -38,12 +40,13 @@ export default {
       this.state = StateEnum.INIT
       this.selected = null
     },
-    onDnDItemMousemove(event) {
+    onDnDItemMousemove: debounce(function(event) {
+      console.log('mousemove')
       this.mousePos = {
         y: event.pageY,
         x: event.pageX
       }
-    }
+    }, 5)
   },
   render() {
     const debugOut = () => {

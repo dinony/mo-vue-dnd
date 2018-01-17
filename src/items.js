@@ -2,10 +2,10 @@ export default {
   functional: true,
   render(h, context) {
     const props = context.props
-    const scopedSlot = context.data.scopedSlots.default
+    const dndItemSlot = context.data.scopedSlots.default
     return (
       <div>
-        {props.items.map(i => scopedSlot(i))}
+      {props.items.map(i => dndItemSlot(i))}
       </div>
     )
   }

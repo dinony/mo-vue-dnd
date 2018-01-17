@@ -16,12 +16,12 @@ new Vue({
   render() {
     const slots = {
       default: props => {
-        return <div class="dndItem">Index: {props.i}, Item: {props.item}</div>
+        return <div class="dndItem">Index: {props.index}, Item: {props.item}</div>
       }
     }
 
     return (
-      <DnDContext>
+      <DnDContext debug={true} scopedSlots={slots}>
         <div class="dndWrapper">
           <DnDItems items={this.left} scopedSlots={slots}/>
           <DnDItems items={this.right} scopedSlots={slots}/>

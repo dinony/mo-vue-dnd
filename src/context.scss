@@ -1,0 +1,15 @@
+.mo-dndContextDebug {
+  position: absolute;
+  border: 5px dashed blue;
+  padding: 10px;
+  background-color: lightblue;
+  color: white;
+  min-width: 300px;
+  min-height: 200px;
+  bottom: 0px;
+  right: 0px;
+}
+
+.mo-dndSelectedItem {
+  position: absolute;
+}

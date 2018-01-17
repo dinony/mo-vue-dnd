@@ -1,7 +1,13 @@
+body {
+  margin: 0px;
+  box-sizing: border-box;
+}
+
 .dndWrapper {
   display: flex;
   background-color: pink;
   justify-content: space-around;
+  height: 100vh;
 }
 
 .dndItem {

@@ -1,10 +1,13 @@
 {
   "name": "mo-vue-dnd",
   "version": "0.1.0",
-  "description": "",
-  "main": "src/main.js",
+  "description": "Drag and drop in pure Vue.js",
+  "main": "dist/mo-vue-dnd.common.js",
+  "module": "dist/mo-vue-dnd.esm.js",
+  "unpkg": "dist/mo-vue-dnd.umd.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --hot",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server",
+    "build:dev": "cross-env NODE_ENV=development webpack --progress",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "keywords": [],

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
-import DnDContext from './context'
-import DnDItems from './items'
+import DnDContext from './context/context'
+import DnDItems from './items/items'
 
 import './index.scss'
 

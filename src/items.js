@@ -1,4 +1,4 @@
-import DnDItem from './item'
+import DnDItem from './item/item'
 
 export default {
   functional: true,

@@ -1,5 +1,10 @@
-import {A} from './a'
+console.log(':D')
 
-export function test(a, b) {
-  console.log(arguments.length, A)
-}
+import Vue from 'vue'
+
+new Vue({
+  el: '#app',
+  data: {
+    test: ':S'
+  }
+})

@@ -1,0 +1,11 @@
+.dndWrapper {
+  display: flex;
+  background-color: pink;
+  justify-content: space-around;
+}
+
+.dndItem {
+  padding: 5px;
+  border: 1px dashed gray;
+  min-width: 50px;
+}

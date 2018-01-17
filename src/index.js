@@ -1,9 +1,9 @@
-console.log(':D')
+import Vue from 'vue'
 
 import DnDContext from './context'
 import DnDItems from './items'
 
-import Vue from 'vue'
+import './index.scss'
 
 new Vue({
   el: '#app',
@@ -16,9 +16,13 @@ new Vue({
   render() {
     return (
       <DnDContext>
-        <div class="wrapper">
-          <DnDItems items={this.left}/>
-          <DnDItems items={this.right}/>
+        <div class="dndWrapper">
+          <DnDItems items={this.left} scopedSlots={{
+            default: props => <div class="dndItem">{props}</div>
+          }}/>
+          <DnDItems items={this.right} scopedSlots={{
+            default: props => <div class="dndItem">{props}</div>
+          }}/>
         </div>
       </DnDContext>
     )

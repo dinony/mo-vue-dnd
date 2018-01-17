@@ -1,9 +1,11 @@
 export default {
   functional: true,
-  render(h, {props: {items}}) {
+  render(h, context) {
+    const props = context.props
+    const scopedSlot = context.data.scopedSlots.default
     return (
       <div>
-        {items.map(i => <div>{i}</div>)}
+        {props.items.map(i => scopedSlot(i))}
       </div>
     )
   }

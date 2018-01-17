@@ -15,7 +15,9 @@ new Vue({
   },
   render() {
     const slots = {
-      default: props => <div class="dndItem">{props}</div>
+      default: props => {
+        return <div class="dndItem">Index: {props.i}, Item: {props.item}</div>
+      }
     }
 
     return (

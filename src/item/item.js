@@ -1,10 +1,12 @@
-import bus from './bus'
+import './item.scss'
+import bus from '../bus'
 import {
   DND_ITEM_SELECTED,
   DND_ITEM_UNSELECTED
-} from './events'
+} from '../events'
 
 function onMousedown(ev, payload) {
+  if(ev.button !== 0) {return}
   const clientRect = ev.target.getBoundingClientRect()
   bus.$emit(DND_ITEM_SELECTED, {event: ev, payload, clientRect})
 }

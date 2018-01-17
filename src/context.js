@@ -52,9 +52,13 @@ export default {
         <div class="mo-dndContextDebug">
           <pre>State: {this.state}</pre>
           <pre>{this.selected ? JSON.stringify(this.selected.item, null, 2): null}</pre>
-        </div>
-      )
+        </div>)
     }
+
+    const common = (<div>
+      {this.debug ? debugOut() : ''}
+      {this.$slots.default}
+    </div>)
 
     if(this.state === StateEnum.SELECTED) {
       const dndItemStyle = {
@@ -63,21 +67,14 @@ export default {
       }
       const dndItemSlot = this.$scopedSlots.default
       return (
-        <div class="mo-dndContext" onMouseup={this.setInitState} onMousemove={this.onDnDItemMousemove}>
-          {this.debug ? debugOut() : ''}
-          {this.$slots.default}
+        <div class="mo-dndContext mo-dndSelected" onMouseup={this.setInitState} onMousemove={this.onDnDItemMousemove}>
+          {common}
           <div class="mo-dndSelectedItem" style={dndItemStyle}>
             {dndItemSlot({item: this.selected.item, index: this.selected.index})}
           </div>
-        </div>
-      )
+        </div>)
     } else {
-      return (
-        <div class="mo-dndContext" onMouseup={this.setInitState}>
-          {this.debug ? debugOut() : ''}
-          {this.$slots.default}
-        </div>
-      )
+      return <div class="mo-dndContext">{common}</div>
     }
   }
 }

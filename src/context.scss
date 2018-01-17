@@ -10,6 +10,10 @@
   right: 0px;
 }
 
-.mo-dndSelectedItem {
-  position: absolute;
+.mo-dndSelected {
+  cursor: -webkit-grabbing;
+
+  .mo-dndSelectedItem {
+    position: absolute;
+  }
 }

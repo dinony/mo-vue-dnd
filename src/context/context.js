@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       state: StateEnum.INIT,
-      selected: null,
+      selection: null,
       mousePos: null
     }
   },
@@ -35,7 +35,7 @@ export default {
   methods: {
     setSelectedState({event, payload, clientRect}) {
       this.state = StateEnum.DRAG
-      this.selected = payload
+      this.selection = payload
       this.mousePos = {
         x: clientRect.left,
         y: clientRect.top
@@ -43,7 +43,7 @@ export default {
     },
     setInitState() {
       this.state = StateEnum.INIT
-      this.selected = null
+      this.selection = null
     },
     onDnDItemMousemove: function(event) {
       console.log('mousemove')
@@ -59,7 +59,7 @@ export default {
         <div class="mo-dndContextDebug">
           <h4>mo-vue-dnd</h4>
           <pre>State: {this.state}</pre>
-          <pre>{this.selected ? JSON.stringify(this.selected.item, null, 2): null}</pre>
+          <pre>{this.selection ? JSON.stringify(this.selection.item, null, 2): null}</pre>
         </div>)
     }
 
@@ -75,7 +75,7 @@ export default {
         <div class="mo-dndContext mo-dndContextDrag" onMouseup={this.setInitState} onMousemove={this.onDnDItemMousemove}>
           {content}
           <div class="mo-dndDragItem" style={dndItemStyle}>
-            {dndItemSlot({item: this.selected.item, index: this.selected.index})}
+            {dndItemSlot({item: this.selection.item, index: this.selection.index})}
           </div>
         </div>)
     } else {

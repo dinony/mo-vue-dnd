@@ -1,36 +1,29 @@
 import './item.scss'
 import bus from '../bus'
 import {
-  DND_ITEM_SELECTED,
-  DND_ITEM_UNSELECTED
+  DND_ITEM_SELECTED
 } from '../events'
 
-function onMousedown(ev, payload) {
-  if(ev.button !== 0) {return}
-  const clientRect = ev.target.getBoundingClientRect()
-  bus.$emit(DND_ITEM_SELECTED, {event: ev, payload, clientRect})
-}
-
-function onMouseup(ev, payload) {
-  bus.$emit(DND_ITEM_UNSELECTED, {event: ev, payload})
+function onMousedown(event, model) {
+  if(event.button !== 0) {return}
+  const clientRect = event.target.getBoundingClientRect()
+  const payload = {event, clientRect, model}
+  bus.$emit(DND_ITEM_SELECTED, payload)
 }
 
 export default {
   functional: true,
   render(h, context) {
     const props = context.props
-    const payload = {
+    const model = {
       source: props.source,
       item: props.item,
       index: props.index
     }
     const slots = context.slots()
     return (
-      <div class="mo-dndItem"
-        onMousedown={ev => onMousedown(ev, payload)}
-        onMouseup={ev => onMouseup(ev, payload)}>
+      <div class="mo-dndItem" onMousedown={ev => onMousedown(ev, model)}>
         {slots.default}
-      </div>
-    )
+      </div>)
   }
 }

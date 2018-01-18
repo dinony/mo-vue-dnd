@@ -4,6 +4,7 @@ import {
   DND_ITEM_SELECTED,
   DND_ITEM_UNSELECTED
 } from '../events'
+import {add, sub, vec2css} from '../vec'
 
 const StateEnum = {
   INIT: 0,
@@ -21,13 +22,8 @@ export default {
     return {
       state: StateEnum.INIT,
       selection: null,
-      mousePos: null
-    }
-  },
-  computed: {
-    dragPosition() {
-      return null
-      // return this.selection !== null ?
+      itemPos: null,
+      dragPos: null,
     }
   },
   mounted() {
@@ -38,25 +34,36 @@ export default {
     bus.$off(DND_ITEM_SELECTED, this.setSelectedState)
     bus.$off(DND_ITEM_UNSELECTED, this.setInitState)
   },
+  computed: {
+    mdItemOffset() {
+      // vector pointing from mdPos to (left, top) of selected DnDItem
+      // Needed for positioning of drag item
+      return this.mdPos && this.itemPos ? sub(this.itemPos, this.mdPos) : null
+    },
+    dragItemStyle() {
+      return this.dragPos && this.mdItemOffset ? vec2css(add(this.dragPos, this.mdItemOffset)) : null
+    }
+  },
   methods: {
-    setSelectedState({event, payload, clientRect}) {
+    setSelectedState(payload) {
       this.state = StateEnum.DRAG
-      this.selection = payload
-      this.mousePos = {
-        x: clientRect.left,
-        y: clientRect.top
+      this.selection = payload.model
+      this.itemPos = {
+        x: payload.clientRect.left,
+        y: payload.clientRect.top
       }
+      this.mdPos = {
+        x: payload.event.pageX,
+        y: payload.event.pageY
+      }
+      this.dragPos = this.mdPos
     },
     setInitState() {
       this.state = StateEnum.INIT
       this.selection = null
     },
-    onDnDItemMousemove: function(event) {
-      console.log('mousemove')
-      this.mousePos = {
-        y: event.pageY,
-        x: event.pageX
-      }
+    onDnDItemMousemove(event) {
+      this.dragPos = {y: event.pageY,x: event.pageX}
     }
   },
   render() {
@@ -71,15 +78,15 @@ export default {
 
     if(this.state === StateEnum.DRAG) {
       const dndItemSlot = this.$scopedSlots.default
-      const dndItemStyle = {
-        top: this.mousePos.y+'px',
-        left: this.mousePos.x+'px'
+      const slotArg = {
+        item: this.selection.item,
+        index: this.selection.index
       }
       return (
         <div class="mo-dndContext mo-dndContextDrag" onMouseup={this.setInitState} onMousemove={this.onDnDItemMousemove}>
           {content}
-          <div class="mo-dndDragItem" style={dndItemStyle}>
-            {dndItemSlot({item: this.selection.item, index: this.selection.index})}
+          <div class="mo-dndDragItem" style={this.dragItemStyle}>
+            {dndItemSlot(slotArg)}
           </div>
         </div>)
     } else {

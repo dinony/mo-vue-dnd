@@ -50,6 +50,7 @@ export default {
     const debugOut = () => {
       return (
         <div class="mo-dndContextDebug">
+          <h4>mo-vue-dnd</h4>
           <pre>State: {this.state}</pre>
           <pre>{this.selected ? JSON.stringify(this.selected.item, null, 2): null}</pre>
         </div>)

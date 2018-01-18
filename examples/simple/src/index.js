@@ -1,6 +1,5 @@
 import Vue from 'vue'
 
-debugger
 import {DnDContext, DnDItems} from 'mo-vue-dnd'
 
 import './index.scss'
@@ -14,7 +13,6 @@ new Vue({
     }
   },
   render() {
-    debugger
     const slots = {
       default: props => <div class="dndItem">Index: {props.index}, Item: {props.item}</div>
     }

@@ -11,7 +11,12 @@ const StateEnum = {
 }
 
 export default {
-  props: ['debug'],
+  props: {
+    debug: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       state: StateEnum.INIT,

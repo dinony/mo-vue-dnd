@@ -63,7 +63,7 @@ export default {
         </div>)
     }
 
-    const common = this.debug ? [debugOut(), this.$slots.default] : this.$slots.default
+    const content = this.debug ? [this.$slots.default, debugOut()] : this.$slots.default
 
     if(this.state === StateEnum.DRAG) {
       const dndItemStyle = {
@@ -72,14 +72,14 @@ export default {
       }
       const dndItemSlot = this.$scopedSlots.default
       return (
-        <div class="mo-dndContext mo-dndSelected" onMouseup={this.setInitState} onMousemove={this.onDnDItemMousemove}>
-          {common}
-          <div class="mo-dndSelectedItem" style={dndItemStyle}>
+        <div class="mo-dndContext mo-dndContextDrag" onMouseup={this.setInitState} onMousemove={this.onDnDItemMousemove}>
+          {content}
+          <div class="mo-dndDragItem" style={dndItemStyle}>
             {dndItemSlot({item: this.selected.item, index: this.selected.index})}
           </div>
         </div>)
     } else {
-      return <div class="mo-dndContext">{common}</div>
+      return <div class="mo-dndContext">{content}</div>
     }
   }
 }

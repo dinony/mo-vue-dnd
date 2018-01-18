@@ -6,9 +6,10 @@
   "module": "dist/mo-vue-dnd.esm.js",
   "unpkg": "dist/mo-vue-dnd.umd.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server",
     "build:dev": "cross-env NODE_ENV=development webpack --progress",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "simple:dev": "cross-env NODE_ENV=development webpack-dev-server --config examples/simple/webpack.config.js",
+    "simple:build": "cross-env NODE_ENV=development webpack --config examples/simple/webpack.config.js"
   },
   "files": [
     "dist"

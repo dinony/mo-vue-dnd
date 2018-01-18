@@ -24,6 +24,12 @@ export default {
       mousePos: null
     }
   },
+  computed: {
+    dragPosition() {
+      return null
+      // return this.selection !== null ?
+    }
+  },
   mounted() {
     bus.$on(DND_ITEM_SELECTED, this.setSelectedState)
     bus.$on(DND_ITEM_UNSELECTED, this.setInitState)
@@ -54,23 +60,21 @@ export default {
     }
   },
   render() {
-    const debugOut = () => {
-      return (
-        <div class="mo-dndContextDebug">
-          <h4>mo-vue-dnd</h4>
-          <pre>State: {this.state}</pre>
-          <pre>{this.selection ? JSON.stringify(this.selection.item, null, 2): null}</pre>
-        </div>)
-    }
+    const debugOut = () => (
+      <div class="mo-dndContextDebug">
+        <h4>mo-vue-dnd</h4>
+        <pre>State: {this.state}</pre>
+        <pre>{this.selection ? JSON.stringify(this.selection.item, null, 2): null}</pre>
+      </div>)
 
     const content = this.debug ? [this.$slots.default, debugOut()] : this.$slots.default
 
     if(this.state === StateEnum.DRAG) {
+      const dndItemSlot = this.$scopedSlots.default
       const dndItemStyle = {
         top: this.mousePos.y+'px',
         left: this.mousePos.x+'px'
       }
-      const dndItemSlot = this.$scopedSlots.default
       return (
         <div class="mo-dndContext mo-dndContextDrag" onMouseup={this.setInitState} onMousemove={this.onDnDItemMousemove}>
           {content}

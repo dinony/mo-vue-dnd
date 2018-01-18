@@ -24,21 +24,23 @@ export default {
       mousePos: null
     }
   },
-  created() {
-    bus.$on(DND_ITEM_SELECTED, ({event, payload, clientRect}) => {
+  mounted() {
+    bus.$on(DND_ITEM_SELECTED, this.setSelectedState)
+    bus.$on(DND_ITEM_UNSELECTED, this.setInitState)
+  },
+  beforeDestroy() {
+    bus.$off(DND_ITEM_SELECTED, this.setSelectedState)
+    bus.$off(DND_ITEM_UNSELECTED, this.setInitState)
+  },
+  methods: {
+    setSelectedState({event, payload, clientRect}) {
       this.state = StateEnum.SELECTED
       this.selected = payload
       this.mousePos = {
         x: clientRect.left,
         y: clientRect.top
       }
-    })
-
-    bus.$on(DND_ITEM_UNSELECTED, payload => {
-      this.setInitState()
-    })
-  },
-  methods: {
+    },
     setInitState() {
       this.state = StateEnum.INIT
       this.selected = null

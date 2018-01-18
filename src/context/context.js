@@ -7,7 +7,7 @@ import {
 
 const StateEnum = {
   INIT: 0,
-  SELECTED: 1
+  DRAG: 1
 }
 
 export default {
@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     setSelectedState({event, payload, clientRect}) {
-      this.state = StateEnum.SELECTED
+      this.state = StateEnum.DRAG
       this.selected = payload
       this.mousePos = {
         x: clientRect.left,
@@ -63,12 +63,9 @@ export default {
         </div>)
     }
 
-    const common = (<div>
-      {this.debug ? debugOut() : ''}
-      {this.$slots.default}
-    </div>)
+    const common = this.debug ? [debugOut(), this.$slots.default] : this.$slots.default
 
-    if(this.state === StateEnum.SELECTED) {
+    if(this.state === StateEnum.DRAG) {
       const dndItemStyle = {
         top: this.mousePos.y+'px',
         left: this.mousePos.x+'px'

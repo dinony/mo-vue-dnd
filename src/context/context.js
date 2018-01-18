@@ -29,10 +29,14 @@ export default {
   mounted() {
     bus.$on(DND_ITEM_SELECTED, this.setSelectedState)
     bus.$on(DND_ITEM_UNSELECTED, this.setInitState)
+    document.addEventListener('mousemove', this.onDnDItemMousemove)
+    document.addEventListener('mouseup', this.setInitState)
   },
   beforeDestroy() {
     bus.$off(DND_ITEM_SELECTED, this.setSelectedState)
     bus.$off(DND_ITEM_UNSELECTED, this.setInitState)
+    document.removeEventListener('mousemove', this.onDnDItemMousemove)
+    document.removeEventListener('mouseup', this.setInitState)
   },
   computed: {
     mdItemOffset() {
@@ -83,7 +87,7 @@ export default {
         index: this.selection.index
       }
       return (
-        <div class="mo-dndContext mo-dndContextDrag" onMouseup={this.setInitState} onMousemove={this.onDnDItemMousemove}>
+        <div class="mo-dndContext mo-dndContextDrag">
           {content}
           <div class="mo-dndDragItem" style={this.dragItemStyle}>
             {dndItemSlot(slotArg)}

@@ -23,6 +23,9 @@
   },
   "author": "Onur Dogangönül <contact@dinony.com>",
   "license": "MIT",
+  "browserslist": [
+    "> 1%"
+  ],
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
@@ -36,6 +39,7 @@
     "file-loader": "^1.1.6",
     "lodash.debounce": "^4.0.8",
     "node-sass": "^4.7.2",
+    "postcss-loader": "^2.0.10",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.1",
     "vue": "^2.5.13",

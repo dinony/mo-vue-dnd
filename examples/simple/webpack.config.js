@@ -13,11 +13,22 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader'
+        exclude: /node_modules/,
+        use: [
+          {loader: 'style-loader'},
+          {loader: 'css-loader', options: {importLoaders: 1}},
+          {loader: 'postcss-loader'}
+        ]
       },
       {
         test: /\.scss$/,
-        loader: 'style-loader!css-loader!sass-loader'
+        exclude: /node_modules/,
+        use: [
+          {loader: 'style-loader'},
+          {loader: 'css-loader', options: {importLoaders: 2}},
+          {loader: 'postcss-loader'},
+          {loader: 'sass-loader'},
+        ]
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,

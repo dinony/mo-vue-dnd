@@ -17,5 +17,6 @@
 
   .mo-dndDragItem {
     position: absolute;
+    pointer-events: none;
   }
 }

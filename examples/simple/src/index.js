@@ -18,7 +18,7 @@ new Vue({
 
     return (
       <DnDContext debug={true} scopedSlots={slots}>
-        <div class="dndWrapper">
+        <div class="dndWrappr">
           <DnDItems items={this.left} scopedSlots={slots}/>
           <DnDItems items={this.right} scopedSlots={slots}/>
         </div>

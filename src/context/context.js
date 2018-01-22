@@ -5,7 +5,7 @@ import {
   DND_ITEM_SELECTED,
   DND_ITEM_UNSELECTED
 } from '../events'
-import {add, sub, vec2css} from '../vec'
+import {Vec2, CSSPos} from '../vec'
 
 const StateEnum = {
   INIT: 0,
@@ -44,15 +44,15 @@ export default {
     mdItemOffset() {
       // Vector pointing from mdPos to (left, top) of selected DnDItem
       // Needed for positioning of drag item
-      return this.mdPos && this.srcItemPos ? sub(this.srcItemPos, this.mdPos) : null
+      return this.mdPos && this.srcItemPos ? this.srcItemPos.sub(this.mdPos) : null
     },
     dragItemPos() {
       // Return {x,y} in viewport coordinates
-      return this.mmPos && this.mdItemOffset ? add(this.mmPos, this.mdItemOffset) : null
+      return this.mmPos && this.mdItemOffset ? this.mmPos.add(this.mdItemOffset) : null
     },
     dragItemStyle() {
       // Return css positions {top, left} of dragged item
-      return this.dragItemPos ? vec2css(this.dragItemPos) : null
+      return this.dragItemPos ? CSSPos.fromVec2(this.dragItemPos) : null
     }
   },
   methods: {
@@ -60,27 +60,25 @@ export default {
       this.state = StateEnum.DRAG
       this.selection = payload.model
       // Source item viewport coords
-      this.srcItemPos = {
-        x: payload.clientRect.left,
-        y: payload.clientRect.top
-      }
+      this.srcItemPos = CSSPos.toVec2(payload.clientRect)
       // MouseEvent viewport coords
-      this.mdPos = {
-        x: payload.event.clientX,
-        y: payload.event.clientY
-      }
+      this.mdPos = new Vec2(payload.event.clientX, payload.event.clientY)
       bus.$emit(DND_ITEM_SELECTED, this.selection)
     },
     setInitState() {
       this.state = StateEnum.INIT
       this.selection = null
+      this.srcItemPos = null
+      this.mdPos = null
+      this.mmPos = null
       bus.$emit(DND_ITEM_UNSELECTED)
     },
     onDnDItemMousemove(event) {
-      this.mmPos = {
-        x: event.clientX,
-        y: event.clientY
+      if(this.mmPos === null) {
+        this.mmPos = new Vec2(0, 0)
       }
+      this.$set(this.mmPos, 'x', event.clientX)
+      this.$set(this.mmPos, 'y', event.clientY)
     }
   },
   render() {

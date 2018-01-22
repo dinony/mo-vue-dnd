@@ -1,18 +1,16 @@
-export function add(p1, p2) {
-  return {x: p1.x+p2.x, y: p1.y+p2.y}
-}
-
-export function sub(p1, p2) {
-  return {x: p1.x-p2.x, y: p1.y-p2.y}
-}
-
-export function vec2css(p) {
-  return {left: `${p.x}px`, top: `${p.y}px`}
-}
-
+const cssPxRegex = /^(\d+(\.\d+)?)px$/
 const cssPx = x => `${x}px`
-const parseCSSPx = cssPxStr => {
+const parseCSSPx = cssPxStr => cssPxRegex.exec(cssPxStr)
 
+function cssPosToVec2(cssPosLike) {
+  if(typeof cssPosLike.left === 'number' && typeof cssPosLike.top === 'number') {
+    return new Vec2(cssPosLike.left, cssPosLike.top)
+  } else {
+    // cssPosLike instanceof CSSPos
+    const x = parseCSSPx(cssPosLike.left)
+    const y = parseCSSPx(cssPosLike.top)
+    return x && y ? new Vec2(x, y) : null
+  }
 }
 
 export class CSSPos {
@@ -25,8 +23,12 @@ export class CSSPos {
     return new CSSPos(vec2.x, vec2.y)
   }
 
+  static toVec2(cssPos) {
+    return cssPosToVec2(cssPos)
+  }
+
   toVec2() {
-    return new Vec2(parseCSSPx(this.left), parseCSSPx(this.top))
+    return cssPosToVec2(this)
   }
 }
 

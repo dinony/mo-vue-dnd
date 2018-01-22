@@ -1,6 +1,7 @@
 import './context.scss'
 import bus from '../bus'
 import {
+  DND_ITEM_SELECT,
   DND_ITEM_SELECTED,
   DND_ITEM_UNSELECTED
 } from '../events'
@@ -28,14 +29,14 @@ export default {
     }
   },
   mounted() {
-    bus.$on(DND_ITEM_SELECTED, this.setSelectedState)
-    bus.$on(DND_ITEM_UNSELECTED, this.setInitState)
+    bus.$on(DND_ITEM_SELECT, this.setSelectedState)
+    // bus.$on(DND_ITEM_UNSELECTED, this.setInitState)
     document.addEventListener('mousemove', this.onDnDItemMousemove)
     document.addEventListener('mouseup', this.setInitState)
   },
   beforeDestroy() {
-    bus.$off(DND_ITEM_SELECTED, this.setSelectedState)
-    bus.$off(DND_ITEM_UNSELECTED, this.setInitState)
+    bus.$off(DND_ITEM_SELECT, this.setSelectedState)
+    // bus.$off(DND_ITEM_UNSELECTED, this.setInitState)
     document.removeEventListener('mousemove', this.onDnDItemMousemove)
     document.removeEventListener('mouseup', this.setInitState)
   },
@@ -68,10 +69,12 @@ export default {
         x: payload.event.clientX,
         y: payload.event.clientY
       }
+      bus.$emit(DND_ITEM_SELECTED, this.selection)
     },
     setInitState() {
       this.state = StateEnum.INIT
       this.selection = null
+      bus.$emit(DND_ITEM_UNSELECTED)
     },
     onDnDItemMousemove(event) {
       this.mmPos = {

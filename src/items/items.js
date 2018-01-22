@@ -57,27 +57,22 @@ export default {
         bus.$emit(DND_ITEM_SELECT, payload)
       }
     },
-    onMouseup(event, index) {
-      console.log('up')
-    },
-    onMouseenter(event, index) {
-      console.log('enter')
+    onMouseenter(event) {
+      console.log('enter', event)
     }
   },
-  render(h) {
+  render() {
     const dndItemSlot = this.$scopedSlots.default
 
     const content = this.items.map((item, index) => (
-      <DnDItem source={this.items} item={item} index={index}
+      <DnDItem item={item} index={index} onEnter={this.onMouseenter}
         isSelected={this.equalsFn(this.selectedItem, item)}>
         {dndItemSlot({item, index})}
       </DnDItem>))
 
     return (
       <div class="mo-dndItems"
-        onMousedown={ev => {this.onMousedown(ev)}}
-        onMouseup={ev => this.onMouseup(ev)}
-        onMouseenter={ev => this.onMouseenter(ev)}>
+        onMousedown={ev => {this.onMousedown(ev)}}>
         {content}
       </div>)
   }

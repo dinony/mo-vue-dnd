@@ -22,8 +22,9 @@ export default {
     return {
       state: StateEnum.INIT,
       selection: null,
-      itemPos: null,
-      dragPos: null,
+      srcItemPos: null,
+      mdPos: null,
+      mmPos: null
     }
   },
   mounted() {
@@ -40,34 +41,43 @@ export default {
   },
   computed: {
     mdItemOffset() {
-      // vector pointing from mdPos to (left, top) of selected DnDItem
+      // Vector pointing from mdPos to (left, top) of selected DnDItem
       // Needed for positioning of drag item
-      return this.mdPos && this.itemPos ? sub(this.itemPos, this.mdPos) : null
+      return this.mdPos && this.srcItemPos ? sub(this.srcItemPos, this.mdPos) : null
+    },
+    dragItemPos() {
+      // Return {x,y} in viewport coordinates
+      return this.mmPos && this.mdItemOffset ? add(this.mmPos, this.mdItemOffset) : null
     },
     dragItemStyle() {
-      return this.dragPos && this.mdItemOffset ? vec2css(add(this.dragPos, this.mdItemOffset)) : null
+      // Return css positions {top, left} of dragged item
+      return this.dragItemPos ? vec2css(this.dragItemPos) : null
     }
   },
   methods: {
     setSelectedState(payload) {
       this.state = StateEnum.DRAG
       this.selection = payload.model
-      this.itemPos = {
+      // Source item viewport coords
+      this.srcItemPos = {
         x: payload.clientRect.left,
         y: payload.clientRect.top
       }
+      // MouseEvent viewport coords
       this.mdPos = {
-        x: payload.event.pageX,
-        y: payload.event.pageY
+        x: payload.event.clientX,
+        y: payload.event.clientY
       }
-      this.dragPos = this.mdPos
     },
     setInitState() {
       this.state = StateEnum.INIT
       this.selection = null
     },
     onDnDItemMousemove(event) {
-      this.dragPos = {y: event.pageY,x: event.pageX}
+      this.mmPos = {
+        x: event.clientX,
+        y: event.clientY
+      }
     }
   },
   render() {
@@ -75,7 +85,7 @@ export default {
       <div class="mo-dndContextDebug">
         <h4>mo-vue-dnd</h4>
         <pre>State: {this.state}</pre>
-        <pre>{this.selection ? JSON.stringify(this.selection.item, null, 2): null}</pre>
+        <pre>{this.selection ? JSON.stringify(this.dragItemPos, null, 2): null}</pre>
       </div>)
 
     const content = this.debug ? [this.$slots.default, debugOut()] : this.$slots.default

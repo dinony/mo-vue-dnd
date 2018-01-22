@@ -7,7 +7,7 @@ export default {
     const dndItemSlot = context.data.scopedSlots.default
 
     const content = props.items.map((item, index) => (
-      <DnDItem source={props.items} item={item} index={index}>
+      <DnDItem source={props.items} item={item} index={index} isSelected={index === 2}>
         {dndItemSlot({item, index})}
       </DnDItem>))
 

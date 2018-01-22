@@ -11,6 +11,10 @@ function onMousedown(event, model) {
   bus.$emit(DND_ITEM_SELECTED, payload)
 }
 
+function onMouseenter(event, model) {
+  console.log('mouseenter', event)
+}
+
 export default {
   functional: true,
   render(h, context) {
@@ -21,8 +25,13 @@ export default {
       index: props.index
     }
     const slots = context.slots()
+    const params = {
+      class: {'mo-dndItemSelected': props.isSelected}
+    }
     return (
-      <div class="mo-dndItem" onMousedown={ev => onMousedown(ev, model)}>
+      <div class="mo-dndItem" {...params}
+        onMousedown={ev => onMousedown(ev, model)}
+        onMouseenter={ev => onMouseenter(ev, model)}>
         {slots.default}
       </div>)
   }

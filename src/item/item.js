@@ -1,14 +1,14 @@
 import './item.scss'
 import bus from '../bus'
 import {
-  DND_ITEM_SELECTED
+  DND_ITEM_SELECT
 } from '../events'
 
 function onMousedown(event, model) {
   if(event.button !== 0) {return}
   const clientRect = event.target.getBoundingClientRect()
   const payload = {event, clientRect, model}
-  bus.$emit(DND_ITEM_SELECTED, payload)
+  bus.$emit(DND_ITEM_SELECT, payload)
 }
 
 function onMouseenter(event, model) {

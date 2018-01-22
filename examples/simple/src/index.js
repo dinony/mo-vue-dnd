@@ -13,9 +13,8 @@ new Vue({
     }
   },
   render() {
-    const slots = {
-      default: props => <div class="dndItem">Index: {props.index}, Item: {props.item}</div>
-    }
+    const renderDnDItem = props => <div class="dndItem">Index: {props.index}, Item: {props.item}</div>
+    const slots = {default: renderDnDItem}
 
     return (
       <DnDContext debug={true} scopedSlots={slots}>
@@ -23,7 +22,6 @@ new Vue({
           <DnDItems items={this.left} scopedSlots={slots}/>
           <DnDItems items={this.right} scopedSlots={slots}/>
         </div>
-      </DnDContext>
-    )
+      </DnDContext>)
   }
 })

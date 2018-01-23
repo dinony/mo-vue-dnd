@@ -1,8 +1,10 @@
 import Vue from 'vue'
 
-import {DnDContext, DnDItems} from 'mo-vue-dnd'
+import {DnDContext, DnDItems, DnDOptions} from 'mo-vue-dnd'
 
 import './index.scss'
+
+const dndOptions = new DnDOptions(true)
 
 new Vue({
   el: '#app',
@@ -20,7 +22,7 @@ new Vue({
       <DnDContext debug={true} scopedSlots={slots}>
         <div class="container">
           <div class="dndWrapper">
-            <DnDItems items={this.left} scopedSlots={slots}/>
+            <DnDItems items={this.left} options={dndOptions} scopedSlots={slots}/>
             <DnDItems items={this.right} scopedSlots={slots}/>
           </div>
           <div class="dbWrapper">

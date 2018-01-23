@@ -13,7 +13,7 @@ export default {
       type: Array,
       required: true
     },
-    equalsFn: {
+    equalItemFn: {
       type: Function,
       default: (selection, item) => {
         return selection && selection.item === item
@@ -42,26 +42,27 @@ export default {
   },
   computed: {
     displayedItems() {
-      if(this.dragOverState &&
-        !(this.dragOverState.sameSource && this.dragOverState.sourceIndex === this.dragOverState.targetIndex)) {
-        if(this.dragOverState.sameSource) {
+      const ds = this.dragOverState
+      if(ds &&
+        !(ds.sameSource && ds.sourceIndex === ds.targetIndex)) {
+        if(ds.sameSource) {
           // Drop into same list
-          if(this.dragOverState.sourceIndex < this.dragOverState.targetIndex) {
-            return this.items.slice(0, this.dragOverState.sourceIndex)
-              .concat(this.items.slice(this.dragOverState.sourceIndex+1, this.dragOverState.targetIndex+1))
-              .concat(this.dragOverState.sourceItem)
-              .concat(this.items.slice(this.dragOverState.targetIndex+1))
+          if(ds.sourceIndex < ds.targetIndex) {
+            return this.items.slice(0, ds.sourceIndex)
+              .concat(this.items.slice(ds.sourceIndex+1, ds.targetIndex+1))
+              .concat(ds.sourceItem)
+              .concat(this.items.slice(ds.targetIndex+1))
           } else {
-            return this.items.slice(0, this.dragOverState.targetIndex)
-              .concat(this.dragOverState.sourceItem)
-              .concat(this.items.slice(this.dragOverState.targetIndex, this.dragOverState.sourceIndex))
-              .concat(this.items.slice(this.dragOverState.sourceIndex+1))
+            return this.items.slice(0, ds.targetIndex)
+              .concat(ds.sourceItem)
+              .concat(this.items.slice(ds.targetIndex, ds.sourceIndex))
+              .concat(this.items.slice(ds.sourceIndex+1))
           }
         } else {
           // Drop into other list
-          return this.items.slice(0, this.dragOverState.targetIndex)
-            .concat(this.dragOverState.sourceItem)
-            .concat(this.items.slice(this.dragOverState.targetIndex))
+          return this.items.slice(0, ds.targetIndex)
+            .concat(ds.sourceItem)
+            .concat(this.items.slice(ds.targetIndex))
         }
       } else {
         return this.items
@@ -93,7 +94,10 @@ export default {
         bus.$emit(DND_ITEM_SELECT, payload)
       }
     },
-    onMouseenter(dragTarget) {
+    onMouseleave() {
+      this.dragOverState = null
+    },
+    onEnter(dragTarget) {
       if(this.selectedItem) {
         this.dragOverState = {
           sameSource: this.equalSrcFn(this.selectedItem.source, this.items),
@@ -111,14 +115,15 @@ export default {
     const dndItemSlot = this.$scopedSlots.default
 
     const content = this.displayedItems.map((item, index) => (
-      <DnDItem item={item} index={index} onEnter={this.onMouseenter}
-        isSelected={this.equalsFn(this.selectedItem, item)}>
+      <DnDItem item={item} index={index} onEnter={this.onEnter}
+        isSelected={this.equalItemFn(this.selectedItem, item)}>
         {dndItemSlot({item, index})}
       </DnDItem>))
 
     return (
       <div class="mo-dndItems"
-        onMousedown={ev => {this.onMousedown(ev)}}>
+        onMousedown={this.onMousedown}
+        onMouseleave={this.onMouseleave}>
         {content}
       </div>)
   }

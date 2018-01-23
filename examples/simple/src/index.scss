@@ -3,11 +3,22 @@ body {
   box-sizing: border-box;
 }
 
+.container {
+  height: 100vh;
+  background-color: pink;
+
+  .dbWrapper {
+    margin-top: 50px;
+    margin-left: 10px;
+    .db {
+      margin: 0px;
+    }
+  }
+}
+
 .dndWrapper {
   display: flex;
-  background-color: pink;
   justify-content: space-around;
-  height: 100vh;
 }
 
 .dndItem {

@@ -18,9 +18,15 @@ new Vue({
 
     return (
       <DnDContext debug={true} scopedSlots={slots}>
-        <div class="dndWrapper">
-          <DnDItems items={this.left} scopedSlots={slots}/>
-          <DnDItems items={this.right} scopedSlots={slots}/>
+        <div class="container">
+          <div class="dndWrapper">
+            <DnDItems items={this.left} scopedSlots={slots}/>
+            <DnDItems items={this.right} scopedSlots={slots}/>
+          </div>
+          <div class="dbWrapper">
+            <pre class="db">Left: {JSON.stringify(this.left, 2)}</pre>
+            <pre class="db">Right: {JSON.stringify(this.right, 2)}</pre>
+          </div>
         </div>
       </DnDContext>)
   }

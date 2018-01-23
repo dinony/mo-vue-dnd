@@ -18,6 +18,12 @@ export default {
       default: (selection, item) => {
         return selection && selection.item === item
       }
+    },
+    equalSrcFn: {
+      type: Function,
+      default: (source, target) => {
+        return source && target && source === target
+      }
     }
   },
   data() {
@@ -53,7 +59,9 @@ export default {
           }
         } else {
           // Drop into other list
-          return this.items
+          return this.items.slice(0, this.dragOverState.targetIndex)
+            .concat(this.dragOverState.sourceItem)
+            .concat(this.items.slice(this.dragOverState.targetIndex))
         }
       } else {
         return this.items
@@ -88,9 +96,11 @@ export default {
     onMouseenter(dragTarget) {
       if(this.selectedItem) {
         this.dragOverState = {
-          sameSource: this.selectedItem.source === this.items,
+          sameSource: this.equalSrcFn(this.selectedItem.source, this.items),
+          source: this.selectedItem.source,
           sourceIndex: this.selectedItem.index,
           sourceItem: this.selectedItem.item,
+          target: this.items,
           targetIndex: dragTarget.index,
           targetItem: dragTarget.item
         }

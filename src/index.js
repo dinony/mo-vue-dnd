@@ -1,7 +1,2 @@
-import DnDContext from './context/context'
-import DnDItems from './items/items'
-
-export {
-  DnDContext,
-  DnDItems
-}
+export {default as DnDContext} from './context/context'
+export {default as DnDItems, DnDOptions} from './items/items'

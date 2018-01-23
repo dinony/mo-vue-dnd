@@ -36,10 +36,25 @@ export default {
   },
   computed: {
     displayedItems() {
-      if(this.dragOverState && this.selectedItem) {
-        return this.items.slice(0, this.dragOverState.targetIndex)
-          .concat(this.selectedItem.item)
-          .concat(this.items.slice(this.dragOverState.targetIndex+1))
+      if(this.dragOverState &&
+        !(this.dragOverState.sameSource && this.dragOverState.sourceIndex === this.dragOverState.targetIndex)) {
+        if(this.dragOverState.sameSource) {
+          // Drop into same list
+          if(this.dragOverState.sourceIndex < this.dragOverState.targetIndex) {
+            return this.items.slice(0, this.dragOverState.sourceIndex)
+              .concat(this.items.slice(this.dragOverState.sourceIndex+1, this.dragOverState.targetIndex+1))
+              .concat(this.dragOverState.sourceItem)
+              .concat(this.items.slice(this.dragOverState.targetIndex+1))
+          } else {
+            return this.items.slice(0, this.dragOverState.targetIndex)
+              .concat(this.dragOverState.sourceItem)
+              .concat(this.items.slice(this.dragOverState.targetIndex, this.dragOverState.sourceIndex))
+              .concat(this.items.slice(this.dragOverState.sourceIndex+1))
+          }
+        } else {
+          // Drop into other list
+          return this.items
+        }
       } else {
         return this.items
       }
@@ -71,8 +86,11 @@ export default {
       }
     },
     onMouseenter(dragTarget) {
-      if(this.selectedItem && !this.equalsFn(this.selectedItem, dragTarget.item)) {
+      if(this.selectedItem) {
         this.dragOverState = {
+          sameSource: this.selectedItem.source === this.items,
+          sourceIndex: this.selectedItem.index,
+          sourceItem: this.selectedItem.item,
           targetIndex: dragTarget.index,
           targetItem: dragTarget.item
         }

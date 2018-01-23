@@ -12,6 +12,15 @@ const StateEnum = {
   DRAG: 1
 }
 
+export class DragContext {
+  constructor(context, index) {
+    this.context = context
+    this.index = index
+  }
+
+  get item() { return this.context[this.index] }
+}
+
 export default {
   props: {
     debug: {
@@ -23,7 +32,7 @@ export default {
     return {
       state: StateEnum.INIT,
       selection: null,
-      srcItemPos: null,
+      selectedItemPos: null,
       mdPos: null,
       mmPos: null
     }
@@ -44,7 +53,7 @@ export default {
     mdItemOffset() {
       // Vector pointing from mdPos to (left, top) of selected DnDItem
       // Needed for positioning of drag item
-      return this.mdPos && this.srcItemPos ? this.srcItemPos.sub(this.mdPos) : null
+      return this.mdPos && this.selectedItemPos ? this.selectedItemPos.sub(this.mdPos) : null
     },
     dragItemPos() {
       // Return {x,y} in viewport coordinates
@@ -58,9 +67,9 @@ export default {
   methods: {
     setSelectedState(payload) {
       this.state = StateEnum.DRAG
-      this.selection = payload.model
+      this.selection = payload.context
       // Source item viewport coords
-      this.srcItemPos = CSSPos.toVec2(payload.clientRect)
+      this.selectedItemPos = CSSPos.toVec2(payload.clientRect)
       // MouseEvent viewport coords
       this.mdPos = new Vec2(payload.event.clientX, payload.event.clientY)
       bus.$emit(DND_ITEM_SELECTED, this.selection)
@@ -68,7 +77,7 @@ export default {
     setInitState() {
       this.state = StateEnum.INIT
       this.selection = null
-      this.srcItemPos = null
+      this.selectedItemPos = null
       this.mdPos = null
       this.mmPos = null
       bus.$emit(DND_ITEM_UNSELECTED)

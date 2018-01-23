@@ -1,8 +1,7 @@
 import './item.scss'
 
-export class DnDItemEvent {
-  constructor(item, index) {
-    this.item = item
+export class DnDItemEventPayload {
+  constructor(index) {
     this.index = index
   }
 }
@@ -23,14 +22,14 @@ export default {
   },
   computed: {
     eventPayload() {
-      return new DnDItemEvent(this.item, this.index)
+      return new DnDItemEventPayload(this.index)
     }
   },
   methods: {
     emitOnMouseenter() {
       this.$emit('enter', this.eventPayload)
     },
-    emitOnMouseup() {
+    emitOnMouseup(event) {
       this.$emit('up', this.eventPayload)
     }
   },

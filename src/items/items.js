@@ -3,9 +3,19 @@ import bus from '../bus'
 import {
   DND_ITEM_SELECT,
   DND_ITEM_SELECTED,
-  DND_ITEM_UNSELECTED
+  DND_ITEM_UNSELECTED,
+  DnDItemSelectPayload
 } from '../events'
 import {indexOfDirectChild} from '../dom'
+import {DragContext} from '../context/context'
+
+class DragOverState {
+  constructor(sourceContext, targetContext, isSameContext) {
+    this.sourceContext = sourceContext
+    this.targetContext = targetContext
+    this.sameContext = isSameContext
+  }
+}
 
 export default {
   props: {
@@ -44,26 +54,29 @@ export default {
     displayedItems() {
       const ds = this.dragOverState
       if(ds &&
-        !(ds.sameSource && ds.sourceIndex === ds.targetIndex)) {
-        if(ds.sameSource) {
-          // Drop into same list
-          if(ds.sourceIndex < ds.targetIndex) {
-            return this.items.slice(0, ds.sourceIndex)
-              .concat(this.items.slice(ds.sourceIndex+1, ds.targetIndex+1))
-              .concat(ds.sourceItem)
-              .concat(this.items.slice(ds.targetIndex+1))
+        !(ds.sameContext && ds.sourceContext.index === ds.targetContext.index)) {
+          const srcIndex = ds.sourceContext.index
+          const trgIndex = ds.targetContext.index
+          const srcItem = ds.sourceContext.item
+          if(ds.sameContext) {
+            // Drop into same list
+            if(srcIndex < trgIndex) {
+              return this.items.slice(0, srcIndex)
+                .concat(this.items.slice(srcIndex+1, trgIndex+1))
+                .concat(srcItem)
+                .concat(this.items.slice(trgIndex+1))
+            } else {
+              return this.items.slice(0, trgIndex)
+                .concat(srcItem)
+                .concat(this.items.slice(trgIndex, srcIndex))
+                .concat(this.items.slice(srcIndex+1))
+            }
           } else {
-            return this.items.slice(0, ds.targetIndex)
-              .concat(ds.sourceItem)
-              .concat(this.items.slice(ds.targetIndex, ds.sourceIndex))
-              .concat(this.items.slice(ds.sourceIndex+1))
+            // Drop into other list
+            return this.items.slice(0, trgIndex)
+              .concat(srcItem)
+              .concat(this.items.slice(trgIndex))
           }
-        } else {
-          // Drop into other list
-          return this.items.slice(0, ds.targetIndex)
-            .concat(ds.sourceItem)
-            .concat(this.items.slice(ds.targetIndex))
-        }
       } else {
         return this.items
       }
@@ -85,12 +98,9 @@ export default {
       const index = indexOfDirectChild(parent, child)
       if(index >= 0 && index < this.items.length) {
         const clientRect = child.getBoundingClientRect()
-        const model = {
-          source: this.items,
-          item: this.items[index],
-          index
-        }
-        const payload = {event, clientRect, model}
+        const payload = new DnDItemSelectPayload(
+          event, clientRect,
+          new DragContext(this.items, index))
         bus.$emit(DND_ITEM_SELECT, payload)
       }
     },
@@ -99,23 +109,21 @@ export default {
     },
     onEnter(dragTarget) {
       if(this.selectedItem) {
-        this.dragOverState = {
-          sameSource: this.equalSrcFn(this.selectedItem.source, this.items),
-          source: this.selectedItem.source,
-          sourceIndex: this.selectedItem.index,
-          sourceItem: this.selectedItem.item,
-          target: this.items,
-          targetIndex: dragTarget.index,
-          targetItem: dragTarget.item
-        }
+        this.dragOverState = new DragOverState(
+          this.selectedItem,
+          new DragContext(this.items, dragTarget.index),
+          this.equalSrcFn(this.selectedItem.context, this.items))
       }
+    },
+    onUp(dragTarget) {
+      console.log('up', dragTarget)
     }
   },
   render() {
     const dndItemSlot = this.$scopedSlots.default
 
     const content = this.displayedItems.map((item, index) => (
-      <DnDItem item={item} index={index} onEnter={this.onEnter}
+      <DnDItem item={item} index={index} onEnter={this.onEnter} onUp={this.onUp}
         isSelected={this.equalItemFn(this.selectedItem, item)}>
         {dndItemSlot({item, index})}
       </DnDItem>))

@@ -17,11 +17,21 @@ class DragState {
   }
 }
 
+export class DnDOptions {
+  constructor(allowSameContainer=true) {
+    this.allowSameContainer = allowSameContainer
+  }
+}
+
 export default {
   props: {
     items: {
       type: Array,
       required: true
+    },
+    options: {
+      type: DnDOptions,
+      default: () => new DnDOptions()
     },
     equalItemFn: {
       type: Function,
@@ -58,7 +68,7 @@ export default {
           const srcIndex = ds.sourceContext.index
           const trgIndex = ds.targetContext.index
           const srcItem = ds.sourceContext.item
-          if(ds.sameContext) {
+          if(ds.sameContext && this.options.allowSameContainer) {
             // Drop into same list
             if(srcIndex < trgIndex) {
               return this.items.slice(0, srcIndex)
@@ -71,11 +81,13 @@ export default {
                 .concat(this.items.slice(trgIndex, srcIndex))
                 .concat(this.items.slice(srcIndex+1))
             }
-          } else {
+          } else if(!ds.sameContext) {
             // Drop into other list
             return this.items.slice(0, trgIndex)
               .concat(srcItem)
               .concat(this.items.slice(trgIndex))
+          } else {
+            return this.items
           }
       } else {
         return this.items
@@ -116,7 +128,7 @@ export default {
       }
     },
     onUp(dragTarget) {
-      console.log('up', dragTarget)
+      // console.log('up', dragTarget)
     }
   },
   render() {

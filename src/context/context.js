@@ -18,7 +18,9 @@ export class DragContext {
     this.index = index
   }
 
-  get item() { return this.context[this.index] }
+  get item() {
+    return this.context[this.index]
+  }
 }
 
 export default {
@@ -39,13 +41,11 @@ export default {
   },
   mounted() {
     bus.$on(DND_ITEM_SELECT, this.setSelectedState)
-    // bus.$on(DND_ITEM_UNSELECTED, this.setInitState)
     document.addEventListener('mousemove', this.onDnDItemMousemove)
     document.addEventListener('mouseup', this.setInitState)
   },
   beforeDestroy() {
     bus.$off(DND_ITEM_SELECT, this.setSelectedState)
-    // bus.$off(DND_ITEM_UNSELECTED, this.setInitState)
     document.removeEventListener('mousemove', this.onDnDItemMousemove)
     document.removeEventListener('mouseup', this.setInitState)
   },

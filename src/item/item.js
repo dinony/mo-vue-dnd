@@ -1,5 +1,12 @@
 import './item.scss'
 
+export class DnDItemEvent {
+  constructor(item, index) {
+    this.item = item
+    this.index = index
+  }
+}
+
 export default {
   props: {
     item: {
@@ -14,9 +21,17 @@ export default {
       default: false
     }
   },
+  computed: {
+    eventPayload() {
+      return new DnDItemEvent(this.item, this.index)
+    }
+  },
   methods: {
-    emitOnEnter() {
-      this.$emit('enter', {item: this.item, index: this.index})
+    emitOnMouseenter() {
+      this.$emit('enter', this.eventPayload)
+    },
+    emitOnMouseup() {
+      this.$emit('up', this.eventPayload)
     }
   },
   render() {
@@ -26,7 +41,8 @@ export default {
         'mo-dndItemSelected': this.isSelected
       },
       on: {
-        mouseenter: this.emitOnEnter
+        mouseenter: this.emitOnMouseenter,
+        mouseup: this.emitOnMouseup
       }
     }
     return <div {...params}>{this.$slots.default}</div>

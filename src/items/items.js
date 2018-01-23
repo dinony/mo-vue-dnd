@@ -16,13 +16,14 @@ export default {
     equalsFn: {
       type: Function,
       default: (selection, item) => {
-        return selection ? selection.item === item : false
+        return selection && selection.item === item
       }
     }
   },
   data() {
     return {
-      selectedItem: null
+      selectedItem: null,
+      dragOverState: null
     }
   },
   mounted() {
@@ -33,12 +34,24 @@ export default {
     bus.$off(DND_ITEM_SELECTED, this.setSelectedItem)
     bus.$off(DND_ITEM_UNSELECTED, this.resetSelectedItem)
   },
+  computed: {
+    displayedItems() {
+      if(this.dragOverState && this.selectedItem) {
+        return this.items.slice(0, this.dragOverState.targetIndex)
+          .concat(this.selectedItem.item)
+          .concat(this.items.slice(this.dragOverState.targetIndex+1))
+      } else {
+        return this.items
+      }
+    }
+  },
   methods: {
     setSelectedItem(selectedItem) {
       this.selectedItem = selectedItem
     },
     resetSelectedItem() {
       this.selectedItem = null
+      this.dragOverState = null
     },
     onMousedown(event) {
       // Just left button clicks
@@ -57,14 +70,19 @@ export default {
         bus.$emit(DND_ITEM_SELECT, payload)
       }
     },
-    onMouseenter(event) {
-      console.log('enter', event)
+    onMouseenter(dragTarget) {
+      if(this.selectedItem && !this.equalsFn(this.selectedItem, dragTarget.item)) {
+        this.dragOverState = {
+          targetIndex: dragTarget.index,
+          targetItem: dragTarget.item
+        }
+      }
     }
   },
   render() {
     const dndItemSlot = this.$scopedSlots.default
 
-    const content = this.items.map((item, index) => (
+    const content = this.displayedItems.map((item, index) => (
       <DnDItem item={item} index={index} onEnter={this.onMouseenter}
         isSelected={this.equalsFn(this.selectedItem, item)}>
         {dndItemSlot({item, index})}

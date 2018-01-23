@@ -16,7 +16,7 @@ export default {
   },
   methods: {
     emitOnEnter() {
-      this.$emit('enter', this.index)
+      this.$emit('enter', {item: this.item, index: this.index})
     }
   },
   render() {

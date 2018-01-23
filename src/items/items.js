@@ -9,7 +9,7 @@ import {
 import {indexOfDirectChild} from '../dom'
 import {DragContext} from '../context/context'
 
-class DragOverState {
+class DragState {
   constructor(sourceContext, targetContext, isSameContext) {
     this.sourceContext = sourceContext
     this.targetContext = targetContext
@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       selectedItem: null,
-      dragOverState: null
+      dragState: null
     }
   },
   mounted() {
@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     displayedItems() {
-      const ds = this.dragOverState
+      const ds = this.dragState
       if(ds &&
         !(ds.sameContext && ds.sourceContext.index === ds.targetContext.index)) {
           const srcIndex = ds.sourceContext.index
@@ -88,7 +88,7 @@ export default {
     },
     resetSelectedItem() {
       this.selectedItem = null
-      this.dragOverState = null
+      this.dragState = null
     },
     onMousedown(event) {
       // Just left button clicks
@@ -105,14 +105,14 @@ export default {
       }
     },
     onMouseleave() {
-      this.dragOverState = null
+      this.dragState = null
     },
     onEnter(dragTarget) {
       if(this.selectedItem) {
-        this.dragOverState = new DragOverState(
+        this.dragState = new DragState(
           this.selectedItem,
           new DragContext(this.items, dragTarget.index),
-          this.equalSrcFn(this.selectedItem.context, this.items))
+          this.equalSrcFn(this.selectedItem.container, this.items))
       }
     },
     onUp(dragTarget) {

@@ -13,13 +13,13 @@ const StateEnum = {
 }
 
 export class DragContext {
-  constructor(context, index) {
-    this.context = context
+  constructor(container, index) {
+    this.container = container
     this.index = index
   }
 
   get item() {
-    return this.context[this.index]
+    return this.container[this.index]
   }
 }
 
@@ -41,12 +41,12 @@ export default {
   },
   mounted() {
     bus.$on(DND_ITEM_SELECT, this.setSelectedState)
-    document.addEventListener('mousemove', this.onDnDItemMousemove)
+    document.addEventListener('mousemove', this.onMousemove)
     document.addEventListener('mouseup', this.setInitState)
   },
   beforeDestroy() {
     bus.$off(DND_ITEM_SELECT, this.setSelectedState)
-    document.removeEventListener('mousemove', this.onDnDItemMousemove)
+    document.removeEventListener('mousemove', this.onMousemove)
     document.removeEventListener('mouseup', this.setInitState)
   },
   computed: {
@@ -68,7 +68,7 @@ export default {
     setSelectedState(payload) {
       this.state = StateEnum.DRAG
       this.selection = payload.context
-      // Source item viewport coords
+      // Selected item viewport coords
       this.selectedItemPos = CSSPos.toVec2(payload.clientRect)
       // MouseEvent viewport coords
       this.mdPos = new Vec2(payload.event.clientX, payload.event.clientY)
@@ -82,7 +82,7 @@ export default {
       this.mmPos = null
       bus.$emit(DND_ITEM_UNSELECTED)
     },
-    onDnDItemMousemove(event) {
+    onMousemove(event) {
       if(this.mmPos === null) {
         this.mmPos = new Vec2(0, 0)
       }

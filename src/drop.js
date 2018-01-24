@@ -21,7 +21,7 @@ export function drop(dragState) {
 
   const selfDrop = () => ds.sameContext && sc.index === tc.index
 
-  if(ds.sameContext && !selfDrop()) {
+  if(ds.sameContext && !selfDrop() && sc.options.allowSameContainer) {
     if(sc.index < tc.index) {
       const newSrc = sc.container.slice(0, sc.index)
         .concat(sc.container.slice(sc.index+1, tc.index+1))

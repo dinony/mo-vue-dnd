@@ -36,7 +36,7 @@ export function drop(dragState) {
     } else {
       const newSrc = sc.container.slice(0, tc.index)
         .concat(sc.item)
-        .concat(sc.container.slice(tc.index, tc.index))
+        .concat(sc.container.slice(tc.index, sc.index))
         .concat(sc.container.slice(sc.index+1))
 
       // source is same as traget

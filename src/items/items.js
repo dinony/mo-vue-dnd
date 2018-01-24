@@ -4,6 +4,7 @@ import {
   DND_ITEM_SELECT,
   DND_ITEM_SELECTED,
   DND_ITEM_UNSELECTED,
+  DND_ITEM_DROP,
   DnDItemSelectPayload
 } from '../events'
 import {indexOfDirectChild} from '../dom'
@@ -129,6 +130,9 @@ export default {
     },
     onUp(dragTarget) {
       // console.log('up', dragTarget)
+      if(this.dragState) {
+        bus.$emit(DND_ITEM_DROP, this.dragState)
+      }
     }
   },
   render() {

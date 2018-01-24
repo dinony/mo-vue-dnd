@@ -7,6 +7,7 @@ import {
   DND_ITEM_DROP
 } from '../events'
 import {Vec2, CSSPos} from '../vec'
+import {drop} from '../drop'
 
 const StateEnum = {
   INIT: 0,
@@ -29,6 +30,11 @@ export default {
     debug: {
       type: Boolean,
       default: false
+    },
+    dropHandler: {
+      type: Function,
+      required: false,
+      default: drop
     }
   },
   data() {
@@ -93,7 +99,8 @@ export default {
       this.$set(this.mmPos, 'y', event.clientY)
     },
     onItemDrop(dragState) {
-      console.log('handleDrop', dragState)
+      const res = this.dropHandler(dragState)
+      this.$emit('update', {test: 42})
     }
   },
   render() {

@@ -14,12 +14,17 @@ new Vue({
       right: ['A', 'B', 'C', 'D']
     }
   },
+  methods: {
+    onUpdate(payload) {
+      debugger
+    }
+  },
   render() {
     const renderDnDItem = props => <div class="dndItem">Index: {props.index}, Item: {props.item}</div>
     const slots = {default: renderDnDItem}
 
     return (
-      <DnDContext debug={true} scopedSlots={slots}>
+      <DnDContext debug={true} scopedSlots={slots} onUpdate={this.onUpdate}>
         <div class="container">
           <div class="dndWrapper">
             <DnDItems items={this.left} options={dndOptions} scopedSlots={slots}/>

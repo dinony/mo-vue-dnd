@@ -4,7 +4,7 @@ import {DnDContext, DnDItems, DnDOptions} from 'mo-vue-dnd'
 
 import './index.scss'
 
-const dndOptions = new DnDOptions(true)
+const dndOptions = new DnDOptions(true, true)
 
 new Vue({
   el: '#app',

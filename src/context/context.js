@@ -12,17 +12,6 @@ const StateEnum = {
   DRAG: 1
 }
 
-export class DragContext {
-  constructor(container, index) {
-    this.container = container
-    this.index = index
-  }
-
-  get item() {
-    return this.container[this.index]
-  }
-}
-
 export default {
   props: {
     debug: {

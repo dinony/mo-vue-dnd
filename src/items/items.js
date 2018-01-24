@@ -7,8 +7,18 @@ import {
   DnDItemSelectPayload
 } from '../events'
 import {indexOfDirectChild} from '../dom'
-import {DragContext} from '../context/context'
 import {drop} from '../drop'
+
+export class DragContext {
+  constructor(container, index) {
+    this.container = container
+    this.index = index
+  }
+
+  get item() {
+    return this.container[this.index]
+  }
+}
 
 class DragState {
   constructor(sourceContext, targetContext, isSameContext) {

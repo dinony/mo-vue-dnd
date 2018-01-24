@@ -33,9 +33,11 @@ class DragState {
 export class DnDOptions {
   constructor(
     allowSameContainer=true,
-    allowItemRemoval=false) {
+    allowItemRemoval=false,
+    wrapDnDHandle=true) {
     this.allowSameContainer = allowSameContainer
     this.allowItemRemoval = allowItemRemoval
+    this.wrapDnDHandle = wrapDnDHandle
   }
 }
 
@@ -142,17 +144,17 @@ export default {
   render() {
     const dndItemSlot = this.$scopedSlots.default
 
-    const content = this.displayedItems.map((item, index) => (
+    const items = this.displayedItems.map((item, index) => (
       <DnDItem item={item} index={index} onEnter={this.onEnter} onUp={this.onUp}
         isSelected={this.equalItemFn(this.selectedItem, item)}>
         {dndItemSlot({item, index})}
       </DnDItem>))
 
-    return (
-      <div class="mo-dndItems"
-        onMousedown={this.onMousedown}
-        onMouseleave={this.onMouseleave}>
-        {content}
+    const content = (
+      <div class="mo-dndItems" onMouseleave={this.onMouseleave}>
+        {items}
       </div>)
+
+    return this.options.wrapDnDHandle ? <DnDHandle>{content}</DnDHandle> : content
   }
 }

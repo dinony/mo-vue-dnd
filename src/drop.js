@@ -29,18 +29,18 @@ export function drop(dragState) {
         .concat(sc.container.slice(tc.index+1))
 
         // source is same as traget
-      const dc = new DropContext(newSrc, sc.uodateFn)
+      const dc = new DropContext(newSrc, sc.updateFn)
       return new DropResult(
         dc, dc,
         ds.sameContext, true)
     } else {
-      const newSrc = sc.conatiner.slice(0, tc.index)
+      const newSrc = sc.container.slice(0, tc.index)
         .concat(sc.item)
         .concat(sc.container.slice(tc.index, tc.index))
         .concat(sc.container.slice(sc.index+1))
 
       // source is same as traget
-      const dc = new DropContext(newSrc, sc.uodateFn)
+      const dc = new DropContext(newSrc, sc.updateFn)
       return new DropResult(
         dc, dc,
         ds.sameContext, true)
@@ -52,7 +52,7 @@ export function drop(dragState) {
 
     const newTrg = tc.container.slice(0, tc.index)
       .concat(sc.item)
-      .concat(tc.container.slice(tc.index+1))
+      .concat(tc.container.slice(tc.index))
 
     return new DropResult(
       new DropContext(newSrc, sc.updateFn),

@@ -9,7 +9,9 @@
     "build:dev": "cross-env NODE_ENV=development webpack --progress",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "simple:dev": "cross-env NODE_ENV=development webpack-dev-server --config examples/simple/webpack.config.js",
-    "simple:build": "cross-env NODE_ENV=development webpack --config examples/simple/webpack.config.js"
+    "simple:build": "cross-env NODE_ENV=development webpack --config examples/simple/webpack.config.js",
+    "dndHandle:dev": "cross-env NODE_ENV=development webpack-dev-server --config examples/dndHandle/webpack.config.js",
+    "dndHandle:build": "cross-env NODE_ENV=development webpack --config examples/dndHandle/webpack.config.js"
   },
   "files": [
     "dist"

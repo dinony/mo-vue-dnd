@@ -23,9 +23,27 @@ export function drop(dragState) {
 
   if(ds.sameContext && !selfDrop()) {
     if(sc.index < tc.index) {
+      const newSrc = sc.container.slice(0, sc.index)
+        .concat(sc.container.slice(sc.index+1, tc.index+1))
+        .concat(sc.item)
+        .concat(sc.container.slice(tc.index+1))
 
+        // source is same as traget
+      const dc = new DropContext(newSrc, sc.uodateFn)
+      return new DropResult(
+        dc, dc,
+        ds.sameContext, true)
     } else {
+      const newSrc = sc.conatiner.slice(0, tc.index)
+        .concat(sc.item)
+        .concat(sc.container.slice(tc.index, tc.index))
+        .concat(sc.container.slice(sc.index+1))
 
+      // source is same as traget
+      const dc = new DropContext(newSrc, sc.uodateFn)
+      return new DropResult(
+        dc, dc,
+        ds.sameContext, true)
     }
   } else if(!ds.sameContext) {
     const newSrc = sc.options.allowItemRemoval ?

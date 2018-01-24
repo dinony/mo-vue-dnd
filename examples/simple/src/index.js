@@ -1,10 +1,14 @@
 import Vue from 'vue'
 
-import {DnDContext, DnDItems, DnDOptions} from 'mo-vue-dnd'
+import {
+  DnDContext, DnDItems,
+  DnDOptions, DnDHandle
+} from 'mo-vue-dnd'
 
 import './index.scss'
 
-const dndOptions = new DnDOptions(true, true)
+const leftOptions = new DnDOptions(true, true, false)
+const rightOptions = new DnDOptions(true, false, false)
 
 new Vue({
   el: '#app',
@@ -23,15 +27,21 @@ new Vue({
     }
   },
   render() {
-    const renderDnDItem = props => <div class="dndItem">Index: {props.index}, Item: {props.item}</div>
+    const renderDnDItem = props => (
+      <div class="dndItem">
+        <DnDHandle>
+          <div class="dndItemHandle"></div>
+        </DnDHandle>
+        <div class="dndItemContent">Item: {props.item}</div>
+      </div>)
     const slots = {default: renderDnDItem}
 
     return (
       <DnDContext debug={true} scopedSlots={slots}>
         <div class="container">
           <div class="dndWrapper">
-            <DnDItems items={this.left} onUpdate={this.updateLeft} options={dndOptions} scopedSlots={slots} />
-            <DnDItems items={this.right} onUpdate={this.updateRight} scopedSlots={slots}/>
+            <DnDItems items={this.left} onUpdate={this.updateLeft} options={leftOptions} scopedSlots={slots} />
+            <DnDItems items={this.right} onUpdate={this.updateRight} options={rightOptions} scopedSlots={slots}/>
           </div>
           <div class="dbWrapper">
             <pre class="db">Left: {JSON.stringify(this.left, 2)}</pre>

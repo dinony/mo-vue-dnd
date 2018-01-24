@@ -7,8 +7,8 @@ import {
 
 import './index.scss'
 
-const leftOptions = new DnDOptions(true, true, true)
-const rightOptions = new DnDOptions(true, false, true)
+const leftOptions = new DnDOptions(true, true, false)
+const rightOptions = new DnDOptions(true, false, false)
 
 new Vue({
   el: '#app',
@@ -30,15 +30,11 @@ new Vue({
   render() {
     const renderDnDItem = props => (
       <div class="dndItem">
-        Item: {props.item}
+        <DnDHandle container={props.container}>
+          <div class="dndItemHandle"></div>
+        </DnDHandle>
+        <div class="dndItemContent">Item: {props.item}</div>
       </div>)
-    // const renderDnDItem = props => (
-    //   <div class="dndItem">
-    //     <DnDHandle container={props.container}>
-    //       <div class="dndItemHandle"></div>
-    //     </DnDHandle>
-    //     <div class="dndItemContent">Item: {props.item}</div>
-    //   </div>)
     const slots = {default: renderDnDItem}
 
     return (

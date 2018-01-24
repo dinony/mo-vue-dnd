@@ -63,8 +63,8 @@ export default {
   computed: {
     displayedItems() {
       const ds = this.dragState
-      if(ds &&
-        !(ds.sameContext && ds.sourceContext.index === ds.targetContext.index)) {
+      const selfHover = () => ds.sameContext && ds.sourceContext.index === ds.targetContext.index
+      if(ds && !selfHover()) {
           const srcIndex = ds.sourceContext.index
           const trgIndex = ds.targetContext.index
           const srcItem = ds.sourceContext.item

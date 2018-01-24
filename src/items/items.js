@@ -78,7 +78,7 @@ export default {
     },
     onMousedown({event, container}) {
       if(this.items !== container) {return}
-      const parent = event.currentTarget
+      const parent = this.$refs.content
       const child = event.target
       const index = indexOfDirectChild(parent, child)
       if(index >= 0 && index < this.items.length) {
@@ -125,7 +125,7 @@ export default {
       </DnDItem>))
 
     const content = (
-      <div class="mo-dndItems" onMouseleave={this.onMouseleave}>
+      <div class="mo-dndItems" onMouseleave={this.onMouseleave} ref="content">
         {items}
       </div>)
 

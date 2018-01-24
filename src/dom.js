@@ -10,3 +10,9 @@ export function indexOfDirectChild(parent, child) {
   const dChild = getDirectChild(parent, child)
   return indexOf(dChild, parent)
 }
+
+export function findAncestorByClassName(child, clsName) {
+  return child.parentNode.className.includes(clsName) ?
+    child.parentNode :
+    findAncestorByClassName(child.parentNode, clsName)
+}

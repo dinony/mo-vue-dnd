@@ -8,7 +8,10 @@ import {
   DND_HANDLE_MD,
   DnDItemSelectPayload
 } from '../events'
-import {indexOfDirectChild} from '../dom'
+import {
+  indexOfDirectChild,
+  findAncestorByClassName
+} from '../dom'
 import {drop} from '../drop'
 import DragContext from './dragContext'
 import DragState from './dragState'
@@ -82,7 +85,8 @@ export default {
       const child = event.target
       const index = indexOfDirectChild(parent, child)
       if(index >= 0 && index < this.items.length) {
-        const clientRect = child.getBoundingClientRect()
+        const itemChild = findAncestorByClassName(child, 'mo-dndItem')
+        const clientRect = itemChild.getBoundingClientRect()
         const payload = new DnDItemSelectPayload(
           event, clientRect,
           new DragContext(this.items, index, this.options, this.emitUpdate))

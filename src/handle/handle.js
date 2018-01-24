@@ -1,5 +1,6 @@
 export default {
-  render() {
-    return <div class="mo-dndHandle">{this.$slots.default}</div>
+  functional: true,
+  render(h, context) {
+    return <div class="mo-dndHandle">{context.slots().default}</div>
   }
 }

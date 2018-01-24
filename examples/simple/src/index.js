@@ -7,8 +7,8 @@ import {
 
 import './index.scss'
 
-const leftOptions = new DnDOptions(true, true, false)
-const rightOptions = new DnDOptions(true, false, false)
+const leftOptions = new DnDOptions(false, false)
+const rightOptions = new DnDOptions(true, true)
 
 new Vue({
   el: '#app',
@@ -27,20 +27,14 @@ new Vue({
     }
   },
   render() {
-    const renderDnDItem = props => (
-      <div class="dndItem">
-        <DnDHandle>
-          <div class="dndItemHandle"></div>
-        </DnDHandle>
-        <div class="dndItemContent">Item: {props.item}</div>
-      </div>)
+    const renderDnDItem = props => <div class="dndItem">Item: {props.item}</div>
     const slots = {default: renderDnDItem}
 
     return (
       <DnDContext debug={true} scopedSlots={slots}>
         <div class="container">
           <div class="dndWrapper">
-            <DnDItems items={this.left} onUpdate={this.updateLeft} options={leftOptions} scopedSlots={slots} />
+            <DnDItems items={this.left} onUpdate={this.updateLeft} options={leftOptions} scopedSlots={slots}/>
             <DnDItems items={this.right} onUpdate={this.updateRight} options={rightOptions} scopedSlots={slots}/>
           </div>
           <div class="dbWrapper">

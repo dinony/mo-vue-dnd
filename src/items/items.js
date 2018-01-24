@@ -39,7 +39,7 @@ export default {
         return selection && selection.item === item
       }
     },
-    equalSrcFn: {
+    equalContainerFn: {
       type: Function,
       default: (source, target) => {
         return source && target && source === target
@@ -124,7 +124,7 @@ export default {
         this.dragState = new DragState(
           this.selectedItem,
           new DragContext(this.items, dragTarget.index),
-          this.equalSrcFn(this.selectedItem.container, this.items))
+          this.equalContainerFn(this.selectedItem.container, this.items))
       }
     },
     onUp(dragTarget) {

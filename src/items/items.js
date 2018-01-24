@@ -1,45 +1,18 @@
 import DnDItem from '../item/item'
+import DnDHandle from '../handle/handle'
 import bus from '../bus'
 import {
   DND_ITEM_SELECT,
   DND_ITEM_SELECTED,
   DND_ITEM_UNSELECTED,
+  DND_HANDLE_MD,
   DnDItemSelectPayload
 } from '../events'
 import {indexOfDirectChild} from '../dom'
 import {drop} from '../drop'
-
-export class DragContext {
-  constructor(container, index, options, updateFn) {
-    this.container = container
-    this.index = index
-    this.options = options
-    this.updateFn = updateFn
-  }
-
-  get item() {
-    return this.container[this.index]
-  }
-}
-
-class DragState {
-  constructor(sourceContext, targetContext, isSameContext) {
-    this.sourceContext = sourceContext
-    this.targetContext = targetContext
-    this.sameContext = isSameContext
-  }
-}
-
-export class DnDOptions {
-  constructor(
-    allowSameContainer=true,
-    allowItemRemoval=false,
-    wrapDnDHandle=true) {
-    this.allowSameContainer = allowSameContainer
-    this.allowItemRemoval = allowItemRemoval
-    this.wrapDnDHandle = wrapDnDHandle
-  }
-}
+import DragContext from './dragContext'
+import DragState from './dragState'
+import DnDOptions from './dndOptions'
 
 export default {
   props: {
@@ -78,10 +51,12 @@ export default {
   mounted() {
     bus.$on(DND_ITEM_SELECTED, this.setSelectedItem)
     bus.$on(DND_ITEM_UNSELECTED, this.resetSelectedItem)
+    bus.$on(DND_HANDLE_MD, this.onMousedown)
   },
   beforeDestroy() {
     bus.$off(DND_ITEM_SELECTED, this.setSelectedItem)
     bus.$off(DND_ITEM_UNSELECTED, this.resetSelectedItem)
+    bus.$off(DND_HANDLE_MD, this.onMousedown)
   },
   computed: {
     displayedItems() {
@@ -101,9 +76,8 @@ export default {
       this.selectedItem = null
       this.dragState = null
     },
-    onMousedown(event) {
-      // Just left button clicks
-      if(event.button !== 0) {return}
+    onMousedown({event, container}) {
+      if(this.items !== container) {return}
       const parent = event.currentTarget
       const child = event.target
       const index = indexOfDirectChild(parent, child)
@@ -147,7 +121,7 @@ export default {
     const items = this.displayedItems.map((item, index) => (
       <DnDItem item={item} index={index} onEnter={this.onEnter} onUp={this.onUp}
         isSelected={this.equalItemFn(this.selectedItem, item)}>
-        {dndItemSlot({item, index})}
+        {dndItemSlot({item, index, container: this.items})}
       </DnDItem>))
 
     const content = (
@@ -155,6 +129,6 @@ export default {
         {items}
       </div>)
 
-    return this.options.wrapDnDHandle ? <DnDHandle>{content}</DnDHandle> : content
+    return this.options.wrapDnDHandle ? <DnDHandle container={this.items}>{content}</DnDHandle> : content
   }
 }

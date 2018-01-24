@@ -15,11 +15,11 @@ new Vue({
     }
   },
   methods: {
-    updateLeft(payload) {
-      console.log('left', payload)
+    updateLeft(updateLeft) {
+      this.left = updateLeft
     },
-    updateRight(payload) {
-      console.log('right', payload)
+    updateRight(updateRight) {
+      this.right = updateRight
     }
   },
   render() {

@@ -83,33 +83,9 @@ export default {
   },
   computed: {
     displayedItems() {
-      const ds = this.dragState
-      const selfHover = () => ds.sameContext && ds.sourceContext.index === ds.targetContext.index
-      if(ds && !selfHover()) {
-          const srcIndex = ds.sourceContext.index
-          const trgIndex = ds.targetContext.index
-          const srcItem = ds.sourceContext.item
-          if(ds.sameContext && this.options.allowSameContainer) {
-            // Drop into same list
-            if(srcIndex < trgIndex) {
-              return this.items.slice(0, srcIndex)
-                .concat(this.items.slice(srcIndex+1, trgIndex+1))
-                .concat(srcItem)
-                .concat(this.items.slice(trgIndex+1))
-            } else {
-              return this.items.slice(0, trgIndex)
-                .concat(srcItem)
-                .concat(this.items.slice(trgIndex, srcIndex))
-                .concat(this.items.slice(srcIndex+1))
-            }
-          } else if(!ds.sameContext) {
-            // Drop into other list
-            return this.items.slice(0, trgIndex)
-              .concat(srcItem)
-              .concat(this.items.slice(trgIndex))
-          } else {
-            return this.items
-          }
+      if(this.dragState) {
+        const ret = drop(this.dragState)
+        return ret.needsUpdate ? ret.target.container : this.items
       } else {
         return this.items
       }

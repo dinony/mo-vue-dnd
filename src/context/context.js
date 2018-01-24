@@ -3,7 +3,8 @@ import bus from '../bus'
 import {
   DND_ITEM_SELECT,
   DND_ITEM_SELECTED,
-  DND_ITEM_UNSELECTED
+  DND_ITEM_UNSELECTED,
+  DND_ITEM_DROP
 } from '../events'
 import {Vec2, CSSPos} from '../vec'
 
@@ -41,11 +42,13 @@ export default {
   },
   mounted() {
     bus.$on(DND_ITEM_SELECT, this.setSelectedState)
+    bus.$on(DND_ITEM_DROP, this.onItemDrop)
     document.addEventListener('mousemove', this.onMousemove)
     document.addEventListener('mouseup', this.setInitState)
   },
   beforeDestroy() {
     bus.$off(DND_ITEM_SELECT, this.setSelectedState)
+    bus.$off(DND_ITEM_DROP, this.onItemDrop)
     document.removeEventListener('mousemove', this.onMousemove)
     document.removeEventListener('mouseup', this.setInitState)
   },
@@ -88,6 +91,9 @@ export default {
       }
       this.$set(this.mmPos, 'x', event.clientX)
       this.$set(this.mmPos, 'y', event.clientY)
+    },
+    onItemDrop(dragState) {
+      console.log('handleDrop', dragState)
     }
   },
   render() {

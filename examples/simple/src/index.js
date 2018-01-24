@@ -15,8 +15,11 @@ new Vue({
     }
   },
   methods: {
-    onUpdate(payload) {
-      debugger
+    updateLeft(payload) {
+      console.log('left', payload)
+    },
+    updateRight(payload) {
+      console.log('right', payload)
     }
   },
   render() {
@@ -24,11 +27,11 @@ new Vue({
     const slots = {default: renderDnDItem}
 
     return (
-      <DnDContext debug={true} scopedSlots={slots} onUpdate={this.onUpdate}>
+      <DnDContext debug={true} scopedSlots={slots}>
         <div class="container">
           <div class="dndWrapper">
-            <DnDItems items={this.left} options={dndOptions} scopedSlots={slots}/>
-            <DnDItems items={this.right} scopedSlots={slots}/>
+            <DnDItems items={this.left} options={dndOptions} scopedSlots={slots} onUpdate={this.updateLeft}/>
+            <DnDItems items={this.right} scopedSlots={slots} onUpdate={this.updateRight}/>
           </div>
           <div class="dbWrapper">
             <pre class="db">Left: {JSON.stringify(this.left, 2)}</pre>

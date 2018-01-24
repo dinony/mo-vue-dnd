@@ -3,11 +3,9 @@ import bus from '../bus'
 import {
   DND_ITEM_SELECT,
   DND_ITEM_SELECTED,
-  DND_ITEM_UNSELECTED,
-  DND_ITEM_DROP
+  DND_ITEM_UNSELECTED
 } from '../events'
 import {Vec2, CSSPos} from '../vec'
-import {drop} from '../drop'
 
 const StateEnum = {
   INIT: 0,
@@ -30,11 +28,6 @@ export default {
     debug: {
       type: Boolean,
       default: false
-    },
-    dropHandler: {
-      type: Function,
-      required: false,
-      default: drop
     }
   },
   data() {
@@ -48,13 +41,11 @@ export default {
   },
   mounted() {
     bus.$on(DND_ITEM_SELECT, this.setSelectedState)
-    bus.$on(DND_ITEM_DROP, this.onItemDrop)
     document.addEventListener('mousemove', this.onMousemove)
     document.addEventListener('mouseup', this.setInitState)
   },
   beforeDestroy() {
     bus.$off(DND_ITEM_SELECT, this.setSelectedState)
-    bus.$off(DND_ITEM_DROP, this.onItemDrop)
     document.removeEventListener('mousemove', this.onMousemove)
     document.removeEventListener('mouseup', this.setInitState)
   },
@@ -97,10 +88,6 @@ export default {
       }
       this.$set(this.mmPos, 'x', event.clientX)
       this.$set(this.mmPos, 'y', event.clientY)
-    },
-    onItemDrop(dragState) {
-      const res = this.dropHandler(dragState)
-      this.$emit('update', {test: 42})
     }
   },
   render() {

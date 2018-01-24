@@ -10,7 +10,3 @@ export class DnDItemSelectPayload {
 }
 
 export const DND_ITEM_UNSELECTED = 'MO_DND_ITEM_UNSELECTED'
-
-export const DND_ITEM_DROP = 'MO_DND_ITEM_DROP'
-
-

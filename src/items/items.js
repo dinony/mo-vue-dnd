@@ -4,11 +4,11 @@ import {
   DND_ITEM_SELECT,
   DND_ITEM_SELECTED,
   DND_ITEM_UNSELECTED,
-  DND_ITEM_DROP,
   DnDItemSelectPayload
 } from '../events'
 import {indexOfDirectChild} from '../dom'
 import {DragContext} from '../context/context'
+import {drop} from '../drop'
 
 class DragState {
   constructor(sourceContext, targetContext, isSameContext) {
@@ -45,6 +45,11 @@ export default {
       default: (source, target) => {
         return source && target && source === target
       }
+    },
+    dropHandler: {
+      type: Function,
+      required: false,
+      default: drop
     }
   },
   data() {
@@ -131,7 +136,8 @@ export default {
     onUp(dragTarget) {
       // console.log('up', dragTarget)
       if(this.dragState) {
-        bus.$emit(DND_ITEM_DROP, this.dragState)
+
+        this.$emit('update', {test: 42})
       }
     }
   },

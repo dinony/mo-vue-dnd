@@ -10,11 +10,11 @@ import {indexOfDirectChild} from '../dom'
 import {drop} from '../drop'
 
 export class DragContext {
-  constructor(container, index, options, emitUpdateFn) {
+  constructor(container, index, options, updateFn) {
     this.container = container
     this.index = index
     this.options = options
-    this.emitUpdateFn = emitUpdateFn
+    this.updateFn = updateFn
   }
 
   get item() {
@@ -31,8 +31,11 @@ class DragState {
 }
 
 export class DnDOptions {
-  constructor(allowSameContainer=true) {
+  constructor(
+    allowSameContainer=true,
+    allowItemRemoval=false) {
     this.allowSameContainer = allowSameContainer
+    this.allowItemRemoval = allowItemRemoval
   }
 }
 
@@ -148,9 +151,11 @@ export default {
     onUp(dragTarget) {
       if(this.dragState) {
         const ret = this.dropHandler(this.dragState)
-        ret.target.emitUpdateFn(ret.target.container)
-        if(!ret.sameContext) {
-          ret.source.emitUpdateFn(ret.source.container)
+        if(ret.needsUpdate) {
+          if(!ret.sameContext) {
+            ret.source.updateFn(ret.source.container)
+          }
+          ret.target.updateFn(ret.target.container)
         }
       }
     },

@@ -10,9 +10,11 @@ import {indexOfDirectChild} from '../dom'
 import {drop} from '../drop'
 
 export class DragContext {
-  constructor(container, index) {
+  constructor(container, index, options, emitUpdateFn) {
     this.container = container
     this.index = index
+    this.options = options
+    this.emitUpdateFn = emitUpdateFn
   }
 
   get item() {
@@ -128,7 +130,7 @@ export default {
         const clientRect = child.getBoundingClientRect()
         const payload = new DnDItemSelectPayload(
           event, clientRect,
-          new DragContext(this.items, index))
+          new DragContext(this.items, index, this.options, this.emitUpdate))
         bus.$emit(DND_ITEM_SELECT, payload)
       }
     },
@@ -139,16 +141,21 @@ export default {
       if(this.selectedItem) {
         this.dragState = new DragState(
           this.selectedItem,
-          new DragContext(this.items, dragTarget.index),
+          new DragContext(this.items, dragTarget.index, this.options, this.emitUpdate),
           this.equalContainerFn(this.selectedItem.container, this.items))
       }
     },
     onUp(dragTarget) {
-      // console.log('up', dragTarget)
       if(this.dragState) {
-
-        this.$emit('update', {test: 42})
+        const ret = this.dropHandler(this.dragState)
+        ret.target.emitUpdateFn(ret.target.container)
+        if(!ret.sameContext) {
+          ret.source.emitUpdateFn(ret.source.container)
+        }
       }
+    },
+    emitUpdate(payload) {
+      this.$emit('update', payload)
     }
   },
   render() {

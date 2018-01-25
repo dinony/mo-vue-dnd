@@ -29,9 +29,7 @@ export default {
     },
     equalItemFn: {
       type: Function,
-      default: (sContainer, container, sIndex, index) => {
-        return sContainer === container && sIndex === index
-      }
+      default: (sContainer, container, sIndex, index, sItem, item) => sItem === item
     },
     equalContainerFn: {
       type: Function,
@@ -62,7 +60,7 @@ export default {
   computed: {
     displayedItems() {
       if(this.dragState) {
-        const ret = this.dropHandler(this.dragState)
+        const ret = this.dropHandler(this.dragState, false)
         return ret.needsUpdate ? ret.target.container : this.items
       } else {
         return this.items
@@ -123,7 +121,7 @@ export default {
     const items = this.displayedItems.map((item, index) => {
       const si = this.selectedItem
       const isSelected = si ?
-        this.equalItemFn(si.container, this.items, si.index, index, si.item, item): false
+        this.equalItemFn(si.container, this.displayedItems, si.index, index, si.item, item): false
 
       return (
         <DnDItem item={item} index={index} isSelected={isSelected} onEnter={this.onEnter} onUp={this.onUp}>

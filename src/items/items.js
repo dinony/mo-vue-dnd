@@ -29,7 +29,7 @@ export default {
     },
     equalItemFn: {
       type: Function,
-      default: (selectedItem, item) => selectedItem === item
+      default: (selectedContainer, selectedItem, container, item) => selectedContainer === container && selectedItem === item
     },
     equalContainerFn: {
       type: Function,
@@ -120,7 +120,7 @@ export default {
 
     const items = this.displayedItems.map((item, index) => (
       <DnDItem item={item} index={index} onEnter={this.onEnter} onUp={this.onUp}
-        isSelected={this.selectedItem ? this.equalItemFn(this.selectedItem.item, item): false}>
+        isSelected={this.selectedItem ? this.equalItemFn(this.selectedItem.container, this.selectedItem.item, this.items, item): false}>
         {dndItemSlot({item, index, container: this.items})}
       </DnDItem>))
 

@@ -126,8 +126,7 @@ export default {
         this.equalItemFn(si.container, this.items, si.index, index, si.item, item): false
 
       return (
-        <DnDItem item={item} index={index} onEnter={this.onEnter} onUp={this.onUp}
-          isSelected={isSelected}>
+        <DnDItem item={item} index={index} isSelected={isSelected} onEnter={this.onEnter} onUp={this.onUp}>
           {dndItemSlot({item, index, container: this.items})}
         </DnDItem>)
     })

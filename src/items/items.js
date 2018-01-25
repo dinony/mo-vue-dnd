@@ -27,14 +27,6 @@ export default {
       type: DnDOptions,
       default: () => new DnDOptions()
     },
-    equalItemFn: {
-      type: Function,
-      default: (sContainer, container, sIndex, index, sItem, item) => sItem === item
-    },
-    equalContainerFn: {
-      type: Function,
-      default: (source, target) => source && target && source === target
-    },
     dropHandler: {
       type: Function,
       required: false,
@@ -97,7 +89,7 @@ export default {
         this.dragState = new DragState(
           this.selectedItem,
           new DragContext(this.items, dragTarget.index, this.options, this.emitUpdate),
-          this.equalContainerFn(this.selectedItem.container, this.items))
+          this.selectedItem.container === this.items)
       }
     },
     onUp(dragTarget) {
@@ -120,11 +112,12 @@ export default {
 
     const items = this.displayedItems.map((item, index) => {
       const si = this.selectedItem
-      const isSelected = si ?
-        this.equalItemFn(si.container, this.displayedItems, si.index, index, si.item, item): false
+      const ds = this.dragState
+      const isSelected = si ? si.container === this.displayedItems && si.index === index: false
+      const isDragItem = ds ? ds.targetContext.index === index: false
 
       return (
-        <DnDItem item={item} index={index} isSelected={isSelected} onEnter={this.onEnter} onUp={this.onUp}>
+        <DnDItem item={item} index={index} isSelected={isSelected||isDragItem} onEnter={this.onEnter} onUp={this.onUp}>
           {dndItemSlot({item, index, container: this.items})}
         </DnDItem>)
     })

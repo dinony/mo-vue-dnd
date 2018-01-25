@@ -14,18 +14,19 @@ export class DropResult {
   }
 }
 
-export function drop(dragState) {
+export function drop(dragState, cloneItem=true) {
   const ds = dragState
   const sc = ds.sourceContext
   const tc = ds.targetContext
 
+  const handleClone = context => cloneItem ? context.options.cloneItemFn(context.item) : context.item
   const selfDrop = () => ds.sameContext && sc.index === tc.index
 
   if(ds.sameContext && !selfDrop() && sc.options.allowSameContainer) {
     if(sc.index < tc.index) {
       const newSrc = sc.container.slice(0, sc.index)
         .concat(sc.container.slice(sc.index+1, tc.index+1))
-        .concat(sc.item)
+        .concat(handleClone(sc))
         .concat(sc.container.slice(tc.index+1))
 
         // source is same as traget
@@ -35,7 +36,7 @@ export function drop(dragState) {
         ds.sameContext, true)
     } else {
       const newSrc = sc.container.slice(0, tc.index)
-        .concat(sc.item)
+        .concat(handleClone(sc))
         .concat(sc.container.slice(tc.index, sc.index))
         .concat(sc.container.slice(sc.index+1))
 
@@ -51,7 +52,7 @@ export function drop(dragState) {
       sc.container.slice()
 
     const newTrg = tc.container.slice(0, tc.index)
-      .concat(sc.item)
+      .concat(handleClone(sc))
       .concat(tc.container.slice(tc.index))
 
     return new DropResult(

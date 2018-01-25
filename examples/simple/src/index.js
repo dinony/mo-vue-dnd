@@ -14,8 +14,8 @@ new Vue({
   el: '#app',
   data() {
     return {
-      left: [{label:1}, {label:2}, {label:3}, {label:4}, {label:5}],
-      right: [{label: 'A'}, {label: 'B'}, {label: 'C'}, {label: 'D'}]
+      left: [1, 2, 3, 4, 5],
+      right: ['A', 'B', 'C', 'D']
     }
   },
   methods: {
@@ -27,7 +27,7 @@ new Vue({
     }
   },
   render() {
-    const renderDnDItem = props => <div class="dndItem">Item: {props.item.label}</div>
+    const renderDnDItem = props => <div class="dndItem">Item: {props.item}</div>
     const slots = {default: renderDnDItem}
 
     return (

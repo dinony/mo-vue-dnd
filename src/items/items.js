@@ -113,8 +113,9 @@ export default {
     const items = this.displayedItems.map((item, index) => {
       const si = this.selectedItem
       const ds = this.dragState
+
       const isSelected = si ? si.container === this.displayedItems && si.index === index: false
-      const isDragItem = ds ? ds.targetContext.index === index && ds.sourceContext.item === item: false
+      const isDragItem = ds ? ds.targetContext.container === this.items && ds.targetContext.index === index: false
 
       return (
         <DnDItem item={item} index={index} isSelected={isSelected||isDragItem} onEnter={this.onEnter} onUp={this.onUp}>

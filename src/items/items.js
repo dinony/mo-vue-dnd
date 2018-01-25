@@ -118,11 +118,16 @@ export default {
   render() {
     const dndItemSlot = this.$scopedSlots.default
 
-    const items = this.displayedItems.map((item, index) => (
-      <DnDItem item={item} index={index} onEnter={this.onEnter} onUp={this.onUp}
-        isSelected={this.selectedItem ? this.equalItemFn(this.selectedItem.container, this.selectedItem.item, this.items, item): false}>
-        {dndItemSlot({item, index, container: this.items})}
-      </DnDItem>))
+    const items = this.displayedItems.map((item, index) => {
+      const isSelected = this.selectedItem ?
+        this.equalItemFn(this.selectedItem.container, this.selectedItem.item, this.items, item): false
+
+      return (
+        <DnDItem item={item} index={index} onEnter={this.onEnter} onUp={this.onUp}
+          isSelected={isSelected}>
+          {dndItemSlot({item, index, container: this.items})}
+        </DnDItem>)
+    })
 
     const content = (
       <div class="mo-dndItems" onMouseleave={this.onMouseleave} ref="content">

@@ -114,7 +114,7 @@ export default {
       const si = this.selectedItem
       const ds = this.dragState
       const isSelected = si ? si.container === this.displayedItems && si.index === index: false
-      const isDragItem = ds ? ds.targetContext.index === index: false
+      const isDragItem = ds ? ds.targetContext.index === index && ds.sourceContext.item === item: false
 
       return (
         <DnDItem item={item} index={index} isSelected={isSelected||isDragItem} onEnter={this.onEnter} onUp={this.onUp}>

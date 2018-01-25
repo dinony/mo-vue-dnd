@@ -26,7 +26,6 @@ new Vue({
       this.right = updateRight
     }
   },
-
   render() {
     const renderDnDItem = props => (
       <div class="dndItem">

@@ -29,15 +29,11 @@ export default {
     },
     equalItemFn: {
       type: Function,
-      default: (selection, item) => {
-        return selection && selection.item === item
-      }
+      default: (selectedItem, item) => selectedItem === item
     },
     equalContainerFn: {
       type: Function,
-      default: (source, target) => {
-        return source && target && source === target
-      }
+      default: (source, target) => source && target && source === target
     },
     dropHandler: {
       type: Function,
@@ -124,7 +120,7 @@ export default {
 
     const items = this.displayedItems.map((item, index) => (
       <DnDItem item={item} index={index} onEnter={this.onEnter} onUp={this.onUp}
-        isSelected={this.equalItemFn(this.selectedItem, item)}>
+        isSelected={this.selectedItem ? this.equalItemFn(this.selectedItem.item, item): false}>
         {dndItemSlot({item, index, container: this.items})}
       </DnDItem>))
 

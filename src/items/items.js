@@ -29,7 +29,9 @@ export default {
     },
     equalItemFn: {
       type: Function,
-      default: (selectedContainer, selectedItem, container, item) => selectedContainer === container && selectedItem === item
+      default: (sContainer, container, sIndex, index) => {
+        return sContainer === container && sIndex === index
+      }
     },
     equalContainerFn: {
       type: Function,
@@ -119,8 +121,9 @@ export default {
     const dndItemSlot = this.$scopedSlots.default
 
     const items = this.displayedItems.map((item, index) => {
-      const isSelected = this.selectedItem ?
-        this.equalItemFn(this.selectedItem.container, this.selectedItem.item, this.items, item): false
+      const si = this.selectedItem
+      const isSelected = si ?
+        this.equalItemFn(si.container, this.items, si.index, index, si.item, item): false
 
       return (
         <DnDItem item={item} index={index} onEnter={this.onEnter} onUp={this.onUp}

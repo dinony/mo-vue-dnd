@@ -1,4 +1,5 @@
-import DnDItem from '../item/item'
+import './items.scss'
+import {default as DnDItem, DnDItemEventPayload} from '../item/item'
 import DnDHandle from '../handle/handle'
 import bus from '../bus'
 import {
@@ -12,7 +13,7 @@ import {
   indexOfDirectChild,
   findAncestorByClassName
 } from '../dom'
-import {drop} from '../drop'
+import {drop} from './drop'
 import DragContext from './dragContext'
 import DragState from './dragState'
 import DnDOptions from './dndOptions'
@@ -22,6 +23,12 @@ export default {
     items: {
       type: Array,
       required: true
+    },
+    group: {
+      validator(grpName) {
+        return typeof grpName === 'string' || grpName === null
+      },
+      default: null
     },
     options: {
       type: DnDOptions,
@@ -84,15 +91,19 @@ export default {
     onMouseleave() {
       this.dragState = null
     },
-    onEnter(dragTarget) {
+    onEnter(dragTargetOrMouseEvent) {
       if(this.selectedItem) {
+        const targetDragContext = dragTargetOrMouseEvent instanceof DnDItemEventPayload ?
+          new DragContext(this.items, dragTargetOrMouseEvent.index, this.options, this.emitUpdate):
+          new DragContext(this.items, 0, this.options, this.emitUpdate)
+
         this.dragState = new DragState(
           this.selectedItem,
-          new DragContext(this.items, dragTarget.index, this.options, this.emitUpdate),
+          targetDragContext,
           this.selectedItem.container === this.items)
       }
     },
-    onUp(dragTarget) {
+    onUp(dragTargetOrMouseEvent) {
       if(this.dragState) {
         const ret = this.dropHandler(this.dragState)
         if(ret.needsUpdate) {
@@ -109,6 +120,7 @@ export default {
   },
   render() {
     const dndItemSlot = this.$scopedSlots.default
+    const empty = <div class="mo-dndItemsEmpty" onMouseenter={this.onEnter}>Empty</div>
 
     const items = this.displayedItems.map((item, index) => {
       const si = this.selectedItem
@@ -124,10 +136,11 @@ export default {
     })
 
     const content = (
-      <div class="mo-dndItems" onMouseleave={this.onMouseleave} ref="content">
-        {items}
+      <div class="mo-dndItems" onMouseleave={this.onMouseleave} onMouseup={this.onUp} ref="content">
+        {this.displayedItems.length > 0 ? items : empty}
       </div>)
 
-    return this.options.wrapDnDHandle ? <DnDHandle container={this.items}>{content}</DnDHandle> : content
+    return this.displayedItems.length > 0 && this.options.wrapDnDHandle ?
+      <DnDHandle container={this.items}>{content}</DnDHandle>: content
   }
 }

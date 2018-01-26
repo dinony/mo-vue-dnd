@@ -1,14 +1,12 @@
 import Vue from 'vue'
-
 import {
   DnDContext, DnDItems,
   DnDOptions, DnDHandle
 } from 'mo-vue-dnd'
-
 import './index.scss'
 
-const leftOptions = new DnDOptions(false, false)
-const rightOptions = new DnDOptions(true, true)
+const leftOptions = new DnDOptions(false)
+const rightOptions = new DnDOptions(true)
 
 new Vue({
   el: '#app',

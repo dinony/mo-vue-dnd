@@ -7,24 +7,8 @@ export function drop(dragState, cloneItem=true) {
   const tc = ds.targetContext
 
   const handleClone = context => cloneItem ? context.options.cloneItemFn(context.item) : context.item
-  const selfDrop = () => ds.sameContext && sc.index === tc.index
 
-  const fallbackResultFn = () => {
-    return new DropResult(
-      new DropContext(sc.container.slice(), sc.updateFn),
-      new DropContext(tc.container.slice(), tc.updateFn),
-      ds.sameContext, false)
-  }
-
-  const sPerms = sc.options.permissions
-  const tPerms = tc.options.permissions
-  const sAllowsOut = sPerms.out === null || sPerms.out[tc.group]
-  const tAllowsIn = tPerms.in === null || tPerms.in[sc.group]
-  if(!sAllowsOut || !tAllowsIn) {
-    return fallbackResultFn()
-  }
-
-  if(ds.sameContext && !selfDrop() && sc.options.allowSameContainer) {
+  if(ds.sameContext) {
     if(sc.index < tc.index) {
       const newSrc = sc.container.slice(0, sc.index)
         .concat(sc.container.slice(sc.index+1, tc.index+1))
@@ -48,7 +32,7 @@ export function drop(dragState, cloneItem=true) {
         dc, dc,
         ds.sameContext, true)
     }
-  } else if(!ds.sameContext) {
+  } else {
     const newSrc = sc.options.allowItemRemoval ?
       sc.container.slice(0, sc.index).concat(sc.container.slice(sc.index+1)):
       sc.container.slice()
@@ -61,7 +45,5 @@ export function drop(dragState, cloneItem=true) {
       new DropContext(newSrc, sc.updateFn),
       new DropContext(newTrg, tc.updateFn),
       ds.sameContext, true)
-  } else {
-    return fallbackResultFn()
   }
 }

@@ -91,14 +91,26 @@ export default {
     },
     onEnter(dragTargetOrMouseEvent) {
       if(this.selectedItem) {
-        const targetDragContext = dragTargetOrMouseEvent instanceof DnDItemEventPayload ?
+        const sc = this.selectedItem
+        const tc = dragTargetOrMouseEvent instanceof DnDItemEventPayload ?
           new DragContext(this.group, this.items, dragTargetOrMouseEvent.index, this.options, this.emitUpdate):
           new DragContext(this.group, this.items, 0, this.options, this.emitUpdate)
 
-        this.dragState = new DragState(
-          this.selectedItem,
-          targetDragContext,
-          this.selectedItem.container === this.items)
+        const isSameContext = sc.container === this.items
+        const isSelfDrop = isSameContext && sc.index === tc.index
+
+        // check permissions
+        const sPerms = sc.options.permissions
+        const tPerms = tc.options.permissions
+        const sAllowsOut = sPerms.out === null || sPerms.out[tc.group]
+        const tAllowsIn = tPerms.in === null || tPerms.in[sc.group]
+
+        if(sAllowsOut && tAllowsIn && !isSelfDrop) {
+          this.dragState = new DragState(
+            sc,
+            tc,
+            isSameContext)
+        }
       }
     },
     onUp(dragTargetOrMouseEvent) {

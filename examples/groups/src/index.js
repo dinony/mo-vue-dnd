@@ -1,8 +1,21 @@
 import Vue from 'vue'
 import './index.scss'
 import {
-  DnDContext, DnDItems
+  DnDContext, DnDItems,
+  DnDOptions, getPermissions
 } from 'mo-vue-dnd'
+
+const aOptions = new DnDOptions(true, true, true,
+  getPermissions(['c'], ['b', 'd']))
+
+const bOptions = new DnDOptions(true, true, true,
+  getPermissions(['a'], ['c', 'd']))
+
+const cOptions = new DnDOptions(true, true, true,
+  getPermissions(['b'], ['a', 'd']))
+
+const dOptions = new DnDOptions(true, true, true,
+  getPermissions(['a', 'b', 'c', 'd'], ['d']))
 
 new Vue({
   el: '#app',
@@ -36,12 +49,12 @@ new Vue({
       <DnDContext scopedSlots={slots}>
         <div class="container">
           <div class="row">
-            <DnDItems items={this.a} group="a" onUpdate={this.updateTopLeft} scopedSlots={slots}/>
-            <DnDItems items={this.b} group="b" onUpdate={this.updateTopRight} scopedSlots={slots}/>
+            <DnDItems items={this.a} group="a" onUpdate={this.updateTopLeft} options={aOptions} scopedSlots={slots}/>
+            <DnDItems items={this.b} group="b" onUpdate={this.updateTopRight} options={bOptions} scopedSlots={slots}/>
           </div>
           <div class="row">
-            <DnDItems items={this.c} group="c" onUpdate={this.updateBottomLeft} scopedSlots={slots}/>
-            <DnDItems items={this.d} group="d" onUpdate={this.updateButtomRight} scopedSlots={slots}/>
+            <DnDItems items={this.c} group="c" onUpdate={this.updateBottomLeft} options={cOptions} scopedSlots={slots}/>
+            <DnDItems items={this.d} group="d" onUpdate={this.updateButtomRight} options={dOptions} scopedSlots={slots}/>
           </div>
         </div>
       </DnDContext>

@@ -1,8 +1,8 @@
 export const DND_ITEM_SELECT = 'MO_DND_ITEM_SELECT'
 export class DnDItemSelectPayload {
-  constructor(event, clientRect, context) {
+  constructor(event, elem, context) {
     this.event = event
-    this.clientRect = clientRect
+    this.elem = elem
     this.context = context
   }
 }

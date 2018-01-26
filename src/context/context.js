@@ -57,10 +57,13 @@ export default {
     setSelectedState(payload) {
       this.state = StateEnum.DRAG
       this.selection = payload.context
+      const clientRect = payload.elem.getBoundingClientRect()
       // Selected item viewport coords
-      this.selectedItemPos = CSSPos.toVec2(payload.clientRect)
+      this.selectedItemPos = Vec2.add(
+        new Vec2(window.pageXOffset, window.pageYOffset),
+        new Vec2(clientRect.x, clientRect.y))
       // MouseEvent viewport coords
-      this.mdPos = new Vec2(payload.event.clientX, payload.event.clientY)
+      this.mdPos = new Vec2(payload.event.pageX, payload.event.pageY)
       bus.$emit(DND_ITEM_SELECTED, this.selection)
     },
     setInitState() {
@@ -75,8 +78,8 @@ export default {
       if(this.mmPos === null) {
         this.mmPos = new Vec2(0, 0)
       }
-      this.$set(this.mmPos, 'x', event.clientX)
-      this.$set(this.mmPos, 'y', event.clientY)
+      this.$set(this.mmPos, 'x', event.pageX)
+      this.$set(this.mmPos, 'y', event.pageY)
     }
   },
   render() {

@@ -79,9 +79,8 @@ export default {
       const index = indexOfDirectChild(parent, child)
       if(index >= 0 && index < this.items.length) {
         const itemChild = findAncestorByClassName(child, 'mo-dndItem')
-        const clientRect = itemChild.getBoundingClientRect()
         const payload = new DnDItemSelectPayload(
-          event, clientRect,
+          event, itemChild,
           new DragContext(this.group, this.items, index, this.options, this.emitUpdate))
         bus.$emit(DND_ITEM_SELECT, payload)
       }

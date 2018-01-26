@@ -3,6 +3,9 @@ import {
   DnDContext, DnDItems,
   DnDOptions, DnDHandle
 } from 'mo-vue-dnd'
+// import 'mo-vue-dnd/index.scss'
+import 'mo-vue-dnd/index.css'
+
 import './index.scss'
 
 const leftOptions = new DnDOptions(false)

@@ -1,4 +1,3 @@
-import './context.scss'
 import bus from '../bus'
 import {
   DND_ITEM_SELECT,

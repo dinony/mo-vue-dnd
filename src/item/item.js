@@ -1,5 +1,3 @@
-import './item.scss'
-
 export class DnDItemEventPayload {
   constructor(index) {
     this.index = index

@@ -1,4 +1,3 @@
-import './items.scss'
 import {default as DnDItem, DnDItemEventPayload} from '../item/item'
 import DnDHandle from '../handle/handle'
 import bus from '../bus'

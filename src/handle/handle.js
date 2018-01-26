@@ -1,4 +1,3 @@
-import './handle.scss'
 import bus from '../bus'
 import {DND_HANDLE_MD, DnDHandleMdPayload} from '../events'
 

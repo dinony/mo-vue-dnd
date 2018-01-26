@@ -3,7 +3,7 @@ function indexOf(child, parent) {
 }
 
 function getDirectChild(parent, child) {
-  return child.parentNode === parent ? child : getDirectChild(parent, child.parentNode)
+  return child === null || child.parentNode === parent ? child : getDirectChild(parent, child.parentNode)
 }
 
 export function indexOfDirectChild(parent, child) {

@@ -25,9 +25,7 @@ export default {
       required: true
     },
     group: {
-      validator(grpName) {
-        return typeof grpName === 'string' || grpName === null
-      },
+      type: String,
       default: null
     },
     options: {

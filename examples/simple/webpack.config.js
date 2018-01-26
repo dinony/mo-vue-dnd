@@ -54,7 +54,7 @@ module.exports = {
       // 'mo-vue-dnd$': path.resolve(__dirname, '../../src/index.js'),
       // 'mo-vue-dnd/index.scss': path.resolve(__dirname, '../../src/index.scss'),
       'mo-vue-dnd$': path.resolve(__dirname, '../../dist/mo-vue-dnd.umd.js'),
-      'mo-vue-dnd/index.css': path.resolve(__dirname, '../../dist/index.css'),
+      'mo-vue-dnd/mo-vue-dnd.css': path.resolve(__dirname, '../../dist/mo-vue-dnd.css'),
     }
   },
   plugins: [],

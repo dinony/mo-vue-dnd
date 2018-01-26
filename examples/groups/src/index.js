@@ -4,7 +4,7 @@ import {
   DnDContext, DnDItems, DnDOptions
 } from 'mo-vue-dnd'
 // import 'mo-vue-dnd/index.scss'
-import 'mo-vue-dnd/index.css'
+import 'mo-vue-dnd/mo-vue-dnd.css'
 
 const aOptions = new DnDOptions()
 aOptions.permissions = [['c'], ['b', 'd']]

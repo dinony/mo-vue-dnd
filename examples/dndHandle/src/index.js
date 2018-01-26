@@ -5,7 +5,7 @@ import {
   DnDOptions, DnDHandle
 } from 'mo-vue-dnd'
 // import 'mo-vue-dnd/index.scss'
-import 'mo-vue-dnd/index.css'
+import 'mo-vue-dnd/mo-vue-dnd.css'
 
 import './index.scss'
 

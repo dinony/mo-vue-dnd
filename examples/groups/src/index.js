@@ -1,21 +1,20 @@
 import Vue from 'vue'
 import './index.scss'
 import {
-  DnDContext, DnDItems,
-  DnDOptions, getPermissions
+  DnDContext, DnDItems, DnDOptions
 } from 'mo-vue-dnd'
 
-const aOptions = new DnDOptions(true, true, true,
-  getPermissions(['c'], ['b', 'd']))
+const aOptions = new DnDOptions()
+aOptions.permissions = [['c'], ['b', 'd']]
 
-const bOptions = new DnDOptions(true, true, true,
-  getPermissions(['a'], ['c', 'd']))
+const bOptions = new DnDOptions()
+bOptions.permissions = [['a'], ['c', 'd']]
 
-const cOptions = new DnDOptions(true, true, true,
-  getPermissions(['b'], ['a', 'd']))
+const cOptions = new DnDOptions()
+cOptions.permissions = [['b'], ['a', 'd']]
 
-const dOptions = new DnDOptions(true, true, true,
-  getPermissions(['a', 'b', 'c', 'd'], ['d']))
+const dOptions = new DnDOptions()
+dOptions.permissions = [['a', 'b', 'c', 'd'], ['d']]
 
 new Vue({
   el: '#app',

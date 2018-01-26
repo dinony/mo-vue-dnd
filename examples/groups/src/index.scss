@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  .row {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 50px;
+
+    .mo-dndItems {
+      min-height: 200px;
+      min-width: 150px;
+      padding: 20px;
+      border: 1px dashed gray;
+    }
+  }
+}

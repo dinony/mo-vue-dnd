@@ -82,7 +82,7 @@ export default {
         const clientRect = itemChild.getBoundingClientRect()
         const payload = new DnDItemSelectPayload(
           event, clientRect,
-          new DragContext(this.items, index, this.options, this.emitUpdate))
+          new DragContext(this.group, this.items, index, this.options, this.emitUpdate))
         bus.$emit(DND_ITEM_SELECT, payload)
       }
     },
@@ -92,8 +92,8 @@ export default {
     onEnter(dragTargetOrMouseEvent) {
       if(this.selectedItem) {
         const targetDragContext = dragTargetOrMouseEvent instanceof DnDItemEventPayload ?
-          new DragContext(this.items, dragTargetOrMouseEvent.index, this.options, this.emitUpdate):
-          new DragContext(this.items, 0, this.options, this.emitUpdate)
+          new DragContext(this.group, this.items, dragTargetOrMouseEvent.index, this.options, this.emitUpdate):
+          new DragContext(this.group, this.items, 0, this.options, this.emitUpdate)
 
         this.dragState = new DragState(
           this.selectedItem,

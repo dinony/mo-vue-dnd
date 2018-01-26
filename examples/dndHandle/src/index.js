@@ -8,7 +8,7 @@ import {
 import './index.scss'
 
 const leftOptions = new DnDOptions(false, false)
-const rightOptions = new DnDOptions(true, true)
+const rightOptions = new DnDOptions(true, false)
 
 new Vue({
   el: '#app',

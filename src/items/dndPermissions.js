@@ -11,7 +11,7 @@ const reducePerms = (accum, key) => {
 }
 
 export function getPermissions(_in, out) {
-  const __in = _in.reduce(reducePerms, {})
-  const __out = out.reduce(reducePerms, {})
+  const __in = _in ? _in.reduce(reducePerms, {}): null
+  const __out = out ? out.reduce(reducePerms, {}): null
   return new DnDPermissions(__in, __out)
 }

@@ -10,7 +10,7 @@ export default class DnDOptions {
     this.allowItemRemoval = allowItemRemoval
     this.wrapDnDHandle = wrapDnDHandle
     this.cloneItemFn = cloneItemFn
-    this.perms = permissions
+    this.permissions = permissions
   }
 
   set permissions(perms) {

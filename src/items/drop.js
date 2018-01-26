@@ -1,18 +1,5 @@
-export class DropContext {
-  constructor(container, updateFn) {
-    this.container = container
-    this.updateFn = updateFn
-  }
-}
-
-export class DropResult {
-  constructor(sourceResult, targetResult, sameContext, needsUpdate) {
-    this.source = sourceResult
-    this.target = targetResult
-    this.sameContext = sameContext
-    this.needsUpdate = needsUpdate
-  }
-}
+import DropContext from './dropContext'
+import DropResult from './dropResult'
 
 export function drop(dragState, cloneItem=true) {
   const ds = dragState

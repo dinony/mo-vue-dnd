@@ -71,8 +71,10 @@ export default {
       this.selectedItem = null
       this.dragState = null
     },
-    onMousedown({event, container}) {
+    onMousedown(payload) {
+      const container = payload.container
       if(this.items !== container) {return}
+      const event = payload.event
       const parent = this.$refs.content
       const child = event.target
       const index = indexOfDirectChild(parent, child)

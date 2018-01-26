@@ -13,15 +13,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
-        exclude: /node_modules/,
-        use: [
-          {loader: 'style-loader'},
-          {loader: 'css-loader', options: {importLoaders: 1}},
-          {loader: 'postcss-loader'}
-        ]
-      },
-      {
         test: /\.scss$/,
         exclude: /node_modules/,
         use: [
@@ -32,27 +23,14 @@ module.exports = {
         ]
       },
       {
-        test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
-        loader: 'file-loader'
-      },
-      {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/
-      },
-      {
-        test: /\.(png|jpg|gif|svg)$/,
-        loader: 'file-loader',
-        options: {
-          name: '[name].[ext]?[hash]'
-        }
       }
     ]
   },
-  resolve: {
-    alias: {
-      'vue$': 'vue/dist/vue.esm.js'
-    }
+  externals: {
+    vue: 'vue'
   },
   plugins: [],
   devServer: {

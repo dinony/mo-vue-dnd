@@ -1,5 +1,12 @@
 var path = require('path')
 var webpack = require('webpack')
+var pkg = require('./package.json')
+
+const banner = `
+mo-vue-dnd v${pkg.version}
+(c) 2018 ${pkg.author}
+License: ${pkg.license}
+`
 
 module.exports = {
   entry: './src/index.js',
@@ -32,7 +39,9 @@ module.exports = {
   externals: {
     vue: 'vue'
   },
-  plugins: [],
+  plugins: [
+    new webpack.BannerPlugin(banner)
+  ],
   devServer: {
     historyApiFallback: true,
     noInfo: true,

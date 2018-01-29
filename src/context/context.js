@@ -23,6 +23,7 @@ export default {
       state: StateEnum.INIT,
       selection: null,
       selectedItemPos: null,
+      selectedClientRect: null,
       mdPos: null,
       mmPos: null
     }
@@ -47,9 +48,16 @@ export default {
       // Return {x,y} in viewport coordinates
       return this.mmPos && this.mdItemOffset ? this.mmPos.add(this.mdItemOffset) : null
     },
+    dragItemDim() {
+      return {
+        width: `${this.selectedClientRect.width}px`,
+        height: `${this.selectedClientRect.height}px`
+      }
+    },
     dragItemStyle() {
-      // Return css positions {top, left} of dragged item
-      return this.dragItemPos ? CSSPos.fromVec2(this.dragItemPos) : null
+      // Return css positions and dimensions {top, left, width, height} of dragged item
+      return Object.assign({}, this.dragItemDim,
+        this.dragItemPos ? CSSPos.fromVec2(this.dragItemPos) : null)
     }
   },
   methods: {
@@ -57,6 +65,7 @@ export default {
       this.state = StateEnum.DRAG
       this.selection = payload.context
       const clientRect = payload.elem.getBoundingClientRect()
+      this.selectedClientRect = clientRect
       // Selected item viewport coords
       this.selectedItemPos = Vec2.add(
         new Vec2(window.pageXOffset, window.pageYOffset),
@@ -69,6 +78,7 @@ export default {
       this.state = StateEnum.INIT
       this.selection = null
       this.selectedItemPos = null
+      this.selectedClientRect = null
       this.mdPos = null
       this.mmPos = null
       bus.$emit(DND_ITEM_UNSELECTED)

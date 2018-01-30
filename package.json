@@ -13,7 +13,8 @@
     "simple:build": "cross-env NODE_ENV=development webpack --config examples/simple/webpack.config.js",
     "dndHandle:dev": "cross-env NODE_ENV=development webpack-dev-server --config examples/dndHandle/webpack.config.js",
     "dndHandle:build": "cross-env NODE_ENV=development webpack --config examples/dndHandle/webpack.config.js",
-    "groups:dev": "cross-env NODE_ENV=development webpack-dev-server --config examples/groups/webpack.config.js"
+    "groups:dev": "cross-env NODE_ENV=development webpack-dev-server --config examples/groups/webpack.config.js",
+    "nested:dev": "cross-env NODE_ENV=development webpack-dev-server --config examples/nested/webpack.config.js"
   },
   "files": [
     "dist"

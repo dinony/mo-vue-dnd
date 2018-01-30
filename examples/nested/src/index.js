@@ -7,13 +7,15 @@ import 'mo-vue-dnd/index.scss'
 // import 'mo-vue-dnd/mo-vue-dnd.css'
 
 import {
-  LeafItem, ContainerItem,
-  LEFT_GRP, leftOptions
+  LeafItem, ContainerItem
 } from './left/left'
 import {
-  LeafNode, IntermediateNode, RIGHT_GRP,
-  rightOptions
+  LeafNode, IntermediateNode
 } from './right/right'
+import {
+  LEFT_GRP, leftOptions,
+  RIGHT_GRP, rightOptions
+} from './config'
 
 new Vue({
   el: '#app',

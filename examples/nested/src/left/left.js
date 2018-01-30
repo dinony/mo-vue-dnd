@@ -1,16 +1,9 @@
 import {DnDOptions} from 'mo-vue-dnd'
 import './left.scss'
 import {
-  RIGHT_GRP, LeafNode, IntermediateNode
+  LeafNode, IntermediateNode
 } from '../right/right'
-
-export const LEFT_GRP = 'left'
-export const leftOptions = new DnDOptions()
-leftOptions.cloneItemFn = item => item
-leftOptions.permissions = [
-  [],
-  [RIGHT_GRP]
-]
+import {leftOptions} from '../config'
 
 class Item {
   constructor(label) {

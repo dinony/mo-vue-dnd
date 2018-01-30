@@ -1,13 +1,5 @@
 import {DnDOptions} from 'mo-vue-dnd'
-import {LEFT_GRP} from '../left/left'
-
-export const RIGHT_GRP = 'right'
-export const rightOptions = new DnDOptions()
-rightOptions.cloneItemFn = node => node
-rightOptions.permissions = [
-  [LEFT_GRP, RIGHT_GRP],
-  [RIGHT_GRP]
-]
+import {rightOptions} from '../config'
 
 class Node {
   // Abstract: override in subclasses

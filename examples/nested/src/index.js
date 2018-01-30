@@ -22,13 +22,12 @@ new Vue({
   data() {
     return {
       left: [
-        new LeafItem('A'),
-        new LeafItem('B'),
-        new LeafItem('C'),
-        new LeafItem('D'),
-        new LeafItem('E')
+        new LeafItem('Leaf'),
+        new ContainerItem('Container')
       ],
-      right: []
+      right: [
+        new IntermediateNode()
+      ]
     }
   },
   methods: {

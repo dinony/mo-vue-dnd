@@ -1,4 +1,5 @@
 import {DnDOptions} from 'mo-vue-dnd'
+import './left.scss'
 import {
   RIGHT_GRP, LeafNode, IntermediateNode
 } from '../right/right'
@@ -22,7 +23,7 @@ class Item {
   }
 
   renderFn(h) {
-    return <div>{this.label}</div>
+    return <div class="left-item">{this.label}</div>
   }
 }
 

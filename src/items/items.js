@@ -92,21 +92,35 @@ export default {
     onEnter(dragTargetOrMouseEvent) {
       if(this.selectedItem) {
         const sc = this.selectedItem
-        const tc = dragTargetOrMouseEvent instanceof DnDItemEventPayload ?
-          new DragContext(this.group, this.items, dragTargetOrMouseEvent.index, this.options, this.emitUpdate):
-          new DragContext(this.group, this.items, 0, this.options, this.emitUpdate)
+        const trgIndex = dragTargetOrMouseEvent instanceof DnDItemEventPayload ?
+          dragTargetOrMouseEvent.index : 0
+        const trgOptions = this.options
+        const trgGroup = this.group
 
         const isSameContext = sc.container === this.items
-        const isSelfDrop = isSameContext && sc.index === tc.index
+        const isSelfDrop = isSameContext && sc.index === trgIndex
 
         // check permissions
         const sPerms = sc.options.permissions
-        const tPerms = tc.options.permissions
-        const sAllowsOut = sPerms.out === null || sPerms.out[tc.group]
+        const tPerms = trgOptions.permissions
+        const sAllowsOut = sPerms.out === null || sPerms.out[trgGroup]
         const tAllowsIn = tPerms.in === null || tPerms.in[sc.group]
 
         if(sAllowsOut && tAllowsIn && !isSelfDrop) {
-          this.dragState = new DragState(sc, tc, isSameContext)
+          // Permissions ok
+          const tc = new DragContext(this.group, this.items, trgIndex, trgOptions, this.emitUpdate)
+
+          if(dragTargetOrMouseEvent instanceof DnDItemEventPayload) {
+            const eventRef = dragTargetOrMouseEvent.event
+            const elemRef = dragTargetOrMouseEvent.elem
+            const clientRect = elemRef.getBoundingClientRect()
+
+            const shouldInsertBefore = eventRef.clientY < clientRect.top+(clientRect.height/2)
+
+            this.dragState = new DragState(sc, tc, isSameContext, shouldInsertBefore)
+          } else {
+            this.dragState = new DragState(sc, tc, isSameContext, true)
+          }
         }
       }
     },

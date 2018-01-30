@@ -5,8 +5,24 @@ export default class DnDPermissions {
   }
 }
 
+export class InvalidPermissionKeyException extends Error {
+  constructor(message) {
+    super(message)
+  }
+}
+
+const invalidKeyErrMsg = key =>
+  (`
+   Permission key: \`${key}\` is not allowed.
+   Please use a valid group name (string).
+  `)
+
 const reducePerms = (accum, key) => {
-  accum[key] = true
+  if(key !== null && key !== undefined) {
+    accum[key] = true
+  } else {
+    throw new InvalidPermissionKeyException(invalidKeyErrMsg(key))
+  }
   return accum
 }
 

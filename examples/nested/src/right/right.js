@@ -2,7 +2,7 @@ import {DnDOptions} from 'mo-vue-dnd'
 import {LEFT_GRP} from '../left/left'
 
 export const RIGHT_GRP = 'right'
-const rightOptions = new DnDOptions()
+export const rightOptions = new DnDOptions()
 rightOptions.cloneItemFn = node => node
 rightOptions.permissions = [
   [LEFT_GRP, RIGHT_GRP],

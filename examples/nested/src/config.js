@@ -3,15 +3,22 @@ import {DnDOptions} from 'mo-vue-dnd'
 export const LEFT_GRP = 'left'
 export const RIGHT_GRP = 'right'
 
-export const leftOptions = new DnDOptions()
+export const leftOptions = new DnDOptions(false)
 leftOptions.cloneItemFn = item => item
 leftOptions.permissions = [
   [],
   [RIGHT_GRP]
 ]
+leftOptions.cloneItemFn = item => {
+  // Adapt cloneItemFn to create node instances
+  // when dropped into right column
+  return item.nodeFactory()
+}
 
 export const rightOptions = new DnDOptions()
 rightOptions.cloneItemFn = node => {
+  // Do no clone on the right side
+  // Just pass reference
   return node
 }
 rightOptions.permissions = [

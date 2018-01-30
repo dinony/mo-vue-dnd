@@ -1,5 +1,7 @@
 export class DnDItemEventPayload {
-  constructor(index) {
+  constructor(event, elem, index) {
+    this.event = event
+    this.elem = elem
     this.index = index
   }
 }
@@ -18,17 +20,15 @@ export default {
       default: false
     }
   },
-  computed: {
-    eventPayload() {
-      return new DnDItemEventPayload(this.index)
-    }
-  },
   methods: {
-    emitOnMouseenter() {
-      this.$emit('enter', this.eventPayload)
+    getEventPayload(event) {
+      return new DnDItemEventPayload(event, this.$el, this.index)
+    },
+    emitOnMouseenter(event) {
+      this.$emit('enter', this.getEventPayload(event))
     },
     emitOnMouseup(event) {
-      this.$emit('up', this.eventPayload)
+      this.$emit('up', this.getEventPayload(event))
     }
   },
   render() {

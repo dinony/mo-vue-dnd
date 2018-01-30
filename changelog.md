@@ -2,6 +2,7 @@
 
 # 0.1.2 (2017-01-30)
 
+* Bugfix: min-height issue for transition from empty to default state
 * Improvement: Check for invalid permissions keys in DnDOptions
 
 # 0.1.1 (2017-01-29)

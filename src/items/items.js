@@ -106,10 +106,7 @@ export default {
         const tAllowsIn = tPerms.in === null || tPerms.in[sc.group]
 
         if(sAllowsOut && tAllowsIn && !isSelfDrop) {
-          this.dragState = new DragState(
-            sc,
-            tc,
-            isSameContext)
+          this.dragState = new DragState(sc, tc, isSameContext)
         }
       }
     },

@@ -140,7 +140,9 @@ export default {
       const isDragItem = ds ? ds.targetContext.container === this.items && ds.targetContext.index === index: false
 
       return (
-        <DnDItem item={item} index={index} isSelected={isSelected||isDragItem} onEnter={this.onEnter} onUp={this.onUp}>
+        <DnDItem item={item} index={index}
+          isSelected={isSelected||isDragItem}
+          onEnter={this.onEnter} onUp={this.onUp}>
           {dndItemSlot({item, index, container: this.items})}
         </DnDItem>)
     })

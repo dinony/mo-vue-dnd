@@ -10,7 +10,10 @@ import {
   LeafItem, ContainerItem,
   LEFT_GRP, leftOptions
 } from './left/left'
-import {LeafNode, IntermediateNode} from './right/right'
+import {
+  LeafNode, IntermediateNode, RIGHT_GRP,
+  rightOptions
+} from './right/right'
 
 new Vue({
   el: '#app',
@@ -39,15 +42,26 @@ new Vue({
       return props.item.renderFn(h)
     }
     const slots = {default: renderItem}
-
     return (
       <DnDContext scopedSlots={slots}>
-        <DnDItems
-          group={LEFT_GRP}
-          items={this.left}
-          options={leftOptions}
-          onUpdate={this.updateLeft}
-          scopedSlots={slots}/>
+        <div class="wrapper">
+          <div class="left">
+            <DnDItems
+              group={LEFT_GRP}
+              items={this.left}
+              options={leftOptions}
+              onUpdate={this.updateLeft}
+              scopedSlots={slots}/>
+          </div>
+          <div class="right">
+            <DnDItems
+              group={RIGHT_GRP}
+              items={this.right}
+              options={rightOptions}
+              onUpdate={this.updateRight}
+              scopedSlots={slots}/>
+          </div>
+        </div>
       </DnDContext>
     )
   }

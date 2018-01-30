@@ -1,7 +1,7 @@
 export default class DragContext {
   constructor(group, container, index, options, updateFn) {
-    this.container = container
     this.group = group
+    this.container = container
     this.index = index
     this.options = options
     this.updateFn = updateFn

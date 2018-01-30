@@ -1,5 +1,6 @@
-import {DnDOptions} from 'mo-vue-dnd'
-import {rightOptions} from '../config'
+import {DnDOptions, DnDItems} from 'mo-vue-dnd'
+import './right.scss'
+import {rightOptions, RIGHT_GRP} from '../config'
 
 class Node {
   // Abstract: override in subclasses
@@ -18,9 +19,6 @@ export class IntermediateNode extends Node {
   constructor(children=[]) {
     super()
     this.children = children
-    this.slots = {
-      default: props => props.item.renderFn()
-    }
   }
 
   setChildren(children) {
@@ -28,13 +26,19 @@ export class IntermediateNode extends Node {
   }
 
   renderFn(h) {
+    const slots = {
+      default: props => props.item.renderFn(h)
+    }
     return (
-      <DnDItems
-        group={RIGHT_GRP}
-        items={this.children}
-        onUpdate={this.setChildren}
-        options={rightOptions}
-        scopedSlots={this.slots}/>
+      <div class="intermediate-node">
+        <h5>Container</h5>
+        <DnDItems
+          group={RIGHT_GRP}
+          items={this.children}
+          onUpdate={this.setChildren}
+          options={rightOptions}
+          scopedSlots={slots}/>
+      </div>
     )
   }
 }

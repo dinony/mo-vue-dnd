@@ -2,7 +2,13 @@ import {DnDOptions, DnDItems} from 'mo-vue-dnd'
 import './right.scss'
 import {rightOptions, RIGHT_GRP} from '../config'
 
+const nodeCounter = 0
+
 class Node {
+  constructor() {
+    this.id = `node-${nodeCounter++}`
+  }
+
   // Abstract: override in subclasses
   renderFn(h) {
     return <div></div>
@@ -37,6 +43,7 @@ export class IntermediateNode extends Node {
           items={this.children}
           onUpdate={this.setChildren}
           options={rightOptions}
+          keyFn={item => item.id}
           scopedSlots={slots}/>
       </div>
     )

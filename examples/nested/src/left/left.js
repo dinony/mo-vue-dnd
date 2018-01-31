@@ -5,9 +5,12 @@ import {
 } from '../right/right'
 import {leftOptions} from '../config'
 
+const itemCounter = 0
+
 class Item {
   constructor(label) {
     this.label = label
+    this.id = `item-${itemCounter++}`
   }
 
   // Abstract: override in subclasses

@@ -37,6 +37,9 @@ new Vue({
     },
     updateRight(right) {
       this.right = right
+    },
+    getObjId(obj) {
+      return obj.id
     }
   },
   render(h) {
@@ -45,7 +48,7 @@ new Vue({
     }
     const slots = {default: renderItem}
     return (
-      <DnDContext debug={true} scopedSlots={slots}>
+      <DnDContext scopedSlots={slots}>
         <div class="wrapper">
           <div class="left">
             <DnDItems
@@ -53,6 +56,7 @@ new Vue({
               items={this.left}
               options={leftOptions}
               onUpdate={this.updateLeft}
+              keyFn={this.getObjId}
               scopedSlots={slots}/>
           </div>
           <div class="right">
@@ -61,6 +65,7 @@ new Vue({
               items={this.right}
               options={rightOptions}
               onUpdate={this.updateRight}
+              keyFn={this.getObjId}
               scopedSlots={slots}/>
           </div>
         </div>

@@ -13,9 +13,9 @@ export function drop(dragState, cloneItem=true) {
   if(ds.sameContext) {
     if(sc.index < tc.index) {
       const newSrc = sc.container.slice(0, sc.index)
-        .concat(sc.container.slice(sc.index+1, tc.index+1))
+        .concat(sc.container.slice(sc.index+1, trgIndex))
         .concat(handleClone(sc))
-        .concat(sc.container.slice(tc.index+1))
+        .concat(sc.container.slice(trgIndex))
 
         // source is same as traget
       const dc = new DropContext(newSrc, sc.updateFn)

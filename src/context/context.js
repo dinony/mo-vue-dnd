@@ -96,7 +96,7 @@ export default {
       <div class="mo-dndContextDebug">
         <h4>mo-vue-dnd</h4>
         <pre>State: {this.state}</pre>
-        <pre>{this.selection ? JSON.stringify(this.dragItemPos, null, 2): null}</pre>
+        <pre>{this.selection ? JSON.stringify(this.selection, null, 2): null}</pre>
       </div>)
 
     const content = this.debug ? [this.$slots.default, debugOut()] : this.$slots.default

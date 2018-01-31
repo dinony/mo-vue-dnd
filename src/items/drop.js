@@ -8,6 +8,8 @@ export function drop(dragState, cloneItem=true) {
 
   const handleClone = context => cloneItem ? context.options.cloneItemFn(context.item) : context.item
 
+  const trgIndex = ds.insertBefore ? tc.index: tc.index+1
+
   if(ds.sameContext) {
     if(sc.index < tc.index) {
       const newSrc = sc.container.slice(0, sc.index)
@@ -37,9 +39,9 @@ export function drop(dragState, cloneItem=true) {
       sc.container.slice(0, sc.index).concat(sc.container.slice(sc.index+1)):
       sc.container.slice()
 
-    const newTrg = tc.container.slice(0, tc.index)
+    const newTrg = tc.container.slice(0, trgIndex)
       .concat(handleClone(sc))
-      .concat(tc.container.slice(tc.index))
+      .concat(tc.container.slice(trgIndex))
 
     return new DropResult(
       new DropContext(newSrc, sc.updateFn),

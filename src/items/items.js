@@ -92,13 +92,16 @@ export default {
     onEnter(dragTargetOrMouseEvent) {
       if(this.selectedItem) {
         const sc = this.selectedItem
+        const isSameContext = sc.container === this.items
+
         const trgIndex = dragTargetOrMouseEvent instanceof DnDItemEventPayload ?
-          dragTargetOrMouseEvent.index : 0
+          dragTargetOrMouseEvent.index: 0
+
+        const isSelfDrop = isSameContext && sc.index === trgIndex
+        if(isSelfDrop) {return}
+
         const trgOptions = this.options
         const trgGroup = this.group
-
-        const isSameContext = sc.container === this.items
-        const isSelfDrop = isSameContext && sc.index === trgIndex
 
         // check permissions
         const sPerms = sc.options.permissions
@@ -106,7 +109,7 @@ export default {
         const sAllowsOut = sPerms.out === null || sPerms.out[trgGroup]
         const tAllowsIn = tPerms.in === null || tPerms.in[sc.group]
 
-        if(sAllowsOut && tAllowsIn && !isSelfDrop) {
+        if(sAllowsOut && tAllowsIn) {
           // Permissions ok
           const tc = new DragContext(this.group, this.items, trgIndex, trgOptions, this.emitUpdate)
 
@@ -141,18 +144,34 @@ export default {
   },
   render() {
     const dndItemSlot = this.$scopedSlots.default
-    const empty = <div class="mo-dndItemsEmpty" onMouseenter={this.onEnter}>Empty</div>
+    const empty = <div class="mo-dndItemsEmpty" onMousemove={this.onEnter}>Empty</div>
 
+    const ds = this.dragState
+    const si = this.selectedItem
     const items = this.displayedItems.map((item, index) => {
-      const si = this.selectedItem
-      const ds = this.dragState
+      let isSelectedItem = false
+      let isProjectedItem = false
+      if(ds) {
+        // Determine whether item is dragged (selected) item
+        if(!ds.sameContext && ds.sourceContext.container === this.items) {
+          isSelectedItem = si.index === index
+        }
 
-      const isSelected = si ? si.container === this.displayedItems && si.index === index: false
-      const isDragItem = ds ? ds.targetContext.container === this.items && ds.targetContext.index === index: false
+        // Determine whether item is projection of selected item in target container
+        if(ds.sameContext && ds.targetContext.container === this.items) {
+          if(ds.shouldInsertBefore) {
+            isProjectedItem = ds.targetContext.index === index
+          } else {
+            isProjectedItem = ds.targetContext.index+1 === index
+          }
+        }
+      } else if(si) {
+        isSelectedItem = si.container === this.items && si.index === index
+      }
 
       return (
         <DnDItem item={item} index={index}
-          isSelected={isSelected||isDragItem}
+          isSelected={isSelectedItem}
           onEnter={this.onEnter} onUp={this.onUp}>
           {dndItemSlot({item, index, container: this.items})}
         </DnDItem>)

@@ -18,6 +18,10 @@ export default {
     isSelected: {
       type: Boolean,
       default: false
+    },
+    isProjected: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -35,10 +39,14 @@ export default {
     const params = {
       class: {
         'mo-dndItem': true,
-        'mo-dndItemSelected': this.isSelected
-      },
-      on: {
-        mouseenter: this.emitOnMouseenter,
+        'mo-dndItemSelected': this.isSelected,
+        'mo-dndItemProjected': this.isProjected
+      }
+    }
+
+    if(!this.isSelected && !this.isProjected) {
+      params.on = {
+        mousemove: this.emitOnMouseenter,
         mouseup: this.emitOnMouseup
       }
     }

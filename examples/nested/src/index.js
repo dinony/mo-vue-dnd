@@ -44,7 +44,7 @@ new Vue({
     }
     const slots = {default: renderItem}
     return (
-      <DnDContext scopedSlots={slots}>
+      <DnDContext debug={true} scopedSlots={slots}>
         <div class="wrapper">
           <div class="left">
             <DnDItems

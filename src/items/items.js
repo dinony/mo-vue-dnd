@@ -158,8 +158,8 @@ export default {
         }
 
         // Determine whether item is projection of selected item in target container
-        if(ds.sameContext && ds.targetContext.container === this.items) {
-          if(ds.shouldInsertBefore) {
+        if(ds.targetContext.container === this.items) {
+          if(ds.insertBefore) {
             isProjectedItem = ds.targetContext.index === index
           } else {
             isProjectedItem = ds.targetContext.index+1 === index
@@ -172,6 +172,7 @@ export default {
       return (
         <DnDItem item={item} index={index}
           isSelected={isSelectedItem}
+          isProjected={isProjectedItem}
           onEnter={this.onEnter} onUp={this.onUp}>
           {dndItemSlot({item, index, container: this.items})}
         </DnDItem>)

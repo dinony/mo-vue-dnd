@@ -6,7 +6,7 @@ export function drop(dragState, cloneItem=true) {
   const sc = ds.sourceContext
   const tc = ds.targetContext
 
-  const handleClone = context => cloneItem ? context.options.cloneItemFn(context.item) : context.item
+  const handleClone = context => cloneItem ? context.options.cloneItemFn(context.item, context.group) : context.item
 
   const trgIndex = ds.insertBefore ? tc.index: tc.index+1
 

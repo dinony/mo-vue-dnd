@@ -23,7 +23,8 @@ new Vue({
     return {
       left: [
         new LeafItem('Leaf'),
-        new ContainerItem('Container')
+        new ContainerItem('Container'),
+        new LeafItem('Leaf 2'),
       ],
       right: [
         new IntermediateNode()

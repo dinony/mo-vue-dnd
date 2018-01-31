@@ -6,13 +6,13 @@ export const RIGHT_GRP = 'right'
 export const leftOptions = new DnDOptions(false)
 leftOptions.cloneItemFn = item => item
 leftOptions.permissions = [
-  [],
-  [RIGHT_GRP]
+  [LEFT_GRP],
+  [RIGHT_GRP, LEFT_GRP]
 ]
-leftOptions.cloneItemFn = item => {
+leftOptions.cloneItemFn = (item, targetGroup) => {
   // Adapt cloneItemFn to create node instances
   // when dropped into right column
-  return item.nodeFactory()
+  return targetGroup === RIGHT_GRP ? item.nodeFactory() : item
 }
 
 export const rightOptions = new DnDOptions()

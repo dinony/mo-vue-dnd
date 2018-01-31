@@ -35,6 +35,10 @@ export default {
       type: Function,
       required: false,
       default: drop
+    },
+    keyFn: {
+      type: Function,
+      required: false
     }
   },
   data() {
@@ -119,7 +123,7 @@ export default {
             const clientRect = elemRef.getBoundingClientRect()
 
             const shouldInsertBefore = eventRef.clientY < clientRect.top+(clientRect.height/2)
-
+            console.log('insertBefore', shouldInsertBefore)
             this.dragState = new DragState(sc, tc, isSameContext, shouldInsertBefore)
           } else {
             this.dragState = new DragState(sc, tc, isSameContext, true)
@@ -169,8 +173,10 @@ export default {
         isSelectedItem = si.container === this.items && si.index === index
       }
 
+      const key = this.keyFn ? this.keyFn(item) : index
+
       return (
-        <DnDItem item={item} index={index}
+        <DnDItem item={item} index={index} key={key}
           isSelected={isSelectedItem}
           isProjected={isProjectedItem}
           onEnter={this.onEnter} onUp={this.onUp}>

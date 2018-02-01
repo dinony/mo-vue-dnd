@@ -60,7 +60,7 @@ export default {
   computed: {
     displayedItems() {
       if(this.dragState) {
-        const ret = this.dropHandler(this.dragState, false)
+        const ret = this.dropHandler(this.dragState)
         return ret.needsUpdate ? ret.target.container : this.items
       } else {
         return this.items

@@ -45,7 +45,7 @@ export default {
       return this.mdPos && this.selectedItemPos ? this.selectedItemPos.sub(this.mdPos) : null
     },
     dragItemPos() {
-      // Return {x,y} in viewport coordinates
+      // Return {x,y} in page coordinates
       return this.mmPos && this.mdItemOffset ? this.mmPos.add(this.mdItemOffset) : null
     },
     dragItemDim() {
@@ -55,7 +55,7 @@ export default {
       }
     },
     dragItemStyle() {
-      // Return css positions and dimensions {top, left, width, height} of dragged item
+      // Return css positions (page coords) and dimensions {top, left, width, height} of dragged item
       return Object.assign({}, this.dragItemDim,
         this.dragItemPos ? CSSPos.fromVec2(this.dragItemPos) : null)
     }
@@ -66,11 +66,11 @@ export default {
       this.selection = payload.context
       const clientRect = payload.elem.getBoundingClientRect()
       this.selectedClientRect = clientRect
-      // Selected item viewport coords
+      // Selected item page coords
       this.selectedItemPos = Vec2.add(
         new Vec2(window.pageXOffset, window.pageYOffset),
         new Vec2(clientRect.x, clientRect.y))
-      // MouseEvent viewport coords
+      // MouseEvent page coords
       this.mdPos = new Vec2(payload.event.pageX, payload.event.pageY)
       bus.$emit(DND_ITEM_SELECTED, this.selection)
     },

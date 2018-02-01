@@ -11,6 +11,9 @@ export default {
     item: {
       required: true
     },
+    keyTest: {
+      required: true,
+    },
     index: {
       type: Number,
       required: true
@@ -28,15 +31,16 @@ export default {
     getEventPayload(event) {
       return new DnDItemEventPayload(event, this.$el, this.index)
     },
-    emitOnMouseenter(event) {
-      this.$emit('enter', this.getEventPayload(event))
+    emitMove(event) {
+      this.$emit('move', this.getEventPayload(event))
     },
-    emitOnMouseup(event) {
+    emitUp(event) {
       this.$emit('up', this.getEventPayload(event))
     }
   },
   render() {
     const params = {
+      key: this.keyTest,
       class: {
         'mo-dndItem': true,
         'mo-dndItemSelected': this.isSelected,
@@ -46,8 +50,8 @@ export default {
 
     if(!this.isSelected && !this.isProjected) {
       params.on = {
-        mousemove: this.emitOnMouseenter,
-        mouseup: this.emitOnMouseup
+        mousemove: this.emitMove,
+        mouseup: this.emitUp
       }
     }
     return <div {...params}>{this.$slots.default}</div>

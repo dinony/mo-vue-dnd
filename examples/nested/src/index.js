@@ -43,10 +43,9 @@ new Vue({
     }
   },
   render(h) {
-    const renderItem = props => {
-      return props.item.renderFn(h)
+    const slots = {
+      default: props => props.item.renderFn(h, props)
     }
-    const slots = {default: renderItem}
     return (
       <DnDContext scopedSlots={slots}>
         <div class="wrapper">

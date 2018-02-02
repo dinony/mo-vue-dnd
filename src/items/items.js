@@ -102,12 +102,14 @@ export default {
         let sc = null
         let tc = null
         if(prevDS) {
-          // Get ref to resulting container of previous drag state
-          // This will be used as the source and target of the new drag state
+          // Same context
           // Note: If prevDS is not null then isSameContext must be true
-          const projContainer = prevDS.resultFn()
-          sc = new DragContext(this.group, projContainer, prevDS.targetContext.index, this.options, this.updateFn)
-          tc = new DragContext(this.group, projContainer, trgIndex, this.options, this.emitUpdate)
+
+          // Get the resulting container of previous drag state
+          // This will be used as the source and target of the new drag state
+          const prevResult = prevDS.resultFn()
+          sc = new DragContext(this.group, prevResult, prevDS.targetContext.index, this.options, this.emitUpdate)
+          tc = new DragContext(this.group, prevResult, trgIndex, this.options, this.emitUpdate)
         } else {
           sc = this.selectedItem
           tc = new DragContext(this.group, this.items, trgIndex, this.options, this.emitUpdate)

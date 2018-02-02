@@ -61,7 +61,7 @@ export default {
     displayedItems() {
       if(this.dragState) {
         const ret = this.dropHandler(this.dragState)
-        return ret.needsUpdate ? ret.target.container : this.items
+        return ret.target.container
       } else {
         return this.items
       }

@@ -181,7 +181,7 @@ export default {
         isSelectedItem = si.container === this.items && si.index === index
       }
 
-      const key = this.keyFn ? this.keyFn(item) : index
+      const key = this.keyFn ? this.keyFn(item): index
 
       return (
         <DnDItem item={item} index={index} key={key} keyTest={key}

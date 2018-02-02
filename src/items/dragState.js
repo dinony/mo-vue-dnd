@@ -6,4 +6,10 @@ export default class DragState {
     this.insertBefore = insertBefore
     this.resultFn = resultFn
   }
+
+  equals(other) {
+    return this.insertBefore === other.insertBefore &&
+      this.sourceContext.equals(other.sourceContext) &&
+      this.targetContext.equals(other.targetContext)
+  }
 }

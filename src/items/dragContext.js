@@ -10,4 +10,10 @@ export default class DragContext {
   get item() {
     return this.container[this.index]
   }
+
+  equals(other) {
+    return this.group === other.group &&
+      this.container === other.container &&
+      this.index === other.index
+  }
 }

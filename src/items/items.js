@@ -134,12 +134,10 @@ export default {
     onUp(dragTargetOrMouseEvent) {
       if(this.dragState) {
         const ret = this.dropHandler(this.dragState)
-        if(ret.needsUpdate) {
-          if(!ret.sameContext) {
-            ret.source.updateFn(ret.source.container)
-          }
-          ret.target.updateFn(ret.target.container)
+        if(!ret.sameContext) {
+          ret.source.updateFn(ret.source.container)
         }
+        ret.target.updateFn(ret.target.container)
       }
     },
     emitUpdate(payload) {

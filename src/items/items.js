@@ -98,12 +98,12 @@ export default {
         const trgIndex = dragTargetOrMouseEvent instanceof DnDItemEventPayload ?
           dragTargetOrMouseEvent.index: 0
 
-        const prevDS = this.dragState // capture prev drag state
+        const prevDS = this.dragState // Capture prev drag state
         let sc = null
         let tc = null
         if(prevDS) {
           // Get ref to resulting container of previous drag state
-          // This will be used as the source of the new drag state
+          // This will be used as the source and target of the new drag state
           // Note: If prevDS is not null then isSameContext must be true
           const projContainer = prevDS.resultFn()
           sc = new DragContext(this.group, projContainer, prevDS.targetContext.index, this.options, this.updateFn)
@@ -115,7 +115,7 @@ export default {
 
         const isSameContext = sc.container === tc.container
 
-        // check permissions
+        // Check permissions
         const sPerms = sc.options.permissions
         const tPerms = tc.options.permissions
         const sAllowsOut = sPerms.out === null || sPerms.out[tc.group]

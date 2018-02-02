@@ -8,44 +8,40 @@ export function drop(dragState, cloneItem=true) {
 
   const handleClone = context => cloneItem ? context.options.cloneItemFn(context.item, context.group) : context.item
 
-  const trgIndex = ds.insertBefore ? tc.index: tc.index+1
-
   if(ds.sameContext) {
+    // source=traget
+    const trgIndex = ds.insertBefore ? tc.index: tc.index+1
+    let trgResult = null
+
     if(sc.index < tc.index) {
-      const newSrc = sc.container.slice(0, sc.index)
+      trgResult = sc.container.slice(0, sc.index)
         .concat(sc.container.slice(sc.index+1, trgIndex))
         .concat(handleClone(sc))
         .concat(sc.container.slice(trgIndex))
-
-        // source is same as traget
-      const dc = new DropContext(newSrc, sc.updateFn)
-      return new DropResult(
-        dc, dc,
-        ds.sameContext, true)
     } else {
-      const newSrc = sc.container.slice(0, trgIndex)
+      trgResult = sc.container.slice(0, trgIndex)
         .concat(handleClone(sc))
         .concat(sc.container.slice(trgIndex, sc.index))
         .concat(sc.container.slice(sc.index+1))
-
-      // source is same as traget
-      const dc = new DropContext(newSrc, sc.updateFn)
-      return new DropResult(
-        dc, dc,
-        ds.sameContext, true)
     }
+
+    const dc = new DropContext(trgResult, sc.updateFn)
+    return new DropResult(dc, dc, ds.sameContext)
   } else {
-    const newSrc = sc.options.allowItemRemoval ?
-      sc.container.slice(0, sc.index).concat(sc.container.slice(sc.index+1)):
-      sc.container.slice()
+    // const srcCont = getContainer(sc)
+    // const trgCont = getContainer(tc)
 
-    const newTrg = tc.container.slice(0, trgIndex)
-      .concat(handleClone(sc))
-      .concat(tc.container.slice(trgIndex))
+    // const newSrc = sc.options.allowItemRemoval ?
+    //   srcCont.slice(0, sc.index).concat(srcCont.slice(sc.index+1)):
+    //   srcCont.slice()
 
-    return new DropResult(
-      new DropContext(newSrc, sc.updateFn),
-      new DropContext(newTrg, tc.updateFn),
-      ds.sameContext, true)
+    // const newTrg = trgCont.slice(0, trgIndex)
+    //   .concat(handleClone(sc))
+    //   .concat(trgCont.slice(trgIndex))
+
+    // return new DropResult(
+    //   new DropContext(newSrc, sc.updateFn),
+    //   new DropContext(newTrg, tc.updateFn),
+    //   ds.sameContext)
   }
 }

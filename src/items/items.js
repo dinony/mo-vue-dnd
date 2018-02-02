@@ -132,7 +132,7 @@ export default {
             shouldInsertBefore = eventRef.clientY < clientRect.top+clientRect.height/2
           }
 
-          this.dragState = new DragState(sc, tc, isSameContext, shouldInsertBefore, () => this.displayedItems())
+          this.dragState = new DragState(sc, tc, isSameContext, shouldInsertBefore, () => this.displayedItems)
         }
       }
     },
@@ -154,7 +154,7 @@ export default {
     const empty = <div class="mo-dndItemsEmpty" onMousemove={this.onMove}>Empty</div>
 
     const ds = this.dragState
-    const tc = ds.targetContext
+    const tc = ds ? ds.targetContext : null
     const si = this.selectedItem
     const items = this.displayedItems.map((item, index) => {
       // An item may be flagged as selected or projected
@@ -167,7 +167,7 @@ export default {
           if(ds.insertBefore) {
             isProjectedItem = index === tc.index-1
           } else {
-            isProjectedItem = index = tc.index
+            isProjectedItem = index === tc.index
           }
         } else {
           if(ds.insertBefore) {

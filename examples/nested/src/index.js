@@ -22,9 +22,9 @@ new Vue({
   data() {
     return {
       left: [
-        new LeafItem('Leaf'),
-        new ContainerItem('Container'),
-        new LeafItem('Leaf 2'),
+        new LeafItem('A'),
+        new ContainerItem('b'),
+        new LeafItem('C'),
       ],
       right: [
         new IntermediateNode()

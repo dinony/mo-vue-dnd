@@ -1,8 +1,8 @@
 export default class DragState {
-  constructor(sourceContext, targetContext, isSameContext, insertBefore) {
+  constructor(sourceContext, targetContext, sameContext, insertBefore) {
     this.sourceContext = sourceContext
     this.targetContext = targetContext
-    this.sameContext = isSameContext
+    this.sameContext = sameContext
     this.insertBefore = insertBefore
   }
 }

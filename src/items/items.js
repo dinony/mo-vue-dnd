@@ -146,45 +146,51 @@ export default {
   },
   render() {
     const dndItemSlot = this.$scopedSlots.default
-    const empty = <div class="mo-dndItemsEmpty" onMousemove={this.onEnter}>Empty</div>
+    const empty = <div class="mo-dndItemsEmpty" onMousemove={this.onMove}>Empty</div>
 
     const ds = this.dragState
+    const tc = ds.targetContext
     const si = this.selectedItem
     const items = this.displayedItems.map((item, index) => {
+      // An item may be flagged as selected or projected
       let isSelectedItem = false
       let isProjectedItem = false
-      if(ds) {
-        // Determine whether item is dragged (selected) item
-        if(!ds.sameContext && ds.sourceContext.container === this.items) {
-          isSelectedItem = si.index === index
-        }
 
-        // Determine whether item is projection of selected item in target container
-        if(ds.targetContext.container === this.items) {
+      if(ds) {
+        // A projected item exists
+        if(ds.sameContext) {
           if(ds.insertBefore) {
-            isProjectedItem = ds.targetContext.index === index
+            isProjectedItem = index === tc.index-1
           } else {
-            isProjectedItem = ds.targetContext.index+1 === index
+            isProjectedItem = index = tc.index
+          }
+        } else {
+          if(ds.insertBefore) {
+            isProjectedItem = index === tc.index
+          } else {
+            isProjectedItem = index === tc.index+1
           }
         }
       } else if(si) {
+        // A selected item exists
         isSelectedItem = si.container === this.items && si.index === index
       }
 
       const key = this.keyFn ? this.keyFn(item) : index
 
       return (
-        <DnDItem item={item} index={index} key={key}
+        <DnDItem item={item} index={index} key={key} keyTest={key}
           isSelected={isSelectedItem}
           isProjected={isProjectedItem}
-          onEnter={this.onEnter} onUp={this.onUp}>
-          {dndItemSlot({item, index, container: this.items})}
+          onMove={this.onMove} onUp={this.onUp}>
+          {dndItemSlot({item, index, container: this.items, isSelectedItem, isProjectedItem})}
         </DnDItem>)
     })
 
     const content = (
       <div class="mo-dndItems" onMouseleave={this.onMouseleave} onMouseup={this.onUp} ref="content">
         {this.displayedItems.length > 0 ? items : empty}
+        <pre>{JSON.stringify(this.displayedItems, null, 2)}</pre>
       </div>)
 
     return this.displayedItems.length > 0 && this.options.wrapDnDHandle ?

@@ -1,4 +1,4 @@
-export class DnDItemEventPayload {
+export class ItemEventPayload {
   constructor(event, elem, index) {
     this.event = event
     this.elem = elem
@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     getEventPayload(event) {
-      return new DnDItemEventPayload(event, this.$el, this.index)
+      return new ItemEventPayload(event, this.$el, this.index)
     },
     emitMove(event) {
       this.$emit('move', this.getEventPayload(event))

@@ -1,7 +1,7 @@
 import {cloneItemFn as defCloneFn} from './clone'
-import {default as DnDPermissions, getPermissions} from './dndPermissions'
+import {default as Permissions, getPermissions} from './Permissions'
 
-export default class DnDOptions {
+export default class Options {
   constructor(
     allowItemRemoval=true,
     wrapDnDHandle=true,

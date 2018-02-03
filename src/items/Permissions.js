@@ -1,4 +1,4 @@
-export default class DnDPermissions {
+export default class Permissions {
   constructor(_in=null, out=null) {
     this.in = _in
     this.out = out
@@ -29,5 +29,5 @@ const reducePerms = (accum, key) => {
 export function getPermissions(_in, out) {
   const __in = _in ? _in.reduce(reducePerms, {}): null
   const __out = out ? out.reduce(reducePerms, {}): null
-  return new DnDPermissions(__in, __out)
+  return new Permissions(__in, __out)
 }

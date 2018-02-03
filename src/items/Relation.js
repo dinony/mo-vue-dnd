@@ -1,10 +1,12 @@
-export default class DragState {
-  constructor(sourceContext, targetContext, sameContext, insertBefore, resultFn) {
+// Base class for mappings between source and target contexts
+export default class Relation {
+  constructor(sourceContext, targetContext) {
     this.sourceContext = sourceContext
     this.targetContext = targetContext
-    this.sameContext = sameContext
-    this.insertBefore = insertBefore
-    this.resultFn = resultFn
+  }
+
+  get isSameContext() {
+    return this.sourceContext.container === this.targetContext.container
   }
 
   equals(other) {

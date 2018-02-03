@@ -1,7 +1,8 @@
-export default class DropResult {
-  constructor(sourceResult, targetResult, sameContext) {
-    this.source = sourceResult
-    this.target = targetResult
-    this.sameContext = sameContext
+import Relation from './Relation'
+
+export default class DropResult extends Relation {
+  constructor(sourceContext, targetContext, needsUpdate) {
+    super(sourceContext, targetContext)
+    this.needsUpdate = needsUpdate
   }
 }

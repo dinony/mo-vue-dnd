@@ -1,21 +1,23 @@
-import {default as DnDItem, DnDItemEventPayload} from '../item/item'
-import DnDHandle from '../handle/handle'
 import bus from '../bus'
+import {default as DnDItem, ItemEventPayload} from '../item/Item'
+import DnDHandle from '../handle/Handle'
 import {
   DND_ITEM_SELECT,
   DND_ITEM_SELECTED,
   DND_ITEM_UNSELECTED,
   DND_HANDLE_MD,
-  DnDItemSelectPayload
+  ItemSelectPayload
 } from '../events'
+
 import {
   indexOfDirectChild,
   findAncestorByClassName
 } from '../dom'
-import {drop} from './drop'
-import DragContext from './dragContext'
-import DragState from './dragState'
-import DnDOptions from './dndOptions'
+
+import drop from './drop'
+import ItemContext from './ItemContext'
+import ItemIntersection from './ItemIntersection'
+import Options from './Options'
 
 export default {
   props: {
@@ -28,8 +30,8 @@ export default {
       default: null
     },
     options: {
-      type: DnDOptions,
-      default: () => new DnDOptions()
+      type: Options,
+      default: () => new Options()
     },
     dropHandler: {
       type: Function,
@@ -58,11 +60,13 @@ export default {
     bus.$off(DND_HANDLE_MD, this.onMousedown)
   },
   computed: {
-    displayedItems() {
-      if(this.dragState) {
-        const ret = this.dropHandler(this.dragState)
-        return ret.target.container
-      } else {
+    projection() {
+      return this.dragState ? this.dropHandler(this.dragState): null
+    },
+    previewItems() {
+      if(this.projection) {
+        return this.items
+      } else {
         return this.items
       }
     }
@@ -84,9 +88,9 @@ export default {
       const index = indexOfDirectChild(parent, child)
       if(index >= 0 && index < this.items.length) {
         const itemChild = findAncestorByClassName(child, 'mo-dndItem')
-        const payload = new DnDItemSelectPayload(
+        const payload = new ItemSelectPayload(
           event, itemChild,
-          new DragContext(this.group, this.items, index, this.options, this.emitUpdate))
+          new ItemContext(this.group, this.items, index, this.options))
         bus.$emit(DND_ITEM_SELECT, payload)
       }
     },
@@ -95,7 +99,7 @@ export default {
     },
     onMove(dragTargetOrMouseEvent) {
       if(this.selectedItem) {
-        const trgIndex = dragTargetOrMouseEvent instanceof DnDItemEventPayload ?
+        const trgIndex = dragTargetOrMouseEvent instanceof ItemEventPayload ?
           dragTargetOrMouseEvent.index: 0
 
         const prevDS = this.dragState // Capture prev drag state
@@ -103,12 +107,12 @@ export default {
         let tc = null
         if(prevDS) {
           // Same context
-          // Note: If prevDS is not null then isSameContext must be true
-
+          const psc = prevDS.sourceContext
+          const ptc = prevDS.targetContext
           // Get the resulting container of previous drag state
           // This will be used as the source and target of the new drag state
           const prevResult = prevDS.resultFn()
-          sc = new DragContext(this.group, prevResult, prevDS.targetContext.index, this.options, this.emitUpdate)
+          sc = new DragContext(this.group, prevResult, ptc.index, this.options, this.emitUpdate)
           tc = new DragContext(this.group, prevResult, trgIndex, this.options, this.emitUpdate)
         } else {
           sc = this.selectedItem
@@ -126,7 +130,7 @@ export default {
         if(sAllowsOut && tAllowsIn) {
           // Permissions ok
           let shouldInsertBefore = true
-          if(dragTargetOrMouseEvent instanceof DnDItemEventPayload) {
+          if(dragTargetOrMouseEvent instanceof ItemEventPayload) {
             const eventRef = dragTargetOrMouseEvent.event
             const elemRef = dragTargetOrMouseEvent.elem
             const clientRect = elemRef.getBoundingClientRect()
@@ -134,7 +138,14 @@ export default {
             shouldInsertBefore = eventRef.clientY < clientRect.top+clientRect.height/2
           }
 
-          this.dragState = new DragState(sc, tc, isSameContext, shouldInsertBefore, () => this.displayedItems)
+          const newDS = new DragState(sc, tc, isSameContext, shouldInsertBefore, () => this.previewItems)
+
+          if(!prevDS || (prevDS && !prevDS.equals(newDS))) {
+            console.log('NEW')
+            this.dragState = newDS
+          } else {
+            console.log('OLD')
+          }
         }
       }
     },
@@ -158,7 +169,7 @@ export default {
     const ds = this.dragState
     const tc = ds ? ds.targetContext : null
     const si = this.selectedItem
-    const items = this.displayedItems.map((item, index) => {
+    const items = this.previewItems.map((item, index) => {
       // An item may be flagged as selected or projected
       let isSelectedItem = false
       let isProjectedItem = false
@@ -196,11 +207,11 @@ export default {
 
     const content = (
       <div class="mo-dndItems" onMouseleave={this.onMouseleave} onMouseup={this.onUp} ref="content">
-        {this.displayedItems.length > 0 ? items : empty}
-        <pre>{JSON.stringify(this.displayedItems, null, 2)}</pre>
+        {this.previewItems.length > 0 ? items : empty}
+        <pre>{JSON.stringify(this.previewItems, null, 2)}</pre>
       </div>)
 
-    return this.displayedItems.length > 0 && this.options.wrapDnDHandle ?
+    return this.previewItems.length > 0 && this.options.wrapDnDHandle ?
       <DnDHandle container={this.items}>{content}</DnDHandle>: content
   }
 }

@@ -1,44 +1,57 @@
-import DropContext from './dropContext'
-import DropResult from './dropResult'
+import DropResult from './DropResult'
 
-export function drop(dragState, cloneItem=true) {
-  const ds = dragState
-  const sc = ds.sourceContext
-  const tc = ds.targetContext
+export default function drop(itemIntersection, cloneItem=true) {
+  const ii = itemIntersection
+  const sc = ii.sourceContext
+  const tc = ii.targetContext
 
-  const clonedItem = cloneItem ? sc.options.cloneItemFn(sc.item, sc.group) : sc.item
-  const trgIndex = ds.insertBefore ? tc.index: tc.index+1
+  const clonedItem = () => cloneItem ? sc.options.cloneItemFn(sc.item, sc.group) : sc.item
+  const trgIndex = ii.insertBefore ? tc.index: tc.index+1
 
-  if(ds.sameContext) {
+  if(ii.sameContext) {
     // source=traget
     let trgResult = null
-
-    if(sc.index < tc.index) {
-      trgResult = sc.container.slice(0, sc.index)
-        .concat(sc.container.slice(sc.index+1, trgIndex))
-        .concat(clonedItem)
-        .concat(sc.container.slice(trgIndex))
+    let needsUpdate = true
+    if(sc.index === tc.index) {
+      trgResult = sc.container
+      needsUpdate = false
+    } else if(sc.index < tc.index) {
+      if(ii.insertBefore && sc.index === tc.index-1) {
+        trgResult = sc.container
+        needsUpdate = false
+      } else {
+        trgResult = sc.container.slice(0, sc.index)
+          .concat(sc.container.slice(sc.index+1, trgIndex))
+          .concat(clonedItem())
+          .concat(sc.container.slice(trgIndex))
+      }
     } else {
-      trgResult = sc.container.slice(0, trgIndex)
-        .concat(clonedItem)
-        .concat(sc.container.slice(trgIndex, sc.index))
-        .concat(sc.container.slice(sc.index+1))
+      if(!ii.insertBefore && sc.index === tc.index+1) {
+        trgResult = sc.container
+        needsUpdate = false
+      } else {
+        trgResult = sc.container.slice(0, trgIndex)
+          .concat(clonedItem())
+          .concat(sc.container.slice(trgIndex, sc.index))
+          .concat(sc.container.slice(sc.index+1))
+      }
     }
 
     const dc = new DropContext(trgResult, sc.updateFn)
-    return new DropResult(dc, dc, ds.sameContext)
+    return new DropResult(dc, dc, ii.sameContext, needsUpdate)
   } else {
     const srcResult = sc.options.allowItemRemoval ?
       sc.container.filter((val, index) => index !== sc.index):
       sc.container
 
     const trgResult = sc.container.slice(0, trgIndex)
-      .concat(clonedItem)
+      .concat(clonedItem())
       .concat(sc.container.slice(trgIndex))
 
     return new DropResult(
       new DropContext(srcResult, sc.updateFn),
       new DropContext(trgResult, sc.updateFn),
-      ds.sameContext)
+      ii.sameContext,
+    true)
   }
 }

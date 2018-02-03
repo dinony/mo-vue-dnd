@@ -1,10 +1,10 @@
 import bus from '../bus'
-import {DND_HANDLE_MD, DnDHandleMdPayload} from '../events'
+import {DND_HANDLE_MD, HandleMdPayload} from '../events'
 
 function onMousedown(event, container) {
   // Just left button clicks
   if(event.button !== 0) {return}
-  bus.$emit(DND_HANDLE_MD, new DnDHandleMdPayload(event, container))
+  bus.$emit(DND_HANDLE_MD, new HandleMdPayload(event, container))
 }
 
 export default {

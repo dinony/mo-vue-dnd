@@ -50,7 +50,7 @@ export default function drop(itemIntersection) {
     // const sd = td (source = target)
     const td = new DropContext(trgResult, sc.updateFn, needsUpdate)
     const tItemContext = new ItemContext(tc.group, trgResult, tItemIndex, tc.options, tc.updateFn)
-    return new DropResult(td, td, tItemContext)
+    return new DropResult(td, td, tItemContext, true)
   } else {
     const srcResult = sc.options.allowItemRemoval ?
       sc.container.filter((val, index) => index !== sc.index):
@@ -64,6 +64,6 @@ export default function drop(itemIntersection) {
     const td = new DropContext(trgResult, tc.updateFn, true)
     const tItemIndex = itemInt.insertBefore ? tc.index: tc.index+1
     const tItemContext = new ItemContext(tc.group, trgResult, tItemIndex, tc.options, tc.updateFn)
-    return new DropResult(sd, td, tItemContext)
+    return new DropResult(sd, td, tItemContext, false)
   }
 }

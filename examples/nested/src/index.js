@@ -47,7 +47,7 @@ new Vue({
       default: props => props.item.renderFn(h, props)
     }
     return (
-      <DnDContext scopedSlots={slots}>
+      <DnDContext debug={true} scopedSlots={slots}>
         <div class="wrapper">
           <div class="left">
             <DnDItems

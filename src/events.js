@@ -18,3 +18,13 @@ export class HandleMdPayload {
     this.container = container
   }
 }
+
+export const DND_TARGET_ENTER = 'TE'
+
+export class TargetEnterPayload {
+  constructor(targetRef) {
+    this.targetRef = targetRef
+  }
+}
+
+export const DND_TARGET_ENTERED = 'TED'

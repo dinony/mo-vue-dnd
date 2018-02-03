@@ -33,18 +33,20 @@ export class IntermediateNode extends Node {
 
   renderFn(h) {
     const slots = {
-      default: props => props.item.renderFn(h)
+      default: props => props.item.renderFn(h, props)
     }
     return (
       <div class="intermediate-node">
         <h5>Container</h5>
-        <DnDItems
-          group={RIGHT_GRP}
-          items={this.children}
-          onUpdate={this.setChildren}
-          options={rightOptions}
-          keyFn={item => item.id}
-          scopedSlots={slots}/>
+        <div class="dnd-wrapper">
+          <DnDItems
+            group={RIGHT_GRP}
+            items={this.children}
+            onUpdate={this.setChildren.bind(this)}
+            options={rightOptions}
+            keyFn={item => item.id}
+            scopedSlots={slots}/>
+        </div>
       </div>
     )
   }

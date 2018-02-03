@@ -6,7 +6,10 @@ import {
   DND_ITEM_SELECTED,
   DND_ITEM_UNSELECTED,
   DND_HANDLE_MD,
-  ItemSelectPayload
+  DND_TARGET_ENTER,
+  DND_TARGET_ENTERED,
+  ItemSelectPayload,
+  TargetEnterPayload
 } from '../events'
 
 import {
@@ -19,6 +22,8 @@ import drop from '../drop/drop'
 import ItemContext from './ItemContext'
 import ItemIntersection from './ItemIntersection'
 import Options from './Options'
+
+const t = 0
 
 export default {
   props: {
@@ -46,6 +51,7 @@ export default {
   },
   data() {
     return {
+      selectedTarget: false,
       selectedItem: null,
       itemIntersection: null
     }
@@ -54,11 +60,13 @@ export default {
     bus.$on(DND_ITEM_SELECTED, this.setSelectedItem)
     bus.$on(DND_ITEM_UNSELECTED, this.resetSelectedItem)
     bus.$on(DND_HANDLE_MD, this.onMousedown)
+    bus.$on(DND_TARGET_ENTERED, this.resetIntersection)
   },
   beforeDestroy() {
     bus.$off(DND_ITEM_SELECTED, this.setSelectedItem)
     bus.$off(DND_ITEM_UNSELECTED, this.resetSelectedItem)
     bus.$off(DND_HANDLE_MD, this.onMousedown)
+    bus.$off(DND_TARGET_ENTERED, this.resetIntersection)
   },
   computed: {
     dropPreviewResult() {
@@ -76,6 +84,15 @@ export default {
       this.selectedItem = null
       this.itemIntersection = null
     },
+    resetIntersection(payload) {
+      if(payload.targetRef !== this) {
+        this.selectedTarget = false
+        this.itemIntersection = null
+        console.log('blub')
+      } else {
+        this.selectedTarget = true
+      }
+    },
     onMousedown(payload) {
       const container = payload.container
       if(this.items !== container) {return}
@@ -89,15 +106,28 @@ export default {
           event, itemWrapper,
           new ItemContext(this.group, this.items, index, this.options, this.emitUpdate))
         bus.$emit(DND_ITEM_SELECT, payload)
+        bus.$emit(DND_TARGET_ENTER, new TargetEnterPayload(this))
+      }
+    },
+    onMouseenter(event) {
+      event.stopPropagation()
+      if(this.selectedItem) {
+        bus.$emit(DND_TARGET_ENTER, new TargetEnterPayload(this))
       }
     },
     onMouseleave() {
       this.itemIntersection = null
     },
     onMove(dragTargetOrMouseEvent) {
-      if(this.selectedItem) {
+      if(this.selectedItem && this.selectedTarget) {
         const trgIndex = dragTargetOrMouseEvent instanceof ItemEventPayload ?
           dragTargetOrMouseEvent.index: 0
+
+        // if(dragTargetOrMouseEvent instanceof ItemEventPayload) {
+        //   dragTargetOrMouseEvent.event.stopPropagation()
+        // } else {
+        //   dragTargetOrMouseEvent.stopPropagation()
+        // }
 
         // previous drop result
         const pDR = this.dropPreviewResult
@@ -150,6 +180,10 @@ export default {
           this.itemIntersection = cInt
         }
       }
+
+      if(this.selectedItem && !this.selectedTarget) {
+        console.log('blah')
+      }
     },
     onUp(dragTargetOrMouseEvent) {
       const dr = this.dropPreviewResult
@@ -191,9 +225,8 @@ export default {
     })
 
     const content = (
-      <div class="mo-dndItems" onMouseleave={this.onMouseleave} onMouseup={this.onUp} ref="content">
+      <div class="mo-dndItems" onMouseenter={this.onMouseenter} onMouseleave={this.onMouseleave} onMouseup={this.onUp} ref="content">
         {this.renderedItems.length > 0 ? items : empty}
-        <pre>{JSON.stringify(this.renderedItems, null, 2)}</pre>
       </div>)
 
     return this.renderedItems.length > 0 && this.options.wrapDnDHandle ?

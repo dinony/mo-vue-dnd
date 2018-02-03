@@ -57,6 +57,6 @@ export class ContainerItem extends Item {
   }
 
   clone() {
-    return new LeafItem(this.label)
+    return new ContainerItem(this.label)
   }
 }

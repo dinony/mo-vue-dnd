@@ -2,7 +2,9 @@ import bus from '../bus'
 import {
   DND_ITEM_SELECT,
   DND_ITEM_SELECTED,
-  DND_ITEM_UNSELECTED
+  DND_ITEM_UNSELECTED,
+  DND_TARGET_ENTER,
+  DND_TARGET_ENTERED
 } from '../events'
 import {Vec2, CSSPos} from '../vec'
 
@@ -21,6 +23,7 @@ export default {
   data() {
     return {
       state: StateEnum.INIT,
+      target: null,
       selection: null,
       selectedItemPos: null,
       selectedClientRect: null,
@@ -30,11 +33,13 @@ export default {
   },
   mounted() {
     bus.$on(DND_ITEM_SELECT, this.setSelectedState)
+    bus.$on(DND_TARGET_ENTER, this.setTarget)
     document.addEventListener('mousemove', this.onMousemove)
     document.addEventListener('mouseup', this.setInitState)
   },
   beforeDestroy() {
     bus.$off(DND_ITEM_SELECT, this.setSelectedState)
+    bus.$off(DND_TARGET_ENTER, this.setTarget)
     document.removeEventListener('mousemove', this.onMousemove)
     document.removeEventListener('mouseup', this.setInitState)
   },
@@ -61,6 +66,10 @@ export default {
     }
   },
   methods: {
+    setTarget(payload) {
+      this.target = payload.targetRef
+      bus.$emit(DND_TARGET_ENTERED, payload)
+    },
     setSelectedState(payload) {
       this.state = StateEnum.DRAG
       this.selection = payload.context
@@ -96,7 +105,7 @@ export default {
       <div class="mo-dndContextDebug">
         <h4>mo-vue-dnd</h4>
         <pre>State: {this.state}</pre>
-        <pre>{this.selection ? JSON.stringify(this.selection, null, 2): null}</pre>
+        <pre>Target: {this.target? this.target.group: null}</pre>
       </div>)
 
     const content = this.debug ? [this.$slots.default, debugOut()] : this.$slots.default

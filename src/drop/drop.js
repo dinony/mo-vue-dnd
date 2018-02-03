@@ -10,7 +10,7 @@ export default function drop(itemIntersection) {
   const cloneItem = () => sc.options.cloneItemFn(sc.item, sc.group)
   const trgIndex = itemInt.insertBefore ? tc.index: tc.index+1
 
-  if(itemInt.sameContext) {
+  if(itemInt.isSameContext) {
     // source=traget
     let trgResult = null
     let needsUpdate = false

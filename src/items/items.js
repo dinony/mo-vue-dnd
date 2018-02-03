@@ -87,7 +87,7 @@ export default {
         const itemWrapper = findAncestorByClassName(child, 'mo-dndItem')
         const payload = new ItemSelectPayload(
           event, itemWrapper,
-          new ItemContext(this.group, this.items, index, this.options))
+          new ItemContext(this.group, this.items, index, this.options, this.emitUpdate))
         bus.$emit(DND_ITEM_SELECT, payload)
       }
     },

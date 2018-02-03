@@ -14,7 +14,8 @@ import {
   findAncestorByClassName
 } from '../dom'
 
-import drop from './drop'
+import drop from '../drop/drop'
+
 import ItemContext from './ItemContext'
 import ItemIntersection from './ItemIntersection'
 import Options from './Options'

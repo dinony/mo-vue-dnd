@@ -1,6 +1,6 @@
 import DropResult from './DropResult'
 import DropContext from './DropContext'
-import ItemContext from './ItemContext'
+import ItemContext from '../items/ItemContext'
 
 export default function drop(itemIntersection) {
   const ii = itemIntersection

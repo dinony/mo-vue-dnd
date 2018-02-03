@@ -3,21 +3,21 @@ import DropContext from './DropContext'
 import ItemContext from '../items/ItemContext'
 
 export default function drop(itemIntersection) {
-  const ii = itemIntersection
-  const sc = ii.sourceContext
-  const tc = ii.targetContext
+  const itemInt = itemIntersection
+  const sc = itemInt.sourceContext
+  const tc = itemInt.targetContext
 
   const cloneItem = () => sc.options.cloneItemFn(sc.item, sc.group)
-  const trgIndex = ii.insertBefore ? tc.index: tc.index+1
+  const trgIndex = itemInt.insertBefore ? tc.index: tc.index+1
 
-  if(ii.sameContext) {
+  if(itemInt.sameContext) {
     // source=traget
     let trgResult = null
     let needsUpdate = false
     if(sc.index === tc.index) {
       trgResult = sc.container
     } else if(sc.index < tc.index) {
-      if(ii.insertBefore && sc.index === tc.index-1) {
+      if(itemInt.insertBefore && sc.index === tc.index-1) {
         trgResult = sc.container
       } else {
         needsUpdate = true
@@ -27,7 +27,7 @@ export default function drop(itemIntersection) {
           .concat(sc.container.slice(trgIndex))
       }
     } else {
-      if(!ii.insertBefore && sc.index === tc.index+1) {
+      if(!itemInt.insertBefore && sc.index === tc.index+1) {
         trgResult = sc.container
       } else {
         needsUpdate = true
@@ -40,9 +40,9 @@ export default function drop(itemIntersection) {
 
     let tItemIndex = null
     if(sc.index < tc.index) {
-      tItemIndex = ii.insertBefore ? tc.index-1: tc.index
+      tItemIndex = itemInt.insertBefore ? tc.index-1: tc.index
     } else if(sc.index > tc.index) {
-      tItemIndex = ii.insertBefore ? tc.index: tc.index+1
+      tItemIndex = itemInt.insertBefore ? tc.index: tc.index+1
     } else {
       tItemIndex = tc.index
     }
@@ -62,7 +62,7 @@ export default function drop(itemIntersection) {
 
     const sd = new DropContext(srcResult, sc.updateFn, sc.options.allowItemRemoval)
     const td = new DropContext(trgResult, tc.updateFn, true)
-    const tItemIndex = ii.insertBefore ? tc.index: tc.index+1
+    const tItemIndex = itemInt.insertBefore ? tc.index: tc.index+1
     const tItemContext = new ItemContext(tc.group, trgResult, tItemIndex, tc.options, tc.updateFn)
     return new DropResult(sd, td, tItemContext)
   }

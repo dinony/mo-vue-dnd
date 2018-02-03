@@ -4,4 +4,10 @@ export default class DropContext {
     this.updateFn = updateFn
     this.needsUpdate = needsUpdate
   }
+
+  update() {
+    if(this.needsUpdate) {
+      this.updateFn(this.container)
+    }
+  }
 }

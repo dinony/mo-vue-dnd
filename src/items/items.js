@@ -152,12 +152,12 @@ export default {
     const dr = this.dropPreviewResult
     const tIndex = dr ? dr.targetContext.index : -1
     const si = this.selectedItem
-    const sIndex = si ? si.index: -1
+    const sIndex = si && !dr ? si.index: -1
     const isSelectedContainer = si ? si.container === this.items: false
     const items = this.renderedItems.map((item, index) => {
       // An item may be flagged as selected or projected
-      const isSelectedItem = index === sIndex && isSelectedContainer
       const isProjectedItem = index === tIndex
+      const isSelectedItem = index === sIndex && isSelectedContainer
 
       const key = this.keyFn ? this.keyFn(item): index
 

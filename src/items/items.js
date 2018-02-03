@@ -152,9 +152,12 @@ export default {
       }
     },
     onUp(dragTargetOrMouseEvent) {
-      if(this.dropPreviewResult) {
-        this.dropPreviewResult.sourceResult.update()
-        this.dropPreviewResult.targetResult.update()
+      const dr = this.dropPreviewResult
+      if(dr) {
+        if(!dr.sameContext) {
+          dr.sourceResult.update()
+        }
+        dr.targetResult.update()
       }
     },
     emitUpdate(payload) {

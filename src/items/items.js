@@ -150,20 +150,14 @@ export default {
 
     // Current drop result
     const dr = this.dropPreviewResult
-    const tc = dr ? dr.targetContext : null
+    const tIndex = dr ? dr.targetContext.index : -1
     const si = this.selectedItem
+    const sIndex = si ? si.index: -1
+    const isSelectedContainer = si ? si.container === this.items: false
     const items = this.renderedItems.map((item, index) => {
       // An item may be flagged as selected or projected
-      let isSelectedItem = false
-      let isProjectedItem = false
-
-      if(tc) {
-        // A projected item exists
-        isProjectedItem = tc.index === index
-      } else if(si) {
-        // A selected item exists
-        isSelectedItem = si.container === this.items && si.index === index
-      }
+      const isSelectedItem = index === sIndex && isSelectedContainer
+      const isProjectedItem = index === tIndex
 
       const key = this.keyFn ? this.keyFn(item): index
 

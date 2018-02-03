@@ -96,6 +96,7 @@ export default {
     },
     onMove(dragTargetOrMouseEvent) {
       if(this.selectedItem) {
+        debugger
         const trgIndex = dragTargetOrMouseEvent instanceof ItemEventPayload ?
           dragTargetOrMouseEvent.index: 0
 
@@ -129,10 +130,7 @@ export default {
           const cInt = new ItemIntersection(sc, tc, shouldInsertBefore)
 
           if(!pInt || (pInt && !pInt.equals(cInt))) {
-            console.log('NEW')
             this.itemIntersection = cInt
-          } else {
-            console.log('OLD')
           }
         }
       }

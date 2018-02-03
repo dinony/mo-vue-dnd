@@ -101,11 +101,11 @@ export default {
 
         // previous drop result
         const pDR = this.dropPreviewResult
+        const pTarget = pDR? pDR.targetContext: null
         let sc = null
         let tc = null
         if(pDR) {
           // Same context
-          const pTarget = pDR.targetContext
           sc = pTarget
           tc = new ItemContext(this.group, pTarget.container, trgIndex, this.options, this.emitUpdate)
         } else {
@@ -128,9 +128,26 @@ export default {
           const pInt = this.itemIntersection
           const cInt = new ItemIntersection(sc, tc, shouldInsertBefore)
 
-          if(!pInt || (pInt && !pInt.equals(cInt))) {
-            this.itemIntersection = cInt
+          if(pTarget) {
+            // Check whether new intersection would output same drop result
+            const newTargetIndex = null
+            if(sc.index < tc.index) {
+              newTargetIndex = shouldInsertBefore ? tc.index-1: tc.index
+            } else if(sc.index > tc.index) {
+              newTargetIndex = shouldInsertBefore ? tc.index: tc.index+1
+            } else {
+              newTargetIndex = tc.index
+            }
+
+            if(pTarget.index === newTargetIndex) {
+              return
+            }
+          } else if(pInt && pInt.equals(cInt)) {
+            return
           }
+
+          // New intersection
+          this.itemIntersection = cInt
         }
       }
     },

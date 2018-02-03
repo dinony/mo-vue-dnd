@@ -12,8 +12,8 @@ export default class ItemContext {
   }
 
   allowsDrop(sourceContext) {
-    const tc = this // this has drop target role
     const sc = sourceContext
+    const tc = this // this has target role
     const sPerms = sc.options.permissions
     const tPerms = tc.options.permissions
     const sAllowsOut = sPerms.out === null || sPerms.out[tc.group]

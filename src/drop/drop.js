@@ -56,9 +56,9 @@ export default function drop(itemIntersection) {
       sc.container.filter((val, index) => index !== sc.index):
       sc.container
 
-    const trgResult = sc.container.slice(0, trgIndex)
+    const trgResult = tc.container.slice(0, trgIndex)
       .concat(cloneItem())
-      .concat(sc.container.slice(trgIndex))
+      .concat(tc.container.slice(trgIndex))
 
     const sd = new DropContext(srcResult, sc.updateFn, sc.options.allowItemRemoval)
     const td = new DropContext(trgResult, tc.updateFn, true)

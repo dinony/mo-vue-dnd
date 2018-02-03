@@ -96,7 +96,6 @@ export default {
     },
     onMove(dragTargetOrMouseEvent) {
       if(this.selectedItem) {
-        debugger
         const trgIndex = dragTargetOrMouseEvent instanceof ItemEventPayload ?
           dragTargetOrMouseEvent.index: 0
 

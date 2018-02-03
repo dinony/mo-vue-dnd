@@ -6,7 +6,7 @@ function getDirectChild(parent, child) {
   return child === null || child.parentNode === parent ? child : getDirectChild(parent, child.parentNode)
 }
 
-export function indexOfDirectChild(parent, child) {
+export function indexOfDirectDescendant(parent, child) {
   const dChild = getDirectChild(parent, child)
   return indexOf(dChild, parent)
 }

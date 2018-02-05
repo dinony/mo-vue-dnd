@@ -1,6 +1,6 @@
 # Changelog
 
-# 0.1.2 (2017-02-05)
+# 0.2.0 (2017-02-05)
 
 * Nested DnD feature and exmaple
 * Several nested DnD related bugfixes

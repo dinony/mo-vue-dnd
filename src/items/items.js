@@ -193,10 +193,6 @@ export default {
           this.itemIntersection = cInt
         }
       }
-
-      if(this.selectedItem && !this.selectedTarget) {
-        console.log('blah')
-      }
     },
     onUp(dragTargetOrMouseEvent) {
       const dr = this.dropPreviewResult

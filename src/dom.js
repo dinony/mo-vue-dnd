@@ -16,3 +16,11 @@ export function findAncestorByClassName(child, clsName) {
     child.parentNode :
     findAncestorByClassName(child.parentNode, clsName)
 }
+
+export function isDescendant(parent, child) {
+  if(child.parentNode) {
+    return child.parentNode !== parent? isDescendant(parent, child.parentNode): true
+  } else {
+    return false
+  }
+}

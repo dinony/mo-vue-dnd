@@ -27,7 +27,10 @@ new Vue({
         new LeafItem('C'),
       ],
       right: [
-        new IntermediateNode()
+        new IntermediateNode([
+          new LeafNode()
+        ]),
+        new LeafNode()
       ]
     }
   },

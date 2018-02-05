@@ -142,17 +142,13 @@ export default {
         if(dragTargetOrMouseEvent instanceof ItemEventPayload) {
           trgIndex = dragTargetOrMouseEvent.index
 
+          // Check whether outer dnd item drops into it's own nested inner dnd container
           const targetNode = dragTargetOrMouseEvent.elem
           if(isDescendant(this.selectedNode, targetNode)) {return}
         } else {
           if(isDescendant(this.selectedNode, dragTargetOrMouseEvent.target)) {return}
         }
 
-        // if(dragTargetOrMouseEvent instanceof ItemEventPayload) {
-        //   dragTargetOrMouseEvent.event.stopPropagation()
-        // } else {
-        //   dragTargetOrMouseEvent.stopPropagation()
-        // }
 
         // previous drop result
         const pDR = this.dropPreviewResult
@@ -209,9 +205,9 @@ export default {
     onUp(dragTargetOrMouseEvent) {
       const dr = this.dropPreviewResult
       if(dr) {
-        if(!dr.sameContext) {
+        // if(!dr.sameContext) {
           dr.sourceResult.update()
-        }
+        // }
         dr.targetResult.update()
       }
     },

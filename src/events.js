@@ -1,9 +1,9 @@
 export const DND_ITEM_SELECT = 'IS'
 export class ItemSelectPayload {
-  constructor(event, elem, context) {
+  constructor(event, elem, itemContext) {
     this.event = event
     this.elem = elem
-    this.context = context
+    this.itemContext = itemContext
   }
 }
 

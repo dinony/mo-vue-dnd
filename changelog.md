@@ -2,7 +2,7 @@
 
 # 0.1.2 (2017-02-05)
 
-* Nested DnD example + several related bugfixes
+* Nested DnD example and several related bugfixes
 * Bugfix: min-height issue for transition from empty to default state
 * Improvement: Check for invalid permissions keys in options
 

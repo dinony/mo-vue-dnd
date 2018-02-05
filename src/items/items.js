@@ -16,7 +16,8 @@ import {
 
 import {
   indexOfDirectDescendant,
-  findAncestorByClassName
+  findAncestorByClassName,
+  isDescendant
 } from '../dom'
 
 import drop from '../drop/drop'
@@ -54,6 +55,7 @@ export default {
       selectedTarget: null,
       isTarget: false,
       selectedItem: null,
+      selectedNode: null,
       itemIntersection: null
     }
   },
@@ -108,11 +110,13 @@ export default {
       this.selectedTarget = null
       this.itemIntersection = null
     },
-    setSelectedItem(selectedItem) {
-      this.selectedItem = selectedItem
+    setSelectedItem(payload) {
+      this.selectedItem = payload.itemContext
+      this.selectedNode = payload.elem
     },
     resetSelectedItem() {
       this.selectedItem = null
+      this.selectedNode = null
       this.itemIntersection = null
     },
     onMousedown(payload) {
@@ -133,8 +137,16 @@ export default {
     },
     onMove(dragTargetOrMouseEvent) {
       if(this.selectedItem && this.isTarget) {
-        const trgIndex = dragTargetOrMouseEvent instanceof ItemEventPayload ?
-          dragTargetOrMouseEvent.index: 0
+        let trgIndex = 0
+
+        if(dragTargetOrMouseEvent instanceof ItemEventPayload) {
+          trgIndex = dragTargetOrMouseEvent.index
+
+          const targetNode = dragTargetOrMouseEvent.elem
+          if(isDescendant(this.selectedNode, targetNode)) {return}
+        } else {
+          if(isDescendant(this.selectedNode, dragTargetOrMouseEvent.target)) {return}
+        }
 
         // if(dragTargetOrMouseEvent instanceof ItemEventPayload) {
         //   dragTargetOrMouseEvent.event.stopPropagation()

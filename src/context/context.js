@@ -80,7 +80,7 @@ export default {
     },
     setSelectedItem(payload) {
       this.state = StateEnum.DRAG
-      this.selection = payload.context
+      this.selection = payload.itemContext
       const clientRect = payload.elem.getBoundingClientRect()
       this.selectedClientRect = clientRect
       // Selected item page coords
@@ -89,7 +89,7 @@ export default {
         new Vec2(clientRect.x, clientRect.y))
       // MouseEvent page coords
       this.mdPos = new Vec2(payload.event.pageX, payload.event.pageY)
-      bus.$emit(DND_ITEM_SELECTED, this.selection)
+      bus.$emit(DND_ITEM_SELECTED, payload)
     },
     onMousemove(event) {
       if(this.mmPos === null) {

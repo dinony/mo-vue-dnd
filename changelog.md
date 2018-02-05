@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.2.1 (2017-02-05)
+
+* Bugfix: Remove tmp node styling
+
 # 0.2.0 (2017-02-05)
 
 * Nested DnD feature and exmaple

@@ -7,7 +7,7 @@ export default function drop(itemIntersection) {
   const sc = itemInt.sourceContext
   const tc = itemInt.targetContext
 
-  const cloneItem = () => sc.options.cloneItemFn(sc.item, sc.group)
+  const cloneItem = () => sc.options.cloneItemFn(sc.item, tc.group)
   const trgIndex = itemInt.insertBefore ? tc.index: tc.index+1
 
   if(itemInt.isSameContext) {

@@ -1,10 +1,12 @@
 import bus from '../bus'
 import {
+  DND_TARGET_SELECT,
+  DND_TARGET_SELECTED,
+  DND_TARGET_UNSELECT,
+  DND_TARGET_UNSELECTED,
   DND_ITEM_SELECT,
   DND_ITEM_SELECTED,
-  DND_ITEM_UNSELECTED,
-  DND_TARGET_ENTER,
-  DND_TARGET_ENTERED
+  DND_ITEM_UNSELECTED
 } from '../events'
 import {Vec2, CSSPos} from '../vec'
 
@@ -32,14 +34,16 @@ export default {
     }
   },
   mounted() {
-    bus.$on(DND_ITEM_SELECT, this.setSelectedState)
-    bus.$on(DND_TARGET_ENTER, this.setTarget)
+    bus.$on(DND_TARGET_SELECT, this.setTarget)
+    bus.$on(DND_TARGET_UNSELECT, this.resetTarget)
+    bus.$on(DND_ITEM_SELECT, this.setSelectedItem)
     document.addEventListener('mousemove', this.onMousemove)
     document.addEventListener('mouseup', this.setInitState)
   },
   beforeDestroy() {
-    bus.$off(DND_ITEM_SELECT, this.setSelectedState)
-    bus.$off(DND_TARGET_ENTER, this.setTarget)
+    bus.$off(DND_TARGET_SELECT, this.setTarget)
+    bus.$off(DND_TARGET_UNSELECT, this.resetTarget)
+    bus.$off(DND_ITEM_SELECT, this.setSelectedItem)
     document.removeEventListener('mousemove', this.onMousemove)
     document.removeEventListener('mouseup', this.setInitState)
   },
@@ -67,10 +71,14 @@ export default {
   },
   methods: {
     setTarget(payload) {
-      this.target = payload.targetRef
-      bus.$emit(DND_TARGET_ENTERED, payload)
+      this.target = payload.targetComponent
+      bus.$emit(DND_TARGET_SELECTED, payload)
     },
-    setSelectedState(payload) {
+    resetTarget() {
+      this.target = null
+      bus.$emit(DND_TARGET_UNSELECTED)
+    },
+    setSelectedItem(payload) {
       this.state = StateEnum.DRAG
       this.selection = payload.context
       const clientRect = payload.elem.getBoundingClientRect()
@@ -83,21 +91,23 @@ export default {
       this.mdPos = new Vec2(payload.event.pageX, payload.event.pageY)
       bus.$emit(DND_ITEM_SELECTED, this.selection)
     },
-    setInitState() {
-      this.state = StateEnum.INIT
-      this.selection = null
-      this.selectedItemPos = null
-      this.selectedClientRect = null
-      this.mdPos = null
-      this.mmPos = null
-      bus.$emit(DND_ITEM_UNSELECTED)
-    },
     onMousemove(event) {
       if(this.mmPos === null) {
         this.mmPos = new Vec2(0, 0)
       }
       this.$set(this.mmPos, 'x', event.pageX)
       this.$set(this.mmPos, 'y', event.pageY)
+    },
+    setInitState() {
+      this.state = StateEnum.INIT
+      this.target = null
+      this.selection = null
+      this.selectedItemPos = null
+      this.selectedClientRect = null
+      this.mdPos = null
+      this.mmPos = null
+      bus.$emit(DND_TARGET_UNSELECTED)
+      bus.$emit(DND_ITEM_UNSELECTED)
     }
   },
   render() {

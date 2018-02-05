@@ -2,14 +2,16 @@ import bus from '../bus'
 import {default as DnDItem, ItemEventPayload} from '../item/Item'
 import DnDHandle from '../handle/Handle'
 import {
+  DND_TARGET_SELECT,
+  DND_TARGET_SELECTED,
+  DND_TARGET_UNSELECT,
+  DND_TARGET_UNSELECTED,
+  TargetSelectPayload,
   DND_ITEM_SELECT,
   DND_ITEM_SELECTED,
   DND_ITEM_UNSELECTED,
-  DND_HANDLE_MD,
-  DND_TARGET_ENTER,
-  DND_TARGET_ENTERED,
   ItemSelectPayload,
-  TargetEnterPayload
+  DND_HANDLE_MD,
 } from '../events'
 
 import {
@@ -23,10 +25,12 @@ import ItemContext from './ItemContext'
 import ItemIntersection from './ItemIntersection'
 import Options from './Options'
 
-const t = 0
-
 export default {
   props: {
+    name: {
+      type: String,
+      default: 'outer'
+    },
     items: {
       type: Array,
       required: true
@@ -51,22 +55,25 @@ export default {
   },
   data() {
     return {
-      selectedTarget: false,
+      selectedTarget: null,
+      isTarget: false,
       selectedItem: null,
       itemIntersection: null
     }
   },
   mounted() {
+    bus.$on(DND_TARGET_SELECTED, this.setTarget)
+    bus.$on(DND_TARGET_UNSELECTED, this.resetTarget)
     bus.$on(DND_ITEM_SELECTED, this.setSelectedItem)
     bus.$on(DND_ITEM_UNSELECTED, this.resetSelectedItem)
     bus.$on(DND_HANDLE_MD, this.onMousedown)
-    bus.$on(DND_TARGET_ENTERED, this.resetIntersection)
   },
   beforeDestroy() {
+    bus.$off(DND_TARGET_SELECTED, this.setTarget)
+    bus.$off(DND_TARGET_UNSELECTED, this.resetTarget)
     bus.$off(DND_ITEM_SELECTED, this.setSelectedItem)
     bus.$off(DND_ITEM_UNSELECTED, this.resetSelectedItem)
     bus.$off(DND_HANDLE_MD, this.onMousedown)
-    bus.$off(DND_TARGET_ENTERED, this.resetIntersection)
   },
   computed: {
     dropPreviewResult() {
@@ -77,21 +84,40 @@ export default {
     }
   },
   methods: {
+    onMouseenter(event) {
+      this.emitSelectedTarget()
+    },
+    onMousemove(event) {
+      if(this.selectedTarget === null) {
+        this.emitSelectedTarget()
+      }
+    },
+    onMouseleave() {
+      bus.$emit(DND_TARGET_UNSELECT)
+    },
+    emitSelectedTarget() {
+      bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(this))
+    },
+    setTarget(payload) {
+      this.selectedTarget = payload.targetComponent
+      if(payload.targetComponent === this) {
+        this.isTarget = true
+      } else {
+        this.isTarget = false
+        this.itemIntersection = null
+      }
+    },
+    resetTarget() {
+      this.isTarget = false
+      this.selectedTarget = null
+      this.itemIntersection = null
+    },
     setSelectedItem(selectedItem) {
       this.selectedItem = selectedItem
     },
     resetSelectedItem() {
       this.selectedItem = null
       this.itemIntersection = null
-    },
-    resetIntersection(payload) {
-      if(payload.targetRef !== this) {
-        this.selectedTarget = false
-        this.itemIntersection = null
-        console.log('blub')
-      } else {
-        this.selectedTarget = true
-      }
     },
     onMousedown(payload) {
       const container = payload.container
@@ -106,20 +132,11 @@ export default {
           event, itemWrapper,
           new ItemContext(this.group, this.items, index, this.options, this.emitUpdate))
         bus.$emit(DND_ITEM_SELECT, payload)
-        bus.$emit(DND_TARGET_ENTER, new TargetEnterPayload(this))
+        bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(this))
       }
-    },
-    onMouseenter(event) {
-      event.stopPropagation()
-      if(this.selectedItem) {
-        bus.$emit(DND_TARGET_ENTER, new TargetEnterPayload(this))
-      }
-    },
-    onMouseleave() {
-      this.itemIntersection = null
     },
     onMove(dragTargetOrMouseEvent) {
-      if(this.selectedItem && this.selectedTarget) {
+      if(this.selectedItem && this.isTarget) {
         const trgIndex = dragTargetOrMouseEvent instanceof ItemEventPayload ?
           dragTargetOrMouseEvent.index: 0
 
@@ -225,7 +242,7 @@ export default {
     })
 
     const content = (
-      <div class="mo-dndItems" onMouseenter={this.onMouseenter} onMouseleave={this.onMouseleave} onMouseup={this.onUp} ref="content">
+      <div class="mo-dndItems" onMouseenter={this.onMouseenter} onMousemove={this.onMousemove} onMouseleave={this.onMouseleave} onMouseup={this.onUp} ref="content">
         {this.renderedItems.length > 0 ? items : empty}
       </div>)
 

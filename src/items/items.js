@@ -127,8 +127,8 @@ export default {
         const payload = new ItemSelectPayload(
           event, itemWrapper,
           new ItemContext(this.group, this.items, index, this.options, this.emitUpdate))
-        bus.$emit(DND_ITEM_SELECT, payload)
         bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(this))
+        bus.$emit(DND_ITEM_SELECT, payload)
       }
     },
     onMove(dragTargetOrMouseEvent) {

@@ -4,6 +4,7 @@ import {DND_HANDLE_MD, HandleMdPayload} from '../events'
 function onMousedown(event, container) {
   // Just left button clicks
   if(event.button !== 0) {return}
+  event.stopPropagation()
   bus.$emit(DND_HANDLE_MD, new HandleMdPayload(event, container))
 }
 

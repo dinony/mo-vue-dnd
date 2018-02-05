@@ -19,12 +19,15 @@ export class HandleMdPayload {
   }
 }
 
-export const DND_TARGET_ENTER = 'TE'
+export const DND_TARGET_SELECT = 'TS'
 
-export class TargetEnterPayload {
-  constructor(targetRef) {
-    this.targetRef = targetRef
+export class TargetSelectPayload {
+  constructor(targetComponent) {
+    this.targetComponent = targetComponent
   }
 }
 
-export const DND_TARGET_ENTERED = 'TED'
+export const DND_TARGET_SELECTED = 'TSD'
+export const DND_TARGET_UNSELECT = 'TU'
+export const DND_TARGET_UNSELECTED = 'TUD'
+

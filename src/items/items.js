@@ -149,10 +149,9 @@ export default {
           if(isDescendant(this.selectedNode, dragTargetOrMouseEvent.target)) {return}
         }
 
-
         // previous drop result
         const pDR = this.dropPreviewResult
-        const pTarget = pDR? pDR.targetContext: null
+        const pTarget = pDR ? pDR.targetContext: null
         let sc = null
         let tc = null
         if(pDR) {
@@ -205,9 +204,9 @@ export default {
     onUp(dragTargetOrMouseEvent) {
       const dr = this.dropPreviewResult
       if(dr) {
-        // if(!dr.sameContext) {
+        if(!dr.sameContext) {
           dr.sourceResult.update()
-        // }
+        }
         dr.targetResult.update()
       }
     },

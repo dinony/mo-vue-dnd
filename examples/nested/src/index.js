@@ -22,15 +22,15 @@ new Vue({
   data() {
     return {
       left: [
-        new LeafItem('A'),
-        new ContainerItem('b'),
-        new LeafItem('C'),
+        new LeafItem('L1'),
+        new ContainerItem('C1'),
+        new LeafItem('L2'),
       ],
       right: [
         new IntermediateNode([
-          new LeafNode()
+          new LeafNode('R1')
         ]),
-        new LeafNode()
+        new LeafNode('R2')
       ]
     }
   },
@@ -47,7 +47,7 @@ new Vue({
   },
   render(h) {
     const slots = {
-      default: props => props.item.renderFn(h, props)
+      default: props => props.item.renderFn(h)
     }
     return (
       <DnDContext scopedSlots={slots}>

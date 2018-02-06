@@ -16,8 +16,12 @@ class Node {
 }
 
 export class LeafNode extends Node {
+  constructor(label) {
+    super()
+    this.label = label
+  }
   renderFn(h) {
-    return <div>Leaf Node</div>
+    return <div>{this.label}</div>
   }
 }
 
@@ -33,7 +37,7 @@ export class IntermediateNode extends Node {
 
   renderFn(h) {
     const slots = {
-      default: props => props.item.renderFn(h, props)
+      default: props => props.item.renderFn(h)
     }
     return (
       <div class="intermediate-node">

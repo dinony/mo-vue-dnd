@@ -13,13 +13,8 @@ class Item {
     this.id = `item-${itemCounter++}`
   }
 
-  renderFn(h, props) {
-    return (
-      <div class="left-item">
-        Label: {this.label}
-        <pre style="font-size: 8px">Selected: {JSON.stringify(props.isSelectedItem)}</pre>
-        <pre style="font-size: 8px">Projected: {JSON.stringify(props.isProjectedItem)}</pre>
-      </div>)
+  renderFn(h) {
+    return <div class="left-item">{this.label}</div>
   }
 
   // Abstract: override in subclasses
@@ -39,7 +34,7 @@ export class LeafItem extends Item {
   }
 
   nodeFactory() {
-    return new LeafNode()
+    return new LeafNode(this.label)
   }
 
   clone() {

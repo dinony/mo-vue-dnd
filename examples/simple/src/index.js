@@ -3,8 +3,8 @@ import {
   DnDContext, DnDItems,
   DnDOptions, DnDHandle
 } from 'mo-vue-dnd'
-// import 'mo-vue-dnd/index.scss'
-import 'mo-vue-dnd/mo-vue-dnd.css'
+import 'mo-vue-dnd/index.scss'
+// import 'mo-vue-dnd/mo-vue-dnd.css'
 
 import './index.scss'
 
@@ -32,7 +32,7 @@ new Vue({
     const slots = {default: renderDnDItem}
 
     return (
-      <DnDContext debug={true} scopedSlots={slots}>
+      <DnDContext scopedSlots={slots}>
         <div class="container">
           <div class="dndWrapper">
             <DnDItems items={this.left} onUpdate={this.updateLeft} options={leftOptions} scopedSlots={slots}/>

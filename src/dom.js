@@ -12,7 +12,7 @@ export function indexOfDirectDescendant(parent, child) {
 }
 
 export function findAncestorByClassName(child, clsName) {
-  return child.parentNode.className.includes(clsName) ?
+  return child.parentNode.className.indexOf(clsName) !== -1 ?
     child.parentNode :
     findAncestorByClassName(child.parentNode, clsName)
 }

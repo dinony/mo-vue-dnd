@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.2.3 (2017-02-07)
+
+* Bugfix: Some compatibility fixes for IE11
+
 # 0.2.2 (2017-02-06)
 
 * Bugfix: Update source container correctly, when intermediate projections exist

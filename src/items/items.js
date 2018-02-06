@@ -56,7 +56,8 @@ export default {
       isTarget: false,
       selectedItem: null,
       selectedNode: null,
-      itemIntersection: null
+      itemIntersection: null,
+      origSourceResult: null
     }
   },
   mounted() {
@@ -79,6 +80,15 @@ export default {
     },
     renderedItems() {
       return this.dropPreviewResult ? this.dropPreviewResult.targetResult.container: this.items
+    }
+  },
+  watch: {
+    dropPreviewResult(dr) {
+      if(dr && !dr.sameContext && !this.origSourceResult) {
+        this.origSourceResult = dr.sourceResult
+      } else if(!dr) {
+        this.origSourceResult = null
+      }
     }
   },
   methods: {
@@ -202,12 +212,11 @@ export default {
       }
     },
     onUp(dragTargetOrMouseEvent) {
-      const dr = this.dropPreviewResult
-      if(dr) {
-        if(!dr.sameContext) {
-          dr.sourceResult.update()
+      if(this.dropPreviewResult) {
+        if(this.origSourceResult) {
+          this.origSourceResult.update()
         }
-        dr.targetResult.update()
+        this.dropPreviewResult.targetResult.update()
       }
     },
     emitUpdate(payload) {

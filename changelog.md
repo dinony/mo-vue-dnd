@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.2.2 (2017-02-06)
+
+* Bugfix: Update source container correctly, when intermediate projections exist
+
 # 0.2.1 (2017-02-05)
 
 * Bugfix: Remove tmp node styling

@@ -116,6 +116,7 @@ export default {
       bus.$emit(DND_ITEM_SELECTED, payload)
     },
     onMousemove(event) {
+      if(!this.selection) {return}
       if(this.mmPos === null) {
         this.mmPos = new Vec2(0, 0)
       }

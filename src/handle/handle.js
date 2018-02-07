@@ -3,8 +3,13 @@ import attachTouchy from '../touch'
 import {DND_HANDLE_MD, HandleMdPayload} from '../events'
 
 function onMousedown(event, componentContext) {
-  // Just left button clicks
-  if(event.button !== 0) {return}
+  if(event instanceof TouchEvent) {
+    if(event.touches.length !== 1) {return}
+  } else if(event instanceof MouseEvent) {
+    // Just left button clicks
+    if(event.button !== 0) {return}
+  }
+
   event.stopPropagation()
   bus.$emit(DND_HANDLE_MD, new HandleMdPayload(event, componentContext))
 }

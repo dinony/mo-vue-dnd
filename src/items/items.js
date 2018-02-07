@@ -22,6 +22,7 @@ import {
 
 import drop from '../drop/drop'
 
+import ItemsContext from './ItemsContext'
 import ItemContext from './ItemContext'
 import ItemIntersection from './ItemIntersection'
 import Options from './Options'
@@ -52,6 +53,7 @@ export default {
   },
   data() {
     return {
+      ownContext: new ItemsContext(this),
       selectedTarget: null,
       isTarget: false,
       selectedItem: null,

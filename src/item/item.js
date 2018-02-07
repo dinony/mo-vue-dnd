@@ -1,3 +1,5 @@
+import attachTouchy from '../touch'
+
 export class ItemEventPayload {
   constructor(event, elem, index) {
     this.event = event
@@ -45,10 +47,9 @@ export default {
     }
 
     if(!this.isSelected && !this.isProjected) {
-      params.on = {
-        mousemove: this.emitMove,
-        mouseup: this.emitUp
-      }
+      params.on = {}
+      attachTouchy(params.on, 'mousemove', this.emitMove)
+      attachTouchy(params.on, 'mouseup', this.emitUp)
     }
     return <div {...params}>{this.$slots.default}</div>
   }

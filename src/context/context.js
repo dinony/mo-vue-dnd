@@ -10,6 +10,7 @@ import {
 } from '../events'
 import {Vec2, CSSPos} from '../vec'
 import {getTouchy} from '../touch'
+import {getEventCoords} from '../dom'
 
 const StateEnum = {
   INIT: 0,
@@ -109,16 +110,20 @@ export default {
       this.selectedItemPos = Vec2.add(
         new Vec2(window.pageXOffset, window.pageYOffset),
         new Vec2(clientRect.left, clientRect.top))
-      // MouseEvent page coords
-      this.mdPos = new Vec2(payload.event.pageX, payload.event.pageY)
+      // Page coords
+      const coords = getEventCoords(payload.event)
+      this.mdPos = new Vec2(coords.pageX, coords.pageY)
       bus.$emit(DND_ITEM_SELECTED, payload)
     },
     onMousemove(event) {
       if(this.mmPos === null) {
         this.mmPos = new Vec2(0, 0)
       }
-      this.$set(this.mmPos, 'x', event.pageX)
-      this.$set(this.mmPos, 'y', event.pageY)
+      const coords = getEventCoords(event)
+      if(coords) {
+        this.$set(this.mmPos, 'x', coords.pageX)
+        this.$set(this.mmPos, 'y', coords.pageY)
+      }
     },
     setInitState() {
       this.state = StateEnum.INIT
@@ -137,11 +142,12 @@ export default {
       <div class="mo-dndContextDebug">
         <h4>mo-vue-dnd</h4>
         <pre>State: {this.state}</pre>
+        <pre>mm: {this.mmPos ? JSON.stringify(this.mmPos, null, 2): null}</pre>
       </div>)
 
     const content = this.debug ? [this.$slots.default, debugOut()] : this.$slots.default
 
-    if(this.state === StateEnum.DRAG) {
+    if(this.state === StateEnum.DRAG && this.dragItemPos) {
       const dndItemSlot = this.$scopedSlots.default
       const slotArg = {
         item: this.selection.item,

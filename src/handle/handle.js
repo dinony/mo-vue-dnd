@@ -1,11 +1,11 @@
 import bus from '../bus'
-import attachTouchy from '../touch'
+import {default as attachTouchy, isTouch} from '../touch'
 import {DND_HANDLE_MD, HandleMdPayload} from '../events'
 
 function onMousedown(event, componentContext) {
-  if(event instanceof TouchEvent) {
+  if(isTouch(event)) {
     if(event.touches.length !== 1) {return}
-  } else if(event instanceof MouseEvent) {
+  } else {
     // Just left button clicks
     if(event.button !== 0) {return}
   }

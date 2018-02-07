@@ -1,3 +1,5 @@
+import {isTouch} from './touch'
+
 function indexOf(child, parent) {
   return Array.prototype.indexOf.call(parent.children, child)
 }
@@ -26,7 +28,7 @@ export function isDescendant(parent, child) {
 }
 
 export function getEventCoords(event) {
-  if(event instanceof TouchEvent) {
+  if(isTouch(event)) {
     const touch = event.touches[0]
     if(touch) {
       return {

@@ -62,3 +62,11 @@ export function getTouchy(event) {
     return [touch[event], event]
   }
 }
+
+export function isTouch(event) {
+  if(event instanceof MouseEvent) {
+    return false
+  } else {
+    return event.touches? true: false
+  }
+}

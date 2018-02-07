@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     setTarget(payload) {
-      this.target = payload.targetComponent
+      this.target = payload.targetComponentContext
       bus.$emit(DND_TARGET_SELECTED, payload)
     },
     resetTarget() {
@@ -120,7 +120,6 @@ export default {
       <div class="mo-dndContextDebug">
         <h4>mo-vue-dnd</h4>
         <pre>State: {this.state}</pre>
-        <pre>Target: {this.target? this.target.group: null}</pre>
       </div>)
 
     const content = this.debug ? [this.$slots.default, debugOut()] : this.$slots.default

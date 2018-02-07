@@ -106,11 +106,11 @@ export default {
       bus.$emit(DND_TARGET_UNSELECT)
     },
     emitSelectedTarget() {
-      bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(this))
+      bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(this.ownContext))
     },
     setTarget(payload) {
-      this.selectedTarget = payload.targetComponent
-      if(payload.targetComponent === this) {
+      this.selectedTarget = payload.targetComponentContext
+      if(payload.targetComponentContext === this.ownContext) {
         this.isTarget = true
       } else {
         this.isTarget = false
@@ -142,7 +142,7 @@ export default {
         const payload = new ItemSelectPayload(
           event, itemWrapper,
           new ItemContext(this.group, this.items, index, this.options, this.emitUpdate))
-        bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(this))
+        bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(this.ownContext))
         bus.$emit(DND_ITEM_SELECT, payload)
       }
     },

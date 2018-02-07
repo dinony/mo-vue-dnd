@@ -24,3 +24,22 @@ export function isDescendant(parent, child) {
     return false
   }
 }
+
+export function getEventCoords(event) {
+  if(event instanceof TouchEvent) {
+    const touch = event.touches[0]
+    if(touch) {
+      return {
+        'pageX': touch.pageX,
+        'pageY': touch.pageY
+      }
+    }
+  } else if(event instanceof MouseEvent) {
+    return {
+      'pageX': event.pageX,
+      'pageY': event.pageY
+    }
+  }
+
+  return null
+}

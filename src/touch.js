@@ -21,21 +21,21 @@ function checkTouchEventName(event) {
 // Reference:
 // https://github.com/bevacqua/dragula/blob/master/dragula.js#L495
 const touch = {
-  mouseup: 'touchend',
   mousedown: 'touchstart',
-  mousemove: 'touchmove'
+  mousemove: 'touchmove',
+  mouseup: 'touchend'
 }
 
 const pointers = {
-  mouseup: 'pointerup',
   mousedown: 'pointerdown',
-  mousemove: 'pointermove'
+  mousemove: 'pointermove',
+  mouseup: 'pointerup'
 }
 
 const microsoft = {
-  mouseup: 'MSPointerUp',
   mousedown: 'MSPointerDown',
-  mousemove: 'MSPointerMove'
+  mousemove: 'MSPointerMove',
+  mouseup: 'MSPointerUp'
 }
 
 export default function attachTouchy(obj, event, fn) {
@@ -52,14 +52,13 @@ export default function attachTouchy(obj, event, fn) {
 }
 
 export function getTouchy(event) {
+  checkTouchEventName(event)
+
   if (global.navigator.pointerEnabled) {
     return [pointers[event]]
   } else if (global.navigator.msPointerEnabled) {
     return [microsoft[event]]
   } else {
-    return [
-      touch[event],
-      event
-    ]
+    return [touch[event], event]
   }
 }

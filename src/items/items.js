@@ -249,7 +249,7 @@ export default {
       const key = this.keyFn ? this.keyFn(item): index
 
       return (
-        <DnDItem item={item} index={index} key={key} keyTest={key}
+        <DnDItem item={item} index={index} key={key}
           isSelected={isSelectedItem}
           isProjected={isProjectedItem}
           onMove={this.onMove} onUp={this.onUp}>

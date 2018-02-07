@@ -9,6 +9,7 @@ import {
   DND_ITEM_UNSELECTED
 } from '../events'
 import {Vec2, CSSPos} from '../vec'
+import {getTouchy} from '../touch'
 
 const StateEnum = {
   INIT: 0,
@@ -37,15 +38,31 @@ export default {
     bus.$on(DND_TARGET_SELECT, this.setTarget)
     bus.$on(DND_TARGET_UNSELECT, this.resetTarget)
     bus.$on(DND_ITEM_SELECT, this.setSelectedItem)
-    document.addEventListener('mousemove', this.onMousemove)
-    document.addEventListener('mouseup', this.setInitState)
+
+    const mm = getTouchy('mousemove')
+    mm.forEach(ev => {
+      document.addEventListener(ev, this.onMousemove)
+    })
+
+    const mu = getTouchy('mouseup')
+    mu.forEach(ev => {
+      document.addEventListener(ev, this.setInitState)
+    })
   },
   beforeDestroy() {
     bus.$off(DND_TARGET_SELECT, this.setTarget)
     bus.$off(DND_TARGET_UNSELECT, this.resetTarget)
     bus.$off(DND_ITEM_SELECT, this.setSelectedItem)
-    document.removeEventListener('mousemove', this.onMousemove)
-    document.removeEventListener('mouseup', this.setInitState)
+
+    const mm = getTouchy('mousemove')
+    mm.forEach(ev => {
+      document.removeEventListener(ev, this.onMousemove)
+    })
+
+    const mu = getTouchy('mouseup')
+    mu.forEach(ev => {
+      document.removeEventListener(ev, this.setInitState)
+    })
   },
   computed: {
     mdItemOffset() {

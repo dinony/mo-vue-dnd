@@ -1,6 +1,15 @@
 # Changelog
 
-# 0.2.3 (2017-02-07)
+# 3.0.2 (2017-02-07)
+
+* Adapt `TargetSelectPayload` to make use of `ItemsContext`
+
+# 3.0.0 (2017-02-07)
+
+* Breaking changes in scoped slot argument of `DnDItems`
+* Breaking changes in `DnDHandle` props.
+
+# 0.2.3 (2017-02-0)
 
 * Bugfix: Some compatibility fixes for IE11
 

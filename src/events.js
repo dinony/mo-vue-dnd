@@ -13,9 +13,9 @@ export const DND_ITEM_UNSELECTED = 'IUD'
 
 export const DND_HANDLE_MD = 'MD'
 export class HandleMdPayload {
-  constructor(event, container) {
+  constructor(event, targetComponentContext) {
     this.event = event
-    this.container = container
+    this.targetComponentContext = targetComponentContext
   }
 }
 

@@ -132,8 +132,7 @@ export default {
       this.itemIntersection = null
     },
     onMousedown(payload) {
-      const container = payload.container
-      if(this.items !== container) {return}
+      if(this.ownContext !== payload.targetComponentContext) {return}
       const event = payload.event
       const parent = this.$refs.content
       const child = event.target
@@ -257,6 +256,6 @@ export default {
       </div>)
 
     return this.renderedItems.length > 0 && this.options.wrapDnDHandle ?
-      <DnDHandle container={this.items}>{content}</DnDHandle>: content
+      <DnDHandle componentContext={this.ownContext}>{content}</DnDHandle>: content
   }
 }

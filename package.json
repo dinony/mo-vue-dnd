@@ -6,9 +6,10 @@
   "unpkg": "dist/mo-vue-dnd.umd.js",
   "style": "dist/mo-vue-dnd.css",
   "scripts": {
+    "release": "npm run build:all && npm publish",
     "build:all": "npm run build && npm run build:style",
     "build:style": "gulp scss",
-    "build:dev": "cross-env NODE_ENV=development webpack --config webpack.config.js  --progress",
+    "build:dev": "cross-env NODE_ENV=development webpack --config webpack.config.js --progress",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js --progress --hide-modules",
     "simple:dev": "cross-env NODE_ENV=development webpack-dev-server --config examples/simple/webpack.config.js",
     "simple:build": "cross-env NODE_ENV=development webpack --config examples/simple/webpack.config.js",

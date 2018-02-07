@@ -247,7 +247,7 @@ export default {
           isSelected={isSelectedItem}
           isProjected={isProjectedItem}
           onMove={this.onMove} onUp={this.onUp}>
-          {dndItemSlot({item, index, container: this.items, isSelectedItem, isProjectedItem})}
+          {dndItemSlot({item, index, componentContext: this.ownContext})}
         </DnDItem>)
     })
 

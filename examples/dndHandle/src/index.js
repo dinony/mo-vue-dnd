@@ -31,7 +31,7 @@ new Vue({
   render() {
     const renderDnDItem = props => (
       <div class="dndItem">
-        <DnDHandle container={props.container}>
+        <DnDHandle componentContext={props.componentContext}>
           <div class="dndItemHandle"></div>
         </DnDHandle>
         <div class="dndItemContent">Item: {props.item}</div>

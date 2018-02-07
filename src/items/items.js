@@ -20,6 +20,8 @@ import {
   isDescendant
 } from '../dom'
 
+import attachTouchy from '../touch'
+
 import drop from '../drop/drop'
 
 import ItemsContext from './ItemsContext'
@@ -226,7 +228,12 @@ export default {
   },
   render() {
     const dndItemSlot = this.$scopedSlots.default
-    const empty = <div class="mo-dndItemsEmpty" onMousemove={this.onMove}>Empty</div>
+
+    const eListeners = {on: {}}
+
+    attachTouchy(eListeners.on, 'mousemove', this.onMove)
+
+    const empty = <div class="mo-dndItemsEmpty" {...eListeners}>Empty</div>
 
     // Current drop result
     const dr = this.dropPreviewResult
@@ -250,8 +257,13 @@ export default {
         </DnDItem>)
     })
 
+    const listeners = {on: {}}
+
+    attachTouchy(listeners.on, 'mousemove', this.onMousemove)
+    attachTouchy(listeners.on, 'mouseup', this.onUp)
+
     const content = (
-      <div class="mo-dndItems" onMouseenter={this.onMouseenter} onMousemove={this.onMousemove} onMouseleave={this.onMouseleave} onMouseup={this.onUp} ref="content">
+      <div class="mo-dndItems" onMouseenter={this.onMouseenter} onMouseleave={this.onMouseleave} ref="content" {...listeners}>
         {this.renderedItems.length > 0 ? items : empty}
       </div>)
 

@@ -11,9 +11,6 @@ export default {
     item: {
       required: true
     },
-    keyTest: {
-      required: true,
-    },
     index: {
       type: Number,
       required: true
@@ -40,7 +37,6 @@ export default {
   },
   render() {
     const params = {
-      key: this.keyTest,
       class: {
         'mo-dndItem': true,
         'mo-dndItemSelected': this.isSelected,

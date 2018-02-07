@@ -50,3 +50,16 @@ export default function attachTouchy(obj, event, fn) {
     obj[event] = fn
   }
 }
+
+export function getTouchy(event) {
+  if (global.navigator.pointerEnabled) {
+    return [pointers[event]]
+  } else if (global.navigator.msPointerEnabled) {
+    return [microsoft[event]]
+  } else {
+    return [
+      touch[event],
+      event
+    ]
+  }
+}

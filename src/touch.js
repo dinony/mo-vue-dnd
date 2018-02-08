@@ -6,7 +6,7 @@ export class InvalidTouchEventNameException extends Error {
 
 const invalidEventNameErrMsg = key =>
   (`
-   Event name: \`${key}\` is not recognized as a touch event.
+   Event name: \`${key}\` cannot be mapped to an according touch or pointer event.
    Please use a valid event name ('mousedown'|'mousemove'|'mouseup').
   `)
 

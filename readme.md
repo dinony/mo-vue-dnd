@@ -15,6 +15,14 @@ Todo
 
 Breaking changes in minor/major releases are documented here.
 
+## 0.3.x -> 0.4.x
+
+### Class Names
+
+`mo-dndItems` -> `mo-dndContainer`
+
+###
+
 ## 0.2.x -> 0.3.x
 
 ### DnDItems: Scoped Slot Argument

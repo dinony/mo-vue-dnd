@@ -12,9 +12,13 @@ export function indexOfDirectDescendant(parent, child) {
 }
 
 export function findAncestorByClassName(child, clsName) {
-  return child.parentNode.className.indexOf(clsName) !== -1 ?
-    child.parentNode :
-    findAncestorByClassName(child.parentNode, clsName)
+  if(child.parentNode === document) {
+    return null
+  } else {
+    return child.parentNode && child.parentNode.className.indexOf(clsName) !== -1 ?
+      child.parentNode:
+      findAncestorByClassName(child.parentNode, clsName)
+  }
 }
 
 export function isDescendant(parent, child) {

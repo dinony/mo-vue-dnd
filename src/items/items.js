@@ -33,6 +33,10 @@ import Options from './Options'
 
 export default {
   props: {
+    name: {
+      type: String,
+      default: 'outer'
+    },
     items: {
       type: Array,
       required: true
@@ -98,24 +102,15 @@ export default {
     }
   },
   methods: {
-    onMouseenter(event) {
-      this.emitSelectedTarget()
+    emitSelectedTarget(newDnDTarget) {
+      bus.$emit(DND_TARGET_SELECT, newDnDTarget)
     },
-    onMousemove(event) {
-      console.log('dndItems', 'mm')
-      if(this.selectedTarget === null) {
-        this.emitSelectedTarget()
-      }
-    },
-    onMouseleave() {
+    emitUnselectTarget() {
       bus.$emit(DND_TARGET_UNSELECT)
     },
-    emitSelectedTarget() {
-      bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(this.ownContext))
-    },
     setTarget(payload) {
-      this.selectedTarget = payload.targetComponentContext
-      if(payload.targetComponentContext === this.ownContext) {
+      this.selectedTarget = payload.targetElement
+      if(payload.targetElement === this.$refs.content) {
         this.isTarget = true
       } else {
         this.isTarget = false
@@ -126,6 +121,23 @@ export default {
       this.isTarget = false
       this.selectedTarget = null
       this.itemIntersection = null
+    },
+    onMousemove(event) {
+      const coords = getEventCoords(event)
+      if(!coords) {return}
+
+      const elemAtPoint = document.elementFromPoint(coords.pageX, coords.pageY)
+      const dndTarget = findAncestorByClassName(elemAtPoint, 'mo-dndItems')
+      if(!dndTarget) {
+        this.emitUnselectTarget()
+        return
+      }
+
+      if(this.selectedTarget !== dndTarget) {
+        this.emitSelectedTarget(dndTarget)
+      }
+
+      console.log('dndTarget', dndTarget)
     },
     onItemSelect(payload) {
       if(this.ownContext !== payload.targetComponentContext) {return}

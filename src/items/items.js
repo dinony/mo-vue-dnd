@@ -67,16 +67,16 @@ export default {
   mounted() {
     bus.$on(DND_TARGET_SELECTED, this.setTarget)
     bus.$on(DND_TARGET_UNSELECTED, this.resetTarget)
+    bus.$on(DND_HANDLE_MD, this.onItemSelect)
     bus.$on(DND_ITEM_SELECTED, this.setSelectedItem)
     bus.$on(DND_ITEM_UNSELECTED, this.resetSelectedItem)
-    bus.$on(DND_HANDLE_MD, this.onMousedown)
   },
   beforeDestroy() {
     bus.$off(DND_TARGET_SELECTED, this.setTarget)
     bus.$off(DND_TARGET_UNSELECTED, this.resetTarget)
+    bus.$off(DND_HANDLE_MD, this.onItemSelect)
     bus.$off(DND_ITEM_SELECTED, this.setSelectedItem)
     bus.$off(DND_ITEM_UNSELECTED, this.resetSelectedItem)
-    bus.$off(DND_HANDLE_MD, this.onMousedown)
   },
   computed: {
     dropPreviewResult() {
@@ -100,6 +100,7 @@ export default {
       this.emitSelectedTarget()
     },
     onMousemove(event) {
+      console.log('dndItems', 'mm')
       if(this.selectedTarget === null) {
         this.emitSelectedTarget()
       }
@@ -124,16 +125,7 @@ export default {
       this.selectedTarget = null
       this.itemIntersection = null
     },
-    setSelectedItem(payload) {
-      this.selectedItem = payload.itemContext
-      this.selectedNode = payload.elem
-    },
-    resetSelectedItem() {
-      this.selectedItem = null
-      this.selectedNode = null
-      this.itemIntersection = null
-    },
-    onMousedown(payload) {
+    onItemSelect(payload) {
       if(this.ownContext !== payload.targetComponentContext) {return}
       const event = payload.event
       const parent = this.$refs.content
@@ -147,6 +139,15 @@ export default {
         bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(this.ownContext))
         bus.$emit(DND_ITEM_SELECT, payload)
       }
+    },
+    setSelectedItem(payload) {
+      this.selectedItem = payload.itemContext
+      this.selectedNode = payload.elem
+    },
+    resetSelectedItem() {
+      this.selectedItem = null
+      this.selectedNode = null
+      this.itemIntersection = null
     },
     onMove(dragTargetOrMouseEvent) {
       if(this.selectedItem && this.isTarget) {

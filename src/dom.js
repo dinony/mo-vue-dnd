@@ -1,5 +1,3 @@
-import {isTouch} from './touch'
-
 function indexOf(child, parent) {
   return Array.prototype.indexOf.call(parent.children, child)
 }

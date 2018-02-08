@@ -103,7 +103,7 @@ export default {
   },
   methods: {
     emitSelectedTarget(newDnDTarget) {
-      bus.$emit(DND_TARGET_SELECT, newDnDTarget)
+      bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(newDnDTarget))
     },
     emitUnselectTarget() {
       bus.$emit(DND_TARGET_UNSELECT)
@@ -132,12 +132,19 @@ export default {
         this.emitUnselectTarget()
         return
       }
-
       if(this.selectedTarget !== dndTarget) {
         this.emitSelectedTarget(dndTarget)
       }
 
-      console.log('dndTarget', dndTarget)
+      if(this.isTarget) {
+
+      } else {
+
+      }
+      // DnD Target established
+    },
+    onMouseup(event) {
+      // TODO:
     },
     onItemSelect(payload) {
       if(this.ownContext !== payload.targetComponentContext) {return}
@@ -150,7 +157,7 @@ export default {
         const payload = new ItemSelectPayload(
           event, itemWrapper,
           new ItemContext(this.group, this.items, index, this.options, this.emitUpdate))
-        bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(this.ownContext))
+        bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(this.$refs.content))
         bus.$emit(DND_ITEM_SELECT, payload)
       }
     },
@@ -197,7 +204,7 @@ export default {
     }
     if(this.selectedItem) {
       attachTouchy(data.on, 'mousemove', this.onMousemove)
-      attachTouchy(data.on, 'mouseup', this.onUp)
+      attachTouchy(data.on, 'mouseup', this.onMouseup)
     }
 
     const empty = <div class="mo-dndItemsEmpty">Empty</div>

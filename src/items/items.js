@@ -1,5 +1,5 @@
 import bus from '../bus'
-import {default as DnDItem, ItemEventPayload} from '../item/Item'
+import DnDItem from '../item/Item'
 import DnDHandle from '../handle/Handle'
 import {
   DND_TARGET_SELECT,
@@ -230,12 +230,6 @@ export default {
   render() {
     const dndItemSlot = this.$scopedSlots.default
 
-    const eListeners = {on: {}}
-
-    attachTouchy(eListeners.on, 'mousemove', this.onMove)
-
-    const empty = <div class="mo-dndItemsEmpty" {...eListeners}>Empty</div>
-
     // Current drop result
     const dr = this.dropPreviewResult
     const tIndex = dr ? dr.targetContext.index: -1
@@ -250,21 +244,21 @@ export default {
       const key = this.keyFn ? this.keyFn(item): index
 
       return (
-        <DnDItem item={item} index={index} key={key}
+        <DnDItem key={key}
           isSelected={isSelectedItem}
-          isProjected={isProjectedItem}
-          onMove={this.onMove} onUp={this.onUp}>
+          isProjected={isProjectedItem}>
           {dndItemSlot({item, index, componentContext: this.ownContext})}
         </DnDItem>)
     })
 
     const listeners = {on: {}}
-
     attachTouchy(listeners.on, 'mousemove', this.onMousemove)
     attachTouchy(listeners.on, 'mouseup', this.onUp)
 
+    const empty = <div class="mo-dndItemsEmpty">Empty</div>
+
     const content = (
-      <div ref="content" class="mo-dndItems" onMouseenter={this.onMouseenter} onMouseleave={this.onMouseleave} {...listeners}>
+      <div ref="content" class="mo-dndItems" {...listeners}>
         {this.renderedItems.length > 0 ? items : empty}
       </div>)
 

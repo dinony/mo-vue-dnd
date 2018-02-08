@@ -20,6 +20,8 @@ import {
   isDescendant
 } from '../dom'
 
+import {getEventCoords} from '../event'
+
 import attachTouchy from '../touch'
 
 import drop from '../drop/drop'

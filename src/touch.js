@@ -18,8 +18,6 @@ function checkTouchEventName(event) {
   }
 }
 
-// Reference:
-// https://github.com/bevacqua/dragula/blob/master/dragula.js#L495
 const touch = {
   mousedown: 'touchstart',
   mousemove: 'touchmove',
@@ -38,6 +36,8 @@ const microsoft = {
   mouseup: 'MSPointerUp'
 }
 
+// Reference:
+// https://github.com/bevacqua/dragula/blob/master/dragula.js#L495
 export default function attachTouchy(obj, event, fn) {
   checkTouchEventName(event)
 

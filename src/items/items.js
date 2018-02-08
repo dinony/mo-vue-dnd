@@ -102,12 +102,6 @@ export default {
     }
   },
   methods: {
-    emitSelectedTarget(newDnDTarget) {
-      bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(newDnDTarget))
-    },
-    emitUnselectTarget() {
-      bus.$emit(DND_TARGET_UNSELECT)
-    },
     setTarget(payload) {
       this.selectedTarget = payload.targetElement
       if(payload.targetElement === this.$refs.content) {
@@ -129,11 +123,11 @@ export default {
       const elemAtPoint = document.elementFromPoint(coords.pageX, coords.pageY)
       const dndTarget = findAncestorByClassName(elemAtPoint, 'mo-dndItems')
       if(!dndTarget) {
-        this.emitUnselectTarget()
+        bus.$emit(DND_TARGET_UNSELECT)
         return
       }
       if(this.selectedTarget !== dndTarget) {
-        this.emitSelectedTarget(dndTarget)
+        bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(dndTarget))
       }
 
       if(this.isTarget) {

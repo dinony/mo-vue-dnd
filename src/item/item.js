@@ -1,22 +1,6 @@
-import attachTouchy from '../touch'
-
-export class ItemEventPayload {
-  constructor(event, elem, index) {
-    this.event = event
-    this.elem = elem
-    this.index = index
-  }
-}
-
 export default {
+  functional: true,
   props: {
-    item: {
-      required: true
-    },
-    index: {
-      type: Number,
-      required: true
-    },
     isSelected: {
       type: Boolean,
       default: false
@@ -26,31 +10,14 @@ export default {
       default: false
     }
   },
-  methods: {
-    getEventPayload(event) {
-      return new ItemEventPayload(event, this.$el, this.index)
-    },
-    emitMove(event) {
-      this.$emit('move', this.getEventPayload(event))
-    },
-    emitUp(event) {
-      this.$emit('up', this.getEventPayload(event))
+  render(h, context) {
+    const cls = {
+      'mo-dndItem': true,
+      'mo-dndItemSelected': context.props.isSelected,
+      'mo-dndItemProjected': context.props.isProjected
     }
-  },
-  render() {
-    const params = {
-      class: {
-        'mo-dndItem': true,
-        'mo-dndItemSelected': this.isSelected,
-        'mo-dndItemProjected': this.isProjected
-      }
-    }
+    const slots = context.slots()
 
-    if(!this.isSelected && !this.isProjected) {
-      params.on = {}
-      attachTouchy(params.on, 'mousemove', this.emitMove)
-      attachTouchy(params.on, 'mouseup', this.emitUp)
-    }
-    return <div {...params}>{this.$slots.default}</div>
+    return <div class={cls}>{context.slots().default}</div>
   }
 }

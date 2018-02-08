@@ -70,6 +70,8 @@ export function isTouch(event) {
   if(event instanceof MouseEvent) {
     return false
   } else {
+    // Note: cannot use `event instanceof TouchEvent`
+    // since TouchEvent is undefined in IE11
     return event.touches? true: false
   }
 }

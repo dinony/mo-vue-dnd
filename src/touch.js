@@ -36,6 +36,9 @@ const microsoft = {
   mouseup: 'MSPointerUp'
 }
 
+// Note: http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
+export const SUPPORTS_TOUCH = 'ontouchstart' in document.documentElement
+
 // Reference:
 // https://github.com/bevacqua/dragula/blob/master/dragula.js#L495
 export default function attachTouchy(obj, event, fn) {

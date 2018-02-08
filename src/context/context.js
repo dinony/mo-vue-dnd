@@ -10,7 +10,7 @@ import {
 } from '../events'
 import {Vec2, CSSPos} from '../vec'
 import {getTouchy} from '../touch'
-import {getEventCoords} from '../dom'
+import {getEventCoords} from '../event'
 
 const StateEnum = {
   INIT: 0,
@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     setTarget(payload) {
-      this.target = payload.targetComponentContext
+      this.target = payload.targetElement
       bus.$emit(DND_TARGET_SELECTED, payload)
     },
     resetTarget() {

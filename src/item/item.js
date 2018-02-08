@@ -16,8 +16,6 @@ export default {
       'mo-dndItemSelected': context.props.isSelected,
       'mo-dndItemProjected': context.props.isProjected
     }
-    const slots = context.slots()
-
     return <div class={cls}>{context.slots().default}</div>
   }
 }

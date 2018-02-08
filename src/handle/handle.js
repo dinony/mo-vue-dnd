@@ -18,7 +18,6 @@ export default {
   functional: true,
   render(h, context) {
     const listeners = {on:{}}
-
     attachTouchy(listeners.on, 'mousedown', ev => onMousedown(ev, context.props.componentContext))
 
     return (

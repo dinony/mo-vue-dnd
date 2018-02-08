@@ -121,21 +121,25 @@ export default {
       if(!coords) {return}
 
       const elemAtPoint = document.elementFromPoint(coords.pageX, coords.pageY)
-      const dndTarget = findAncestorByClassName(elemAtPoint, 'mo-dndItems')
+      const dndTarget = findAncestorByClassName(elemAtPoint, 'mo-dndContainer')
       if(!dndTarget) {
+        console.log('unselect', 'target')
         bus.$emit(DND_TARGET_UNSELECT)
         return
       }
+
       if(this.selectedTarget !== dndTarget) {
+        console.log('select', 'newtarget')
         bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(dndTarget))
-      }
-
-      if(this.isTarget) {
-
       } else {
-
+        console.log('same target')
       }
-      // DnD Target established
+
+      const dndItem = findAncestorByClassName(elemAtPoint, 'mo-dndItem')
+
+      if(this.selectedNode === dndItem) {
+        console.log('MM on same item')
+      }
     },
     onMouseup(event) {
       // TODO:
@@ -201,10 +205,10 @@ export default {
       attachTouchy(data.on, 'mouseup', this.onMouseup)
     }
 
-    const empty = <div class="mo-dndItemsEmpty">Empty</div>
+    const empty = <div class="mo-dndContainerEmpty">Empty</div>
 
     const content = (
-      <div ref="content" class="mo-dndItems" {...data}>
+      <div ref="content" class="mo-dndContainer" {...data}>
         {this.renderedItems.length > 0 ? items : empty}
       </div>)
 

@@ -22,8 +22,8 @@ export class HandleMdPayload {
 export const DND_TARGET_SELECT = 'TS'
 
 export class TargetSelectPayload {
-  constructor(targetComponentContext) {
-    this.targetComponentContext = targetComponentContext
+  constructor(targetElement) {
+    this.targetElement = targetElement
   }
 }
 

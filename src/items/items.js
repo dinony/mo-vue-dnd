@@ -263,7 +263,7 @@ export default {
     attachTouchy(listeners.on, 'mouseup', this.onUp)
 
     const content = (
-      <div class="mo-dndItems" onMouseenter={this.onMouseenter} onMouseleave={this.onMouseleave} ref="content" {...listeners}>
+      <div ref="content" class="mo-dndItems" onMouseenter={this.onMouseenter} onMouseleave={this.onMouseleave} {...listeners}>
         {this.renderedItems.length > 0 ? items : empty}
       </div>)
 

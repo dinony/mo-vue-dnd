@@ -251,14 +251,19 @@ export default {
         </DnDItem>)
     })
 
-    const listeners = {on: {}}
-    attachTouchy(listeners.on, 'mousemove', this.onMousemove)
-    attachTouchy(listeners.on, 'mouseup', this.onUp)
+    const data = {
+      class: {'mo-dndTarget': this.isTarget},
+      on: {}
+    }
+    if(this.selectedItem) {
+      attachTouchy(data.on, 'mousemove', this.onMousemove)
+      attachTouchy(data.on, 'mouseup', this.onUp)
+    }
 
     const empty = <div class="mo-dndItemsEmpty">Empty</div>
 
     const content = (
-      <div ref="content" class="mo-dndItems" {...listeners}>
+      <div ref="content" class="mo-dndItems" {...data}>
         {this.renderedItems.length > 0 ? items : empty}
       </div>)
 

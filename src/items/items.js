@@ -25,6 +25,8 @@ import {
 
 import {getEventCoords} from '../event'
 
+import {default as trace, TraceRes, EmptyTraceRes} from '../trace'
+
 import attachTouchy from '../touch'
 
 import drop from '../drop/drop'
@@ -149,11 +151,10 @@ export default {
       this.itemIntersection = null
     },
     onMousemove(event) {
-      const coords = getEventCoords(event)
-      if(!coords) {return}
+      const res = trace(event)
+      if(res instanceof EmptyTraceRes) {return}
 
-      const elemAtPoint = document.elementFromPoint(coords.pageX, coords.pageY)
-      const dndTarget = findAncestorByClassName(elemAtPoint, 'mo-dndContainer')
+      const dndTarget = res.tContainer
       if(!dndTarget) {
         bus.$emit(DND_TARGET_UNSELECT)
         return
@@ -163,13 +164,13 @@ export default {
         bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(dndTarget))
       }
 
-      const dndItem = findAncestorByClassName(elemAtPoint, 'mo-dndItem')
-      const dndItemIndex = indexOf(dndItem, dndTarget)
+      const dndItem = res.tItem
+      const dndItemIndex = res.iIndex
 
       if(this.selectedNode === dndItem) {return}
       else if(isDescendant(this.selectedNode, dndItem)) {return}
       else {
-        bus.$emit(DND_TARGET_ITEM_CONTEXT, new TargetItemContextPayload(dndTarget, dndItem, dndItemIndex))
+        bus.$emit(DND_TARGET_ITEM_CONTEXT, new TargetItemContextPayload(event, dndTarget, dndItem, dndItemIndex))
       }
     },
     onTargetItemContext(payload) {

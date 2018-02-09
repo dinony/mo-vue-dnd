@@ -37,7 +37,7 @@ export default function traceEvent(event, tCls='mo-dndContainer', iCls='mo-dndIt
     const tItem = findAncestorByClassName(elemAtPoint, iCls)
 
     return tItem ?
-      new TraceResult(tContainer, tItem, indexOf(tContainer, tItem)):
+      new TraceResult(tContainer, tItem, indexOf(tItem, tContainer)):
       new TraceResult(tContainer, null, null)
   }
 }

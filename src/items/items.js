@@ -4,11 +4,15 @@ import DnDHandle from '../handle/Handle'
 import {
   DND_HANDLE_MD,
   DND_ITEM_SELECT,
+  DND_REQUEST_ITEM,
+  DND_REQUESTED_ITEM,
   DND_ITEM_SELECTED,
   DND_ITEM_UNSELECTED,
   ItemSelectPayload,
   DND_TARGET_SELECT,
   DND_TARGET_SELECTED,
+  DND_REQUEST_TARGET,
+  DND_REQUESTED_TARGET,
   DND_TARGET_UNSELECT,
   DND_TARGET_UNSELECTED,
   DND_TARGET_ITEM_CONTEXT,
@@ -76,18 +80,25 @@ export default {
     }
   },
   mounted() {
+    bus.$emit(DND_REQUEST_ITEM)
+    bus.$emit(DND_REQUEST_TARGET)
+
     bus.$on(DND_HANDLE_MD, this.onItemSelect)
     bus.$on(DND_ITEM_SELECTED, this.onSetSelectedItem)
+    bus.$on(DND_REQUESTED_ITEM, this.onSetSelectedItem)
     bus.$on(DND_ITEM_UNSELECTED, this.onResetSelectedItem)
     bus.$on(DND_TARGET_SELECTED, this.onSetTarget)
+    bus.$on(DND_REQUESTED_TARGET, this.onSetTarget)
     bus.$on(DND_TARGET_UNSELECTED, this.onResetTarget)
     bus.$on(DND_TARGET_ITEM_CONTEXT, this.onTargetItemContext)
   },
   beforeDestroy() {
     bus.$off(DND_HANDLE_MD, this.onItemSelect)
     bus.$off(DND_ITEM_SELECTED, this.onSetSelectedItem)
+    bus.$off(DND_REQUESTED_ITEM, this.onSetSelectedItem)
     bus.$off(DND_ITEM_UNSELECTED, this.onResetSelectedItem)
     bus.$off(DND_TARGET_SELECTED, this.onSetTarget)
+    bus.$off(DND_REQUESTED_TARGET, this.onSetTarget)
     bus.$off(DND_TARGET_UNSELECTED, this.onResetTarget)
     bus.$off(DND_TARGET_ITEM_CONTEXT, this.onTargetItemContext)
   },
@@ -151,9 +162,9 @@ export default {
       this.itemIntersection = null
     },
     onMousemove(event) {
+      console.log('mm')
       const res = trace(event)
       if(res instanceof EmptyTraceResult) {return}
-
       const dndTarget = res.tContainer
       if(!dndTarget) {
         bus.$emit(DND_TARGET_UNSELECT)
@@ -176,54 +187,54 @@ export default {
     onTargetItemContext(payload) {
       if(payload.targetElem !== this.$refs.selfRef) {return}
       if(!payload.itemElem) {return}
-      // const trgIndex = payload.itemIndex
+      const trgIndex = payload.itemIndex
 
-      // // previous drop result
-      // const pDR = this.dropPreviewResult
-      // const pTarget = pDR ? pDR.targetContext: null
-      // let sc = null
-      // let tc = null
-      // if(pDR) {
-      //   // Same context
-      //   sc = pTarget
-      //   tc = new ItemContext(this.group, pTarget.container, trgIndex, this.options, this.emitUpdate)
-      // } else {
-      //   sc = this.selectedItem
-      //   tc = new ItemContext(this.group, this.items, trgIndex, this.options, this.emitUpdate)
-      // }
+      // previous drop result
+      const pDR = this.dropPreviewResult
+      const pTarget = pDR ? pDR.targetContext: null
+      let sc = null
+      let tc = null
+      if(pDR) {
+        // Same context
+        sc = pTarget
+        tc = new ItemContext(this.group, pTarget.container, trgIndex, this.options, this.emitUpdate)
+      } else {
+        sc = this.selectedItem
+        tc = new ItemContext(this.group, this.items, trgIndex, this.options, this.emitUpdate)
+      }
 
-      // if(tc.allowsDrop(sc)) {
-      //   // Permissions ok
-      //   const eventRef = payload.event
-      //   const clientRect = payload.itemElem.getBoundingClientRect()
+      if(tc.allowsDrop(sc)) {
+        // Permissions ok
+        const eventCoords = getEventCoords(payload.event)
+        const clientRect = payload.itemElem.getBoundingClientRect()
 
-      //   const shouldInsertBefore = eventRef.clientY < clientRect.top+clientRect.height/2
+        const shouldInsertBefore = eventCoords.clientY < clientRect.top+clientRect.height/2
 
-      //   // Previous intersection and current intersection
-      //   const pInt = this.itemIntersection
-      //   const cInt = new ItemIntersection(sc, tc, shouldInsertBefore)
+        // Previous intersection and current intersection
+        const pInt = this.itemIntersection
+        const cInt = new ItemIntersection(sc, tc, shouldInsertBefore)
 
-      //   if(pTarget) {
-      //     // Check whether new intersection would output same drop result
-      //     const newTargetIndex = null
-      //     if(sc.index < tc.index) {
-      //       newTargetIndex = shouldInsertBefore ? tc.index-1: tc.index
-      //     } else if(sc.index > tc.index) {
-      //       newTargetIndex = shouldInsertBefore ? tc.index: tc.index+1
-      //     } else {
-      //       newTargetIndex = tc.index
-      //     }
+        if(pTarget) {
+          // Check whether new intersection would output same drop result
+          const newTargetIndex = null
+          if(sc.index < tc.index) {
+            newTargetIndex = shouldInsertBefore ? tc.index-1: tc.index
+          } else if(sc.index > tc.index) {
+            newTargetIndex = shouldInsertBefore ? tc.index: tc.index+1
+          } else {
+            newTargetIndex = tc.index
+          }
 
-      //     if(pTarget.index === newTargetIndex) {
-      //       return
-      //     }
-      //   } else if(pInt && pInt.equals(cInt)) {
-      //     return
-      //   }
+          if(pTarget.index === newTargetIndex) {
+            return
+          }
+        } else if(pInt && pInt.equals(cInt)) {
+          return
+        }
 
-      //   // New intersection
-      //   this.itemIntersection = cInt
-      // }
+        // New intersection
+        this.itemIntersection = cInt
+      }
     },
     onMouseup(event) {
     },

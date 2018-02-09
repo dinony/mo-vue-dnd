@@ -19,6 +19,12 @@ export class HandleMdPayload {
   }
 }
 
+export const DND_REQUEST_ITEM = 'RI'
+export const DND_REQUESTED_ITEM = 'RID'
+
+export const DND_REQUEST_TARGET = 'RT'
+export const DND_REQUESTED_TARGET = 'RTD'
+
 export const DND_TARGET_SELECT = 'TS'
 
 export class TargetSelectPayload {

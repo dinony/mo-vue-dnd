@@ -25,7 +25,7 @@ import {
 
 import {getEventCoords} from '../event'
 
-import {default as trace, TraceRes, EmptyTraceRes} from '../trace'
+import {default as trace, TraceResult, EmptyTraceResult} from '../trace'
 
 import attachTouchy from '../touch'
 
@@ -152,7 +152,7 @@ export default {
     },
     onMousemove(event) {
       const res = trace(event)
-      if(res instanceof EmptyTraceRes) {return}
+      if(res instanceof EmptyTraceResult) {return}
 
       const dndTarget = res.tContainer
       if(!dndTarget) {
@@ -175,10 +175,57 @@ export default {
     },
     onTargetItemContext(payload) {
       if(payload.targetElem !== this.$refs.selfRef) {return}
-      console.log('target item context', this.name)
+      if(!payload.itemElem) {return}
+      // const trgIndex = payload.itemIndex
+
+      // // previous drop result
+      // const pDR = this.dropPreviewResult
+      // const pTarget = pDR ? pDR.targetContext: null
+      // let sc = null
+      // let tc = null
+      // if(pDR) {
+      //   // Same context
+      //   sc = pTarget
+      //   tc = new ItemContext(this.group, pTarget.container, trgIndex, this.options, this.emitUpdate)
+      // } else {
+      //   sc = this.selectedItem
+      //   tc = new ItemContext(this.group, this.items, trgIndex, this.options, this.emitUpdate)
+      // }
+
+      // if(tc.allowsDrop(sc)) {
+      //   // Permissions ok
+      //   const eventRef = payload.event
+      //   const clientRect = payload.itemElem.getBoundingClientRect()
+
+      //   const shouldInsertBefore = eventRef.clientY < clientRect.top+clientRect.height/2
+
+      //   // Previous intersection and current intersection
+      //   const pInt = this.itemIntersection
+      //   const cInt = new ItemIntersection(sc, tc, shouldInsertBefore)
+
+      //   if(pTarget) {
+      //     // Check whether new intersection would output same drop result
+      //     const newTargetIndex = null
+      //     if(sc.index < tc.index) {
+      //       newTargetIndex = shouldInsertBefore ? tc.index-1: tc.index
+      //     } else if(sc.index > tc.index) {
+      //       newTargetIndex = shouldInsertBefore ? tc.index: tc.index+1
+      //     } else {
+      //       newTargetIndex = tc.index
+      //     }
+
+      //     if(pTarget.index === newTargetIndex) {
+      //       return
+      //     }
+      //   } else if(pInt && pInt.equals(cInt)) {
+      //     return
+      //   }
+
+      //   // New intersection
+      //   this.itemIntersection = cInt
+      // }
     },
     onMouseup(event) {
-      // TODO:
     },
   },
   render() {

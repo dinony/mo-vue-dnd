@@ -2,6 +2,7 @@ import bus from '../bus'
 import {
   DND_ITEM_SELECT,
   DND_ITEM_SELECTED,
+  DND_REQUEST_ITEM,
   DND_ITEM_UNSELECTED,
   DND_TARGET_SELECT,
   DND_TARGET_SELECTED,
@@ -28,7 +29,7 @@ export default {
     return {
       state: StateEnum.INIT,
       target: null,
-      selection: null,
+      selectionPayload: null,
       selectedItemPos: null,
       selectedClientRect: null,
       mdPos: null,
@@ -36,17 +37,19 @@ export default {
     }
   },
   mounted() {
+    bus.$on(DND_ITEM_SELECT, this.setSelectedItem)
+    bus.$on(DND_REQUEST_ITEM, this.sendRequestedItem)
     bus.$on(DND_TARGET_SELECT, this.setTarget)
     bus.$on(DND_TARGET_UNSELECT, this.resetTarget)
-    bus.$on(DND_ITEM_SELECT, this.setSelectedItem)
 
     document.addEventListener(getTouchy('mousemove'), this.onMousemove)
     document.addEventListener(getTouchy('mouseup'), this.setInitState)
   },
   beforeDestroy() {
+    bus.$off(DND_ITEM_SELECT, this.setSelectedItem)
+    bus.$off(DND_REQUEST_ITEM, this.sendRequestedItem)
     bus.$off(DND_TARGET_SELECT, this.setTarget)
     bus.$off(DND_TARGET_UNSELECT, this.resetTarget)
-    bus.$off(DND_ITEM_SELECT, this.setSelectedItem)
 
     document.removeEventListener(getTouchy('mousemove'), this.onMousemove)
     document.removeEventListener(getTouchy('mouseup'), this.setInitState)
@@ -79,17 +82,9 @@ export default {
     }
   },
   methods: {
-    setTarget(payload) {
-      this.target = payload.targetElement
-      bus.$emit(DND_TARGET_SELECTED, payload)
-    },
-    resetTarget() {
-      this.target = null
-      bus.$emit(DND_TARGET_UNSELECTED)
-    },
     setSelectedItem(payload) {
       this.state = StateEnum.DRAG
-      this.selection = payload.itemContext
+      this.selectionPayload = payload
       const clientRect = payload.elem.getBoundingClientRect()
       this.selectedClientRect = clientRect
       // Selected item page coords
@@ -101,8 +96,11 @@ export default {
       this.mdPos = new Vec2(coords.pageX, coords.pageY)
       bus.$emit(DND_ITEM_SELECTED, payload)
     },
+    sendRequestedItem() {
+      bus.$emit(DND_REQUESTED_ITEM, this.selectionPayload)
+    },
     onMousemove(event) {
-      if(!this.selection) {return}
+      if(!this.selectionPayload) {return}
       if(this.mmPos === null) {
         this.mmPos = new Vec2(0, 0)
       }
@@ -112,10 +110,18 @@ export default {
         this.$set(this.mmPos, 'y', coords.pageY)
       }
     },
+    setTarget(payload) {
+      this.target = payload.targetElement
+      bus.$emit(DND_TARGET_SELECTED, payload)
+    },
+    resetTarget() {
+      this.target = null
+      bus.$emit(DND_TARGET_UNSELECTED)
+    },
     setInitState() {
       this.state = StateEnum.INIT
       this.target = null
-      this.selection = null
+      this.selectionPayload = null
       this.selectedItemPos = null
       this.selectedClientRect = null
       this.mdPos = null
@@ -136,9 +142,10 @@ export default {
 
     if(this.state === StateEnum.DRAG && this.dragItemPos) {
       const dndItemSlot = this.$scopedSlots.default
+      const selection = this.selectionPayload.itemContext
       const slotArg = {
-        item: this.selection.item,
-        index: this.selection.index
+        item: selection.item,
+        index: selection.index
       }
       return (
         <div class="mo-dndContext mo-dndContextDrag">

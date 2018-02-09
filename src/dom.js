@@ -24,7 +24,7 @@ export function findAncestorByClassName(child, clsName) {
 }
 
 export function isDescendant(parent, child) {
-  if(child.parentNode) {
+  if(child && child.parentNode) {
     return child.parentNode !== parent? isDescendant(parent, child.parentNode): true
   } else {
     return false

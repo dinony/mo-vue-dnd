@@ -12,7 +12,8 @@ import {
   DND_TARGET_UNSELECT,
   DND_TARGET_UNSELECTED,
   DND_TARGET_ITEM_CONTEXT,
-  TargetSelectPayload
+  TargetSelectPayload,
+  TargetItemContextPayload
 } from '../events'
 
 import {
@@ -109,7 +110,7 @@ export default {
     onItemSelect(payload) {
       if(this.ownContext !== payload.targetComponentContext) {return}
       const event = payload.event
-      const parent = this.$refs.content
+      const parent = this.$refs.selfRef
       const child = event.target
       const index = indexOfDirectDescendant(parent, child)
       if(index >= 0 && index < this.items.length) {
@@ -117,7 +118,7 @@ export default {
         const payload = new ItemSelectPayload(
           event, itemWrapper,
           new ItemContext(this.group, this.items, index, this.options, this.emitUpdate))
-        bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(this.$refs.content))
+        bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(this.$refs.selfRef))
         bus.$emit(DND_ITEM_SELECT, payload)
       }
     },
@@ -135,7 +136,7 @@ export default {
     },
     onSetTarget(payload) {
       this.selectedTarget = payload.targetElement
-      if(payload.targetElement === this.$refs.content) {
+      if(payload.targetElement === this.$refs.selfRef) {
         this.isTarget = true
       } else {
         this.isTarget = false
@@ -148,7 +149,6 @@ export default {
       this.itemIntersection = null
     },
     onMousemove(event) {
-      console.log('mm', this.name)
       const coords = getEventCoords(event)
       if(!coords) {return}
 
@@ -173,7 +173,7 @@ export default {
       }
     },
     onTargetItemContext(payload) {
-      if(payload.targetElem !== this.ownContext.componentRef) {return}
+      if(payload.targetElem !== this.$refs.selfRef) {return}
       console.log('target item context', this.name)
     },
     onMouseup(event) {
@@ -216,7 +216,7 @@ export default {
     const empty = <div class="mo-dndContainerEmpty">Empty</div>
 
     const content = (
-      <div ref="content" class="mo-dndContainer" {...data}>
+      <div ref="selfRef" class="mo-dndContainer" {...data}>
         {this.renderedItems.length > 0 ? items : empty}
       </div>)
 

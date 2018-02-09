@@ -1,4 +1,4 @@
-function indexOf(child, parent) {
+export function indexOf(child, parent) {
   return Array.prototype.indexOf.call(parent.children, child)
 }
 

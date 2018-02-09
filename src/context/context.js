@@ -1,12 +1,12 @@
 import bus from '../bus'
 import {
+  DND_ITEM_SELECT,
+  DND_ITEM_SELECTED,
+  DND_ITEM_UNSELECTED,
   DND_TARGET_SELECT,
   DND_TARGET_SELECTED,
   DND_TARGET_UNSELECT,
-  DND_TARGET_UNSELECTED,
-  DND_ITEM_SELECT,
-  DND_ITEM_SELECTED,
-  DND_ITEM_UNSELECTED
+  DND_TARGET_UNSELECTED
 } from '../events'
 import {Vec2, CSSPos} from '../vec'
 import {getTouchy} from '../touch'

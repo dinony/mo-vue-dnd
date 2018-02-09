@@ -2,16 +2,17 @@ import bus from '../bus'
 import DnDItem from '../item/Item'
 import DnDHandle from '../handle/Handle'
 import {
-  DND_TARGET_SELECT,
-  DND_TARGET_SELECTED,
-  DND_TARGET_UNSELECT,
-  DND_TARGET_UNSELECTED,
-  TargetSelectPayload,
+  DND_HANDLE_MD,
   DND_ITEM_SELECT,
   DND_ITEM_SELECTED,
   DND_ITEM_UNSELECTED,
   ItemSelectPayload,
-  DND_HANDLE_MD,
+  DND_TARGET_SELECT,
+  DND_TARGET_SELECTED,
+  DND_TARGET_UNSELECT,
+  DND_TARGET_UNSELECTED,
+  DND_TARGET_ITEM_CONTEXT,
+  TargetSelectPayload
 } from '../events'
 
 import {
@@ -173,6 +174,7 @@ export default {
     },
     onTargetItemContext(payload) {
       if(payload.targetElem !== this.ownContext.componentRef) {return}
+      console.log('target item context', this.name)
     },
     onMouseup(event) {
       // TODO:

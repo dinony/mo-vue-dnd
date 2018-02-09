@@ -3,10 +3,10 @@ import {getEventCoords} from './event'
 import {findAncestorByClassName, indexOf} from './dom'
 
 // EmptyTraceResult
-export class EmptyTraceRes {}
+export class EmptyTraceResult {}
 
 // TraceResult
-export class TraceRes {
+export class TraceResult {
   // tContainer = targetContainer
   // tItem = targetItem
   // iIndex = targetItemIndex
@@ -25,19 +25,19 @@ export class TraceRes {
 export default function traceEvent(event, tCls='mo-dndContainer', iCls='mo-dndItem') {
   const coords = getEventCoords(event)
   if(!coords) {
-    return new EmptyTraceRes()
+    return new EmptyTraceResult()
   }
 
   const elemAtPoint = document.elementFromPoint(coords.pageX, coords.pageY)
   const tContainer = findAncestorByClassName(elemAtPoint, tCls)
 
   if(!tContainer) {
-    return new EmptyTraceRes()
+    return new EmptyTraceResult()
   } else {
     const tItem = findAncestorByClassName(elemAtPoint, iCls)
 
     return tItem ?
-      new TraceRes(tContainer, tItem, indexOf(tContainer, tItem)):
-      new TraceRes(tContainer, null, null)
+      new TraceResult(tContainer, tItem, indexOf(tContainer, tItem)):
+      new TraceResult(tContainer, null, null)
   }
 }

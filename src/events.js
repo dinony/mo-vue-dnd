@@ -34,7 +34,8 @@ export const DND_TARGET_UNSELECTED = 'TUD'
 export const DND_TARGET_ITEM_CONTEXT = 'TIC'
 
 export class TargetItemContextPayload {
-  constructor(targetElem, itemElem, itemIndex) {
+  constructor(event, targetElem, itemElem, itemIndex) {
+    this.event = event
     this.targetElem = targetElem
     this.itemElem = itemElem
     this.itemIndex = itemIndex

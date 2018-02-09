@@ -17,7 +17,8 @@ import {
 import {
   indexOfDirectDescendant,
   findAncestorByClassName,
-  isDescendant
+  isDescendant,
+  indexOf
 } from '../dom'
 
 import {getEventCoords} from '../event'
@@ -71,18 +72,20 @@ export default {
     }
   },
   mounted() {
-    bus.$on(DND_TARGET_SELECTED, this.setTarget)
-    bus.$on(DND_TARGET_UNSELECTED, this.resetTarget)
     bus.$on(DND_HANDLE_MD, this.onItemSelect)
-    bus.$on(DND_ITEM_SELECTED, this.setSelectedItem)
-    bus.$on(DND_ITEM_UNSELECTED, this.resetSelectedItem)
+    bus.$on(DND_ITEM_SELECTED, this.onSetSelectedItem)
+    bus.$on(DND_ITEM_UNSELECTED, this.onResetSelectedItem)
+    bus.$on(DND_TARGET_SELECTED, this.onSetTarget)
+    bus.$on(DND_TARGET_UNSELECTED, this.onResetTarget)
+    bus.$on(DND_TARGET_ITEM_CONTEXT, this.onTargetItemContext)
   },
   beforeDestroy() {
-    bus.$off(DND_TARGET_SELECTED, this.setTarget)
-    bus.$off(DND_TARGET_UNSELECTED, this.resetTarget)
     bus.$off(DND_HANDLE_MD, this.onItemSelect)
-    bus.$off(DND_ITEM_SELECTED, this.setSelectedItem)
-    bus.$off(DND_ITEM_UNSELECTED, this.resetSelectedItem)
+    bus.$off(DND_ITEM_SELECTED, this.onSetSelectedItem)
+    bus.$off(DND_ITEM_UNSELECTED, this.onResetSelectedItem)
+    bus.$off(DND_TARGET_SELECTED, this.onSetTarget)
+    bus.$off(DND_TARGET_UNSELECTED, this.onResetTarget)
+    bus.$off(DND_TARGET_ITEM_CONTEXT, this.onTargetItemContext)
   },
   computed: {
     dropPreviewResult() {
@@ -102,48 +105,6 @@ export default {
     }
   },
   methods: {
-    setTarget(payload) {
-      this.selectedTarget = payload.targetElement
-      if(payload.targetElement === this.$refs.content) {
-        this.isTarget = true
-      } else {
-        this.isTarget = false
-        this.itemIntersection = null
-      }
-    },
-    resetTarget() {
-      this.isTarget = false
-      this.selectedTarget = null
-      this.itemIntersection = null
-    },
-    onMousemove(event) {
-      const coords = getEventCoords(event)
-      if(!coords) {return}
-
-      const elemAtPoint = document.elementFromPoint(coords.pageX, coords.pageY)
-      const dndTarget = findAncestorByClassName(elemAtPoint, 'mo-dndContainer')
-      if(!dndTarget) {
-        console.log('unselect', 'target')
-        bus.$emit(DND_TARGET_UNSELECT)
-        return
-      }
-
-      if(this.selectedTarget !== dndTarget) {
-        console.log('select', 'newtarget')
-        bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(dndTarget))
-      } else {
-        console.log('same target')
-      }
-
-      const dndItem = findAncestorByClassName(elemAtPoint, 'mo-dndItem')
-
-      if(this.selectedNode === dndItem) {
-        console.log('MM on same item')
-      }
-    },
-    onMouseup(event) {
-      // TODO:
-    },
     onItemSelect(payload) {
       if(this.ownContext !== payload.targetComponentContext) {return}
       const event = payload.event
@@ -159,18 +120,63 @@ export default {
         bus.$emit(DND_ITEM_SELECT, payload)
       }
     },
-    setSelectedItem(payload) {
+    onSetSelectedItem(payload) {
       this.selectedItem = payload.itemContext
       this.selectedNode = payload.elem
     },
-    resetSelectedItem() {
+    onResetSelectedItem() {
       this.selectedItem = null
       this.selectedNode = null
       this.itemIntersection = null
     },
     emitUpdate(payload) {
       this.$emit('update', payload)
-    }
+    },
+    onSetTarget(payload) {
+      this.selectedTarget = payload.targetElement
+      if(payload.targetElement === this.$refs.content) {
+        this.isTarget = true
+      } else {
+        this.isTarget = false
+        this.itemIntersection = null
+      }
+    },
+    onResetTarget() {
+      this.isTarget = false
+      this.selectedTarget = null
+      this.itemIntersection = null
+    },
+    onMousemove(event) {
+      console.log('mm', this.name)
+      const coords = getEventCoords(event)
+      if(!coords) {return}
+
+      const elemAtPoint = document.elementFromPoint(coords.pageX, coords.pageY)
+      const dndTarget = findAncestorByClassName(elemAtPoint, 'mo-dndContainer')
+      if(!dndTarget) {
+        bus.$emit(DND_TARGET_UNSELECT)
+        return
+      }
+
+      if(this.selectedTarget !== dndTarget) {
+        bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(dndTarget))
+      }
+
+      const dndItem = findAncestorByClassName(elemAtPoint, 'mo-dndItem')
+      const dndItemIndex = indexOf(dndItem, dndTarget)
+
+      if(this.selectedNode === dndItem) {return}
+      else if(isDescendant(this.selectedNode, dndItem)) {return}
+      else {
+        bus.$emit(DND_TARGET_ITEM_CONTEXT, new TargetItemContextPayload(dndTarget, dndItem, dndItemIndex))
+      }
+    },
+    onTargetItemContext(payload) {
+      if(payload.targetElem !== this.ownContext.componentRef) {return}
+    },
+    onMouseup(event) {
+      // TODO:
+    },
   },
   render() {
     const dndItemSlot = this.$scopedSlots.default

@@ -147,15 +147,15 @@ export default {
         if(pTarget) {
           // Check whether new intersection would output same drop result
           const newTargetIndex = null
-          if(sc.index < tc.index) {
-            newTargetIndex = shouldInsertBefore ? tc.index-1: tc.index
-          } else if(sc.index > tc.index) {
-            newTargetIndex = shouldInsertBefore ? tc.index: tc.index+1
+          if(sc.idx < tc.idx) {
+            newTargetIndex = shouldInsertBefore ? tc.idx-1: tc.idx
+          } else if(sc.idx > tc.idx) {
+            newTargetIndex = shouldInsertBefore ? tc.idx: tc.idx+1
           } else {
-            newTargetIndex = tc.index
+            newTargetIndex = tc.idx
           }
 
-          if(pTarget.index === newTargetIndex) {
+          if(pTarget.idx === newTargetIndex) {
             return
           }
         } else if(pInt && pInt.equals(cInt)) {
@@ -172,9 +172,9 @@ export default {
 
     // Current drop result
     const dr = this.dropRes
-    const tIndex = dr ? dr.trgCtx.index: -1
+    const tIndex = dr ? dr.trgCtx.idx: -1
     const si = this.selectedItem
-    const sIndex = si && !dr ? si.index: -1
+    const sIndex = si && !dr ? si.idx: -1
     const isSelectedContainer = si ? si.cnt === this.items: false
 
     const items = this.renderedItems.map((item, index) => {

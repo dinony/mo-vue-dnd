@@ -2,7 +2,7 @@ export default class ItemIntersection {
   constructor(sourceContext, targetContext, insertBefore) {
     this.srcCtx = sourceContext
     this.trgCtx = targetContext
-    this.insertBefore = insertBefore
+    this.insBef = insertBefore
   }
 
   get isSameContext() {
@@ -10,7 +10,7 @@ export default class ItemIntersection {
   }
 
   equals(other) {
-    return this.insertBefore === other.insertBefore &&
+    return this.insBef === other.insBef &&
       this.srcCtx.equals(other.srcCtx) &&
       this.trgCtx.equals(other.trgCtx)
   }

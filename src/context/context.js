@@ -180,7 +180,7 @@ export default {
       const dndItemSlot = this.$scopedSlots.default
       const slotArg = {
         item: this.selIt.item,
-        index: this.selIt.index
+        index: this.selIt.idx
       }
       return (
         <div class="dnd-ctx dnd-ctx-drg">

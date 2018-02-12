@@ -7,6 +7,13 @@ export class ItemSelectPayload {
   }
 }
 
+export class ItemSelectedPayload {
+  constructor(event, traceResult) {
+    this.event = event
+    this.tRes = traceResult
+  }
+}
+
 export const DND_ITEM_SELECTED = 'ISD'
 
 export const DND_ITEM_UNSELECTED = 'IUD'

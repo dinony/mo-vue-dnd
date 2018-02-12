@@ -1,21 +1,12 @@
 import bus from '../bus'
-import {
-  DND_ITEM_SELECT,
-  DND_ITEM_SELECTED,
-  DND_REQUEST_ITEM,
-  DND_REQUESTED_ITEM,
-  DND_ITEM_UNSELECTED,
-  DND_TARGET_SELECT,
-  DND_TARGET_SELECTED,
-  DND_REQUEST_TARGET,
-  DND_REQUESTED_TARGET,
-  DND_TARGET_UNSELECT,
-  DND_TARGET_UNSELECTED
-} from '../events'
 import {Vec2, CSSPos} from '../vec'
 import {getTouchy} from '../touch'
 import {getEventCoords} from '../event'
+import {
+  DND_ITEM_SELECTED, ItemSelectedPayload
+} from '../events'
 import {doc} from '../dom'
+import {default as trace, EmptyTraceResult} from '../trace'
 
 const StateEnum = {
   INIT: 0,
@@ -32,6 +23,7 @@ export default {
   data() {
     return {
       state: StateEnum.INIT,
+      tRes: null,
       target: null,
       selectionPayload: null,
       selectedItemPos: null,
@@ -58,6 +50,7 @@ export default {
     // bus.$off(DND_TARGET_UNSELECT, this.resetTarget)
     // bus.$off(DND_REQUEST_TARGET, this.sendRequestedTarget)
 
+    doc.removeEventListener(getTouchy('mousedown'), this.onMousedown)
     // doc.removeEventListener(getTouchy('mousemove'), this.onMousemove)
     // doc.removeEventListener(getTouchy('mouseup'), this.setInitState)
   },
@@ -90,7 +83,16 @@ export default {
   },
   methods: {
     onMousedown(event) {
-      debugger
+      const res = trace(event)
+      if(res instanceof EmptyTraceResult) {return}
+      if(res.tContainer && res.tItem) {
+        this.tRes = res
+        console.log('emit')
+        bus.$emit(DND_ITEM_SELECTED, new ItemSelectedPayload(event, res))
+      }
+    },
+    onMousemove(event) {
+
     },
     setSelectedItem(payload) {
       this.state = StateEnum.DRAG
@@ -143,6 +145,16 @@ export default {
       this.mmPos = null
       bus.$emit(DND_TARGET_UNSELECTED)
       bus.$emit(DND_ITEM_UNSELECTED)
+    }
+  },
+  watch: {
+    tRes(newTraceResult, oldTraceResult) {
+      console.log('watcher')
+      if(!oldTraceResult && newTraceResult !== null) {
+        doc.addEventListener(getTouchy('mousemove'), this.onMousemove)
+      } else if(oldTraceResult && !newTraceResult) {
+        doc.removeEventListener(getTouchy('mousemove'), this.onMousemove)
+      }
     }
   },
   render() {

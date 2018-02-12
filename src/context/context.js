@@ -26,12 +26,11 @@ export default {
       state: StateEnum.INIT,
       tRes: null, // traceResult
       selIt: null, // selected item
-      target: null,
-      selectionPayload: null,
-      selectedItemPos: null,
-      selectedClientRect: null,
+      selItPos: null, // selected item position
+      selItRect: null, // selected item clientRect
       mdPos: null,
-      mmPos: null
+      mmPos: null,
+      // target: null
     }
   },
   beforeMount() {
@@ -63,7 +62,7 @@ export default {
     mdItemOffset() {
       // Vector pointing from mdPos to (left, top) of selected DnDItem
       // Needed for positioning of drag item
-      return this.mdPos && this.selectedItemPos ? this.selectedItemPos.sub(this.mdPos) : null
+      return this.mdPos && this.selItPos ? this.selItPos.sub(this.mdPos) : null
     },
     dragItemPos() {
       // Return {x,y} in page coordinates
@@ -71,8 +70,8 @@ export default {
     },
     dragItemDim() {
       return {
-        width: `${this.selectedClientRect.width}px`,
-        height: `${this.selectedClientRect.height}px`
+        width: `${this.selItRect.width}px`,
+        height: `${this.selItRect.height}px`
       }
     },
     dragItemStyle() {
@@ -87,6 +86,16 @@ export default {
     }
   },
   methods: {
+    setInitState() {
+      this.state = StateEnum.INIT
+      // this.target = null
+      // this.selectionPayload = null
+      this.selIt = null
+      this.selItPos = null
+      this.selItRect = null
+      this.mdPos = null
+      this.mmPos = null
+    },
     onMousedown(event) {
       const res = trace(event)
       if(res instanceof EmptyTraceResult) {return}
@@ -96,70 +105,82 @@ export default {
       }
     },
     onItemSelect(itemCtx) {
+      this.state = StateEnum.DRAG
       this.selIt = itemCtx
+
+      const itRect = this.tRes.tItem.getBoundingClientRect()
+      this.selItRect = itRect
+
+      // Selected item page coords
+      this.selItPos = Vec2.add(
+        new Vec2(window.pageXOffset, window.pageYOffset),
+        new Vec2(itRect.left, itRect.top))
+
+      const coords = getEventCoords(event)
+      this.mdPos = new Vec2(coords.pageX, coords.pageY)
+
       bus.$emit(DND_ITEM_SELECTED, this.selIt)
     },
     onMousemove(event) {
-
-    },
-    setSelectedItem(payload) {
-      this.state = StateEnum.DRAG
-      this.selectionPayload = payload
-      const clientRect = payload.elem.getBoundingClientRect()
-      this.selectedClientRect = clientRect
-      // Selected item page coords
-      this.selectedItemPos = Vec2.add(
-        new Vec2(window.pageXOffset, window.pageYOffset),
-        new Vec2(clientRect.left, clientRect.top))
-      // Page coords
-      const coords = getEventCoords(payload.event)
-      this.mdPos = new Vec2(coords.pageX, coords.pageY)
-      bus.$emit(DND_ITEM_SELECTED, payload)
-    },
-    sendRequestedItem() {
-      bus.$emit(DND_REQUESTED_ITEM, this.selectionPayload)
-    },
-    onMousemove(event) {
-      if(!this.selectionPayload) {return}
-      if(this.mmPos === null) {
-        this.mmPos = new Vec2(0, 0)
-      }
       const coords = getEventCoords(event)
       if(coords) {
+        if(!this.mmPos) {this.mmPos= new Vec2(0,0)}
         this.$set(this.mmPos, 'x', coords.pageX)
         this.$set(this.mmPos, 'y', coords.pageY)
       }
     },
-    setTarget(payload) {
-      this.target = payload
-      bus.$emit(DND_TARGET_SELECTED, payload)
+    onMouseup(event) {
+      this.setInitState()
     },
-    resetTarget() {
-      this.target = null
-      bus.$emit(DND_TARGET_UNSELECTED)
-    },
-    sendRequestedTarget() {
-      bus.$emit(DND_REQUESTED_TARGET, this.target)
-    },
-    setInitState() {
-      this.state = StateEnum.INIT
-      this.target = null
-      this.selectionPayload = null
-      this.selectedItemPos = null
-      this.selectedClientRect = null
-      this.mdPos = null
-      this.mmPos = null
-      bus.$emit(DND_TARGET_UNSELECTED)
-      bus.$emit(DND_ITEM_UNSELECTED)
-    }
+    // setSelectedItem(payload) {
+    //   this.state = StateEnum.DRAG
+    //   this.selectionPayload = payload
+    //   const clientRect = payload.elem.getBoundingClientRect()
+    //   this.selItRect = clientRect
+    //   // Selected item page coords
+    //   this.selItPos = Vec2.add(
+    //     new Vec2(window.pageXOffset, window.pageYOffset),
+    //     new Vec2(clientRect.left, clientRect.top))
+    //   // Page coords
+    //   const coords = getEventCoords(payload.event)
+    //   this.mdPos = new Vec2(coords.pageX, coords.pageY)
+    //   bus.$emit(DND_ITEM_SELECTED, payload)
+    // },
+    // sendRequestedItem() {
+    //   bus.$emit(DND_REQUESTED_ITEM, this.selectionPayload)
+    // },
+    // // onMousemove(event) {
+    // //   if(!this.selectionPayload) {return}
+    // //   if(this.mmPos === null) {
+    // //     this.mmPos = new Vec2(0, 0)
+    // //   }
+    // //   const coords = getEventCoords(event)
+    // //   if(coords) {
+    // //     this.$set(this.mmPos, 'x', coords.pageX)
+    // //     this.$set(this.mmPos, 'y', coords.pageY)
+    // //   }
+    // // },
+    // setTarget(payload) {
+    //   this.target = payload
+    //   bus.$emit(DND_TARGET_SELECTED, payload)
+    // },
+    // resetTarget() {
+    //   this.target = null
+    //   bus.$emit(DND_TARGET_UNSELECTED)
+    // },
+    // sendRequestedTarget() {
+    //   bus.$emit(DND_REQUESTED_TARGET, this.target)
+    // }
   },
   watch: {
     selIt(newItem, oldItem) {
       // Only attach mm/mu when there is a selected item
       if(!oldItem && newItem !== null) {
         doc.addEventListener(getTouchy('mousemove'), this.onMousemove)
+        doc.addEventListener(getTouchy('mouseup'), this.onMouseup)
       } else if(oldItem && !newItem) {
         doc.removeEventListener(getTouchy('mousemove'), this.onMousemove)
+        doc.removeEventListener(getTouchy('mouseup'), this.onMouseup)
       }
     }
   },
@@ -168,6 +189,7 @@ export default {
       <div class="mo-dndContextDebug">
         <h4>mo-vue-dnd</h4>
         <pre>State: {this.state}</pre>
+        <pre>Selected: {this.selIt ? JSON.stringify(this.selIt.item, null, 2): null}</pre>
         <pre>mm: {this.mmPos ? JSON.stringify(this.mmPos, null, 2): null}</pre>
       </div>)
 
@@ -175,10 +197,9 @@ export default {
 
     if(this.state === StateEnum.DRAG && this.dragItemPos) {
       const dndItemSlot = this.$scopedSlots.default
-      const selection = this.selectionPayload.itemContext
       const slotArg = {
-        item: selection.item,
-        index: selection.index
+        item: this.selIt.item,
+        index: this.selIt.index
       }
       return (
         <div class="mo-dndContext mo-dndContextDrag">

@@ -94,7 +94,7 @@ export default {
   methods: {
     onItemTraced(traceRes) {
       if(this.$refs.selfRef !== traceRes.tContainer) {return}
-      bus.$emit(DND_ITEM_SELECT, new ItemCtx(this.group, this.items, traceRes.iIndex, this.options, this.emitUpdate))
+      bus.$emit(DND_ITEM_SELECT, new ItemCtx(this.group, this.items, traceRes.iIdx, this.options, this.emitUpdate))
     },
     onItemSelected(itemCtx) {
       this.selIt = itemCtx
@@ -116,7 +116,7 @@ export default {
     onMoveTrace(traceResult) {
       if(this.$refs.selfRef !== traceResult.tContainer) {return}
 
-      const trgIndex = traceResult.iIndex
+      const trgIndex = traceResult.iIdx
 
       // previous drop result
       const pDR = this.dropRes

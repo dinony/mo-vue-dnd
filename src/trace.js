@@ -9,12 +9,12 @@ export class EmptyTraceResult {}
 export class TraceResult {
   // tContainer = targetContainer
   // tItem = targetItem
-  // iIndex = targetItemIndex
+  // .iIdx = targetItemIndex
   constructor(event, tContainer, tItem, iIndex) {
     this.ev = event
     this.tContainer = tContainer
     this.tItem = tItem
-    this.iIndex = iIndex
+    this.iIdx = iIndex
   }
 }
 

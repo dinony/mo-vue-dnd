@@ -3,7 +3,8 @@ import {Vec2, CSSPos} from '../vec'
 import {getTouchy} from '../touch'
 import {getEventCoords} from '../event'
 import {
-  DND_ITEM_SELECTED, ItemSelectedPayload
+  DND_ITEM_TRACED, ItemTracedPl,
+  DND_ITEM_SELECT, DND_ITEM_SELECTED
 } from '../events'
 import {doc} from '../dom'
 import {default as trace, EmptyTraceResult} from '../trace'
@@ -23,7 +24,8 @@ export default {
   data() {
     return {
       state: StateEnum.INIT,
-      tRes: null,
+      tRes: null, // traceResult
+      selIt: null, // selected item
       target: null,
       selectionPayload: null,
       selectedItemPos: null,
@@ -33,24 +35,27 @@ export default {
     }
   },
   beforeMount() {
+    doc.addEventListener(getTouchy('mousedown'), this.onMousedown)
+    bus.$on(DND_ITEM_SELECT, this.onItemSelect)
     // bus.$on(DND_ITEM_SELECT, this.setSelectedItem)
     // bus.$on(DND_REQUEST_ITEM, this.sendRequestedItem)
     // bus.$on(DND_TARGET_SELECT, this.setTarget)
     // bus.$on(DND_TARGET_UNSELECT, this.resetTarget)
     // bus.$on(DND_REQUEST_TARGET, this.sendRequestedTarget)
 
-    doc.addEventListener(getTouchy('mousedown'), this.onMousedown)
     // doc.addEventListener(getTouchy('mousemove'), this.onMousemove)
     // doc.addEventListener(getTouchy('mouseup'), this.setInitState)
   },
   beforeDestroy() {
+    doc.removeEventListener(getTouchy('mousedown'), this.onMousedown)
+    bus.$off(DND_ITEM_SELECT, this.onItemSelect)
+
     // bus.$off(DND_ITEM_SELECT, this.setSelectedItem)
     // bus.$off(DND_REQUEST_ITEM, this.sendRequestedItem)
     // bus.$off(DND_TARGET_SELECT, this.setTarget)
     // bus.$off(DND_TARGET_UNSELECT, this.resetTarget)
     // bus.$off(DND_REQUEST_TARGET, this.sendRequestedTarget)
 
-    doc.removeEventListener(getTouchy('mousedown'), this.onMousedown)
     // doc.removeEventListener(getTouchy('mousemove'), this.onMousemove)
     // doc.removeEventListener(getTouchy('mouseup'), this.setInitState)
   },
@@ -87,9 +92,12 @@ export default {
       if(res instanceof EmptyTraceResult) {return}
       if(res.tContainer && res.tItem) {
         this.tRes = res
-        console.log('emit')
-        bus.$emit(DND_ITEM_SELECTED, new ItemSelectedPayload(event, res))
+        bus.$emit(DND_ITEM_TRACED, new ItemTracedPl(event, res))
       }
+    },
+    onItemSelect(itemCtx) {
+      this.selIt = itemCtx
+      bus.$emit(DND_ITEM_SELECTED, this.selIt)
     },
     onMousemove(event) {
 
@@ -109,7 +117,6 @@ export default {
       bus.$emit(DND_ITEM_SELECTED, payload)
     },
     sendRequestedItem() {
-      console.log('rI')
       bus.$emit(DND_REQUESTED_ITEM, this.selectionPayload)
     },
     onMousemove(event) {
@@ -132,7 +139,6 @@ export default {
       bus.$emit(DND_TARGET_UNSELECTED)
     },
     sendRequestedTarget() {
-      console.log('rT')
       bus.$emit(DND_REQUESTED_TARGET, this.target)
     },
     setInitState() {
@@ -148,11 +154,11 @@ export default {
     }
   },
   watch: {
-    tRes(newTraceResult, oldTraceResult) {
-      console.log('watcher')
-      if(!oldTraceResult && newTraceResult !== null) {
+    selIt(newItem, oldItem) {
+      // Only attach mm/mu when there is a selected item
+      if(!oldItem && newItem !== null) {
         doc.addEventListener(getTouchy('mousemove'), this.onMousemove)
-      } else if(oldTraceResult && !newTraceResult) {
+      } else if(oldItem && !newItem) {
         doc.removeEventListener(getTouchy('mousemove'), this.onMousemove)
       }
     }

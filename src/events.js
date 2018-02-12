@@ -1,30 +1,25 @@
-export const DND_ITEM_SELECT = 'IS'
-export class ItemSelectPayload {
-  constructor(event, elem, itemContext) {
-    this.event = event
-    this.elem = elem
-    this.itemContext = itemContext
-  }
-}
+export const DND_ITEM_TRACED = 'IT'
 
-export class ItemSelectedPayload {
+// ItemTracedPayload
+export class ItemTracedPl {
   constructor(event, traceResult) {
-    this.event = event
+    this.ev = event
     this.tRes = traceResult
   }
 }
 
+export const DND_ITEM_SELECT = 'IS'
+// export class ItemSelectPayload {
+//   constructor(event, elem, itemContext) {
+//     this.event = event
+//     this.elem = elem
+//     this.itemContext = itemContext
+//   }
+// }
+
 export const DND_ITEM_SELECTED = 'ISD'
 
 export const DND_ITEM_UNSELECTED = 'IUD'
-
-export const DND_HANDLE_MD = 'MD'
-export class HandleMdPayload {
-  constructor(event, targetComponentContext) {
-    this.event = event
-    this.targetComponentContext = targetComponentContext
-  }
-}
 
 export const DND_REQUEST_ITEM = 'RI'
 export const DND_REQUESTED_ITEM = 'RID'

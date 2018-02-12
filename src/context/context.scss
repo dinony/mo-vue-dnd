@@ -1,5 +1,5 @@
-.mo-dndContext {
-  .mo-dndContextDebug {
+.dnd-ctx {
+  .dnd-ctx-db {
     position: absolute;
     border: 5px dashed blue;
     padding: 10px;
@@ -12,10 +12,10 @@
   }
 }
 
-.mo-dndContextDrag {
+.dnd-ctx-drg {
   cursor: grabbing;
 
-  .mo-dndDragItem {
+  .dnd-drag-it {
     position: absolute;
     pointer-events: none;
   }

@@ -3,7 +3,7 @@ import {Vec2, CSSPos} from '../vec'
 import {getTouchy} from '../touch'
 import {getEventCoords} from '../event'
 import {
-  DND_ITEM_TRACED, ItemTracedPl,
+  DND_ITEM_TRACED,
   DND_ITEM_SELECT, DND_ITEM_SELECTED,
   DND_ITEM_UNSELECTED,
   DND_TARGET_SELECTED, DND_TARGET_UNSELECTED,
@@ -43,27 +43,10 @@ export default {
   beforeMount() {
     doc.addEventListener(getTouchy('mousedown'), this.onMousedown)
     bus.$on(DND_ITEM_SELECT, this.onItemSelect)
-    // bus.$on(DND_ITEM_SELECT, this.setSelectedItem)
-    // bus.$on(DND_REQUEST_ITEM, this.sendRequestedItem)
-    // bus.$on(DND_TARGET_SELECT, this.setTarget)
-    // bus.$on(DND_TARGET_UNSELECT, this.resetTarget)
-    // bus.$on(DND_REQUEST_TARGET, this.sendRequestedTarget)
-
-    // doc.addEventListener(getTouchy('mousemove'), this.onMousemove)
-    // doc.addEventListener(getTouchy('mouseup'), this.setInitState)
   },
   beforeDestroy() {
     doc.removeEventListener(getTouchy('mousedown'), this.onMousedown)
     bus.$off(DND_ITEM_SELECT, this.onItemSelect)
-
-    // bus.$off(DND_ITEM_SELECT, this.setSelectedItem)
-    // bus.$off(DND_REQUEST_ITEM, this.sendRequestedItem)
-    // bus.$off(DND_TARGET_SELECT, this.setTarget)
-    // bus.$off(DND_TARGET_UNSELECT, this.resetTarget)
-    // bus.$off(DND_REQUEST_TARGET, this.sendRequestedTarget)
-
-    // doc.removeEventListener(getTouchy('mousemove'), this.onMousemove)
-    // doc.removeEventListener(getTouchy('mouseup'), this.setInitState)
   },
   computed: {
     mdItemOffset() {
@@ -184,7 +167,7 @@ export default {
   },
   render() {
     const debugOut = () => (
-      <div class="mo-dndContextDebug">
+      <div class="dnd-ctx-db">
         <h4>mo-vue-dnd</h4>
         <pre>State: {this.state}</pre>
         <pre>Selected: {this.selIt ? JSON.stringify(this.selIt.item, null, 2): null}</pre>
@@ -200,14 +183,14 @@ export default {
         index: this.selIt.index
       }
       return (
-        <div class="mo-dndContext mo-dndContextDrag">
+        <div class="dnd-ctx dnd-ctx-drg">
           {content}
-          <div class="mo-dndDragItem" style={this.dragItemStyle}>
+          <div class="dnd-drag-it" style={this.dragItemStyle}>
             {dndItemSlot(slotArg)}
           </div>
         </div>)
     } else {
-      return <div class="mo-dndContext">{content}</div>
+      return <div class="dnd-ctx">{content}</div>
     }
   }
 }

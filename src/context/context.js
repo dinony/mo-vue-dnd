@@ -8,7 +8,9 @@ import {
   DND_ITEM_UNSELECTED,
   DND_TARGET_SELECTED, DND_TARGET_UNSELECTED,
   DND_MOVE_TRACE,
-  DND_DROP
+  DND_DROP,
+  DND_REQUEST_STATE,
+  DND_STATE_REQUESTED
 } from '../events'
 import {doc} from '../dom'
 import {
@@ -44,10 +46,12 @@ export default {
   beforeMount() {
     doc.addEventListener(getTouchy('mousedown'), this.onMousedown)
     bus.$on(DND_ITEM_SELECT, this.onItemSelect)
+    bus.$on(DND_REQUEST_STATE, this.onReqState)
   },
   beforeDestroy() {
     doc.removeEventListener(getTouchy('mousedown'), this.onMousedown)
     bus.$off(DND_ITEM_SELECT, this.onItemSelect)
+    bus.$off(DND_REQUEST_STATE, this.onReqState)
   },
   computed: {
     mdItemOffset() {
@@ -130,7 +134,7 @@ export default {
         }
         this.curTrg = traceRes.tContainer
 
-        if(traceRes.tItem && traceRes.iIdx !== null) {
+        if(traceRes.tItem && traceRes.iIdx !== null && traceRes.iIdx !== -1) {
           // Target and item are known -> emit move trace
           bus.$emit(DND_MOVE_TRACE, traceRes)
         }
@@ -156,6 +160,9 @@ export default {
         bus.$emit(DND_ITEM_UNSELECTED)
         bus.$emit(DND_TARGET_UNSELECTED)
       }
+    },
+    onReqState() {
+      bus.$emit(DND_STATE_REQUESTED, this.selIt, this.curTrg)
     }
   },
   watch: {

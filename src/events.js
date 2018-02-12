@@ -10,3 +10,6 @@ export const DND_TARGET_UNSELECTED = 'TUD'
 export const DND_MOVE_TRACE = 'MT'
 
 export const DND_DROP = 'D'
+
+export const DND_REQUEST_STATE = 'R'
+export const DND_STATE_REQUESTED = 'RD'

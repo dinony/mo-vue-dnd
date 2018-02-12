@@ -145,21 +145,21 @@ export default {
     onItemSelected(itemCtx) {
       this.selIt = itemCtx
     },
-    onItemSelect(payload) {
-      if(this.ownContext !== payload.targetComponentContext) {return}
-      const event = payload.event
-      const parent = this.$refs.selfRef
-      const child = event.target
-      const index = indexOfDirectDescendant(parent, child)
-      if(index >= 0 && index < this.items.length) {
-        const itemWrapper = findAncestorByClassName(child, 'mo-dndItem')
-        const payload = new ItemSelectPayload(
-          event, itemWrapper,
-          new ItemContext(this.group, this.items, index, this.options, this.emitUpdate))
-        bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(this.$refs.selfRef))
-        bus.$emit(DND_ITEM_SELECT, payload)
-      }
-    },
+    // onItemSelect(payload) {
+    //   if(this.ownContext !== payload.targetComponentContext) {return}
+    //   const event = payload.event
+    //   const parent = this.$refs.selfRef
+    //   const child = event.target
+    //   const index = indexOfDirectDescendant(parent, child)
+    //   if(index >= 0 && index < this.items.length) {
+    //     const itemWrapper = findAncestorByClassName(child, 'mo-dndItem')
+    //     const payload = new ItemSelectPayload(
+    //       event, itemWrapper,
+    //       new ItemContext(this.group, this.items, index, this.options, this.emitUpdate))
+    //     bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(this.$refs.selfRef))
+    //     bus.$emit(DND_ITEM_SELECT, payload)
+    //   }
+    // },
     onTargetSelected(trgElem) {
       this.selTrg = trgElem
       if(trgElem === this.$refs.selfRef) {

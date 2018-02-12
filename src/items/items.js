@@ -6,7 +6,9 @@ import {
   DND_ITEM_SELECT,
   DND_ITEM_SELECTED,
   DND_TARGET_SELECTED,
-  DND_TARGET_UNSELECTED
+  DND_TARGET_UNSELECTED,
+  DND_ITEM_UNSELECTED,
+  DND_MOVE_TRACE
   // DND_HANDLE_MD,
   // DND_ITEM_SELECT,
   // DND_REQUEST_ITEM,
@@ -78,50 +80,31 @@ export default {
   },
   data() {
     return {
-      // ownContext: new ItemsContext(this),
-      selIt: null,
-      selectedTarget: null,
-      isTarget: false,
-      selectedItem: null,
-      selectedNode: null,
-      itemIntersection: null,
-      origSourceResult: null
+      selIt: null, // selected item
+      isTrg: false, // isTarget
+      itInt: null, // item intersection
+      origSrcRes: null // origSourceResult
     }
   },
   beforeMount() {
     bus.$on(DND_ITEM_TRACED, this.onItemTraced)
     bus.$on(DND_ITEM_SELECTED, this.onItemSelected)
+    bus.$on(DND_ITEM_UNSELECTED, this.onItemUnselected)
     bus.$on(DND_TARGET_SELECTED, this.onTargetSelected)
     bus.$on(DND_TARGET_UNSELECTED, this.onTargetUnselected)
-    // bus.$on(DND_HANDLE_MD, this.onItemSelect)
-    // bus.$on(DND_ITEM_SELECTED, this.onSetSelectedItem)
-    // bus.$on(DND_REQUESTED_ITEM, this.onSetSelectedItem)
-    // bus.$on(DND_ITEM_UNSELECTED, this.onResetSelectedItem)
-    // bus.$on(DND_TARGET_SELECTED, this.onSetTarget)
-    // bus.$on(DND_REQUESTED_TARGET, this.onSetTarget)
-    // bus.$on(DND_TARGET_UNSELECTED, this.onResetTarget)
-    // bus.$on(DND_TARGET_ITEM_CONTEXT, this.onTargetItemContext)
-
-    // bus.$emit(DND_REQUEST_ITEM)
-    // bus.$emit(DND_REQUEST_TARGET)
+    bus.$on(DND_MOVE_TRACE, this.onMoveTrace)
   },
   beforeDestroy() {
     bus.$off(DND_ITEM_TRACED, this.onItemTraced)
     bus.$off(DND_ITEM_SELECTED, this.onItemSelected)
+    bus.$off(DND_ITEM_UNSELECTED, this.onItemUnselected)
     bus.$off(DND_TARGET_SELECTED, this.onTargetSelected)
     bus.$off(DND_TARGET_UNSELECTED, this.onTargetUnselected)
-    // bus.$off(DND_HANDLE_MD, this.onItemSelect)
-    // bus.$off(DND_ITEM_SELECTED, this.onSetSelectedItem)
-    // bus.$off(DND_REQUESTED_ITEM, this.onSetSelectedItem)
-    // bus.$off(DND_ITEM_UNSELECTED, this.onResetSelectedItem)
-    // bus.$off(DND_TARGET_SELECTED, this.onSetTarget)
-    // bus.$off(DND_REQUESTED_TARGET, this.onSetTarget)
-    // bus.$off(DND_TARGET_UNSELECTED, this.onResetTarget)
-    // bus.$off(DND_TARGET_ITEM_CONTEXT, this.onTargetItemContext)
+    bus.$off(DND_MOVE_TRACE, this.onMoveTrace)
   },
   computed: {
     dropPreviewResult() {
-      return this.itemIntersection ? this.dropHandler(this.itemIntersection): null
+      return this.itInt ? this.dropHandler(this.itInt): null
     },
     renderedItems() {
       return this.dropPreviewResult ? this.dropPreviewResult.targetResult.container: this.items
@@ -129,152 +112,90 @@ export default {
   },
   watch: {
     dropPreviewResult(dr) {
-      if(dr && !dr.sameContext && !this.origSourceResult) {
-        this.origSourceResult = dr.sourceResult
+      if(dr && !dr.sameContext && !this.origSrcRes) {
+        this.origSrcRes = dr.sourceResult
       } else if(!dr) {
-        this.origSourceResult = null
+        this.origSrcRes = null
       }
     }
   },
   methods: {
-    onItemTraced(payload) {
-      if(this.$refs.selfRef !== payload.tRes.tContainer) {return}
-      const itemIndex = payload.tRes.iIndex
+    onItemTraced(traceRes) {
+      if(this.$refs.selfRef !== traceRes.tContainer) {return}
+      const itemIndex = traceRes.iIndex
       bus.$emit(DND_ITEM_SELECT, new ItemCtx(this.group, this.items, itemIndex, this.options, this.emitUpdate))
     },
     onItemSelected(itemCtx) {
       this.selIt = itemCtx
     },
-    // onItemSelect(payload) {
-    //   if(this.ownContext !== payload.targetComponentContext) {return}
-    //   const event = payload.event
-    //   const parent = this.$refs.selfRef
-    //   const child = event.target
-    //   const index = indexOfDirectDescendant(parent, child)
-    //   if(index >= 0 && index < this.items.length) {
-    //     const itemWrapper = findAncestorByClassName(child, 'mo-dndItem')
-    //     const payload = new ItemSelectPayload(
-    //       event, itemWrapper,
-    //       new ItemContext(this.group, this.items, index, this.options, this.emitUpdate))
-    //     bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(this.$refs.selfRef))
-    //     bus.$emit(DND_ITEM_SELECT, payload)
-    //   }
-    // },
+    onItemUnselected() {
+      this.selIt = null
+    },
     onTargetSelected(trgElem) {
       this.selTrg = trgElem
       if(trgElem === this.$refs.selfRef) {
-        this.isTarget = true
+        this.isTrg = true
       } else {
-        this.isTarget = false
-        this.itemIntersection = null
+        this.isTrg = false
+        this.itInt = null
       }
     },
     onTargetUnselected() {
       this.selTrg = null
-      this.isTarget = false
+      this.isTrg = false
+    },
+    onMoveTrace(traceResult) {
+      if(this.$refs.selfRef !== traceResult.tContainer) {return}
+
+      const trgIndex = traceResult.iIndex
+
+      // previous drop result
+      const pDR = this.dropPreviewResult
+      const pTarget = pDR ? pDR.targetContext: null
+      let sc = null
+      let tc = null
+      if(pDR) {
+        // Same context
+        sc = pTarget
+        tc = new ItemCtx(this.group, pTarget.container, trgIndex, this.options, this.emitUpdate)
+      } else {
+        sc = this.selIt
+        tc = new ItemCtx(this.group, this.items, trgIndex, this.options, this.emitUpdate)
+      }
+
+      if(tc.allowsDrop(sc)) {
+        // Permissions ok
+        const eventCoords = getEventCoords(traceResult.ev)
+        const itemRect = traceResult.tItem.getBoundingClientRect()
+
+        const shouldInsertBefore = eventCoords.clientY < itemRect.top+itemRect.height/2
+
+        // Previous intersection and current intersection
+        const pInt = this.itInt
+        const cInt = new ItemIntersection(sc, tc, shouldInsertBefore)
+
+        if(pTarget) {
+          // Check whether new intersection would output same drop result
+          const newTargetIndex = null
+          if(sc.index < tc.index) {
+            newTargetIndex = shouldInsertBefore ? tc.index-1: tc.index
+          } else if(sc.index > tc.index) {
+            newTargetIndex = shouldInsertBefore ? tc.index: tc.index+1
+          } else {
+            newTargetIndex = tc.index
+          }
+
+          if(pTarget.index === newTargetIndex) {
+            return
+          }
+        } else if(pInt && pInt.equals(cInt)) {
+          return
+        }
+
+        // New intersection
+        this.itInt = cInt
+      }
     }
-    // onSetSelectedItem(payload) {
-    //   this.selectedItem = payload.itemContext
-    //   this.selectedNode = payload.elem
-    // },
-    // onResetSelectedItem() {
-    //   this.selectedItem = null
-    //   this.selectedNode = null
-    //   this.itemIntersection = null
-    // },
-    // emitUpdate(payload) {
-    //   this.$emit('update', payload)
-    // },
-    // onSetTarget(payload) {
-    //   this.selectedTarget = payload.targetElement
-    //   if(payload.targetElement === this.$refs.selfRef) {
-    //     this.isTarget = true
-    //   } else {
-    //     this.isTarget = false
-    //     this.itemIntersection = null
-    //   }
-    // },
-    // onResetTarget() {
-    //   this.isTarget = false
-    //   this.selectedTarget = null
-    //   this.itemIntersection = null
-    // },
-    // onMousemove(event) {
-    //   const res = trace(event)
-    //   if(res instanceof EmptyTraceResult) {return}
-    //   const dndTarget = res.tContainer
-    //   if(!dndTarget) {
-    //     bus.$emit(DND_TARGET_UNSELECT)
-    //     return
-    //   }
-
-    //   if(this.selectedTarget !== dndTarget) {
-    //     bus.$emit(DND_TARGET_SELECT, new TargetSelectPayload(dndTarget))
-    //   }
-
-    //   const dndItem = res.tItem
-    //   const dndItemIndex = res.iIndex
-
-    //   if(this.selectedNode === dndItem) {return}
-    //   else if(isDescendant(this.selectedNode, dndItem)) {return}
-    //   else {
-    //     bus.$emit(DND_TARGET_ITEM_CONTEXT, new TargetItemContextPayload(event, dndTarget, dndItem, dndItemIndex))
-    //   }
-    // },
-    // onTargetItemContext(payload) {
-    //   if(payload.targetElem !== this.$refs.selfRef) {return}
-    //   if(!payload.itemElem) {return}
-    //   const trgIndex = payload.itemIndex
-
-    //   // previous drop result
-    //   const pDR = this.dropPreviewResult
-    //   const pTarget = pDR ? pDR.targetContext: null
-    //   let sc = null
-    //   let tc = null
-    //   if(pDR) {
-    //     // Same context
-    //     sc = pTarget
-    //     tc = new ItemContext(this.group, pTarget.container, trgIndex, this.options, this.emitUpdate)
-    //   } else {
-    //     sc = this.selectedItem
-    //     tc = new ItemContext(this.group, this.items, trgIndex, this.options, this.emitUpdate)
-    //   }
-
-    //   if(tc.allowsDrop(sc)) {
-    //     // Permissions ok
-    //     const eventCoords = getEventCoords(payload.event)
-    //     const clientRect = payload.itemElem.getBoundingClientRect()
-
-    //     const shouldInsertBefore = eventCoords.clientY < clientRect.top+clientRect.height/2
-
-    //     // Previous intersection and current intersection
-    //     const pInt = this.itemIntersection
-    //     const cInt = new ItemIntersection(sc, tc, shouldInsertBefore)
-
-    //     if(pTarget) {
-    //       // Check whether new intersection would output same drop result
-    //       const newTargetIndex = null
-    //       if(sc.index < tc.index) {
-    //         newTargetIndex = shouldInsertBefore ? tc.index-1: tc.index
-    //       } else if(sc.index > tc.index) {
-    //         newTargetIndex = shouldInsertBefore ? tc.index: tc.index+1
-    //       } else {
-    //         newTargetIndex = tc.index
-    //       }
-
-    //       if(pTarget.index === newTargetIndex) {
-    //         return
-    //       }
-    //     } else if(pInt && pInt.equals(cInt)) {
-    //       return
-    //     }
-
-    //     // New intersection
-    //     this.itemIntersection = cInt
-    //   }
-    // },
-    // onMouseup(event) {
-    // },
   },
   render() {
     const dndItemSlot = this.$scopedSlots.default

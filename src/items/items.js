@@ -2,6 +2,8 @@ import bus from '../bus'
 import DnDItem from '../item/Item'
 import DnDHandle from '../handle/Handle'
 import {
+  DND_ITEM_TRACED,
+  DND_ITEM_SELECT,
   DND_ITEM_SELECTED
   // DND_HANDLE_MD,
   // DND_ITEM_SELECT,
@@ -37,7 +39,7 @@ import attachTouchy from '../touch'
 import drop from '../drop/drop'
 
 import ItemsContext from './ItemsContext'
-import ItemContext from './ItemContext'
+import ItemCtx from './ItemContext'
 import ItemIntersection from './ItemIntersection'
 import Options from './Options'
 
@@ -71,7 +73,8 @@ export default {
   },
   data() {
     return {
-      ownContext: new ItemsContext(this),
+      // ownContext: new ItemsContext(this),
+      selIt: null,
       selectedTarget: null,
       isTarget: false,
       selectedItem: null,
@@ -81,6 +84,7 @@ export default {
     }
   },
   beforeMount() {
+    bus.$on(DND_ITEM_TRACED, this.onItemTraced)
     bus.$on(DND_ITEM_SELECTED, this.onItemSelected)
     // bus.$on(DND_HANDLE_MD, this.onItemSelect)
     // bus.$on(DND_ITEM_SELECTED, this.onSetSelectedItem)
@@ -95,8 +99,8 @@ export default {
     // bus.$emit(DND_REQUEST_TARGET)
   },
   beforeDestroy() {
-    bus.$on(DND_ITEM_SELECTED, this.onItemSelected)
-    // console.log('bd')
+    bus.$off(DND_ITEM_TRACED, this.onItemTraced)
+    bus.$off(DND_ITEM_SELECTED, this.onItemSelected)
     // bus.$off(DND_HANDLE_MD, this.onItemSelect)
     // bus.$off(DND_ITEM_SELECTED, this.onSetSelectedItem)
     // bus.$off(DND_REQUESTED_ITEM, this.onSetSelectedItem)
@@ -124,10 +128,13 @@ export default {
     }
   },
   methods: {
-    onItemSelected(payload) {
-      const tContainer = payload.tRes.tContainer
-      if(this.$refs.selfRef !== tContainer) {return}
-      console.log('listener', this.name)
+    onItemTraced(payload) {
+      if(this.$refs.selfRef !== payload.tRes.tContainer) {return}
+      const itemIndex = payload.tRes.iIndex
+      bus.$emit(DND_ITEM_SELECT, new ItemCtx(this.group, this.items, itemIndex, this.options, this.emitUpdate))
+    },
+    onItemSelected(itemCtx) {
+      this.selIt = itemCtx
     },
     onItemSelect(payload) {
       if(this.ownContext !== payload.targetComponentContext) {return}
@@ -171,7 +178,6 @@ export default {
       this.itemIntersection = null
     },
     onMousemove(event) {
-      console.log('mm')
       const res = trace(event)
       if(res instanceof EmptyTraceResult) {return}
       const dndTarget = res.tContainer
@@ -210,10 +216,6 @@ export default {
       } else {
         sc = this.selectedItem
         tc = new ItemContext(this.group, this.items, trgIndex, this.options, this.emitUpdate)
-      }
-
-      if(!sc) {
-        console.log(this.name)
       }
 
       if(tc.allowsDrop(sc)) {
@@ -293,6 +295,6 @@ export default {
       </div>)
 
     return this.renderedItems.length > 0 && this.options.wrapDnDHandle ?
-      <DnDHandle componentContext={this.ownContext}>{content}</DnDHandle>: content
+      <DnDHandle>{content}</DnDHandle>: content
   }
 }

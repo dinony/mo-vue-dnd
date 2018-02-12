@@ -6,7 +6,8 @@ import {
   DND_ITEM_TRACED, ItemTracedPl,
   DND_ITEM_SELECT, DND_ITEM_SELECTED,
   DND_ITEM_UNSELECTED,
-  DND_TARGET_SELECTED, DND_TARGET_UNSELECTED
+  DND_TARGET_SELECTED, DND_TARGET_UNSELECTED,
+  DND_MOVE_TRACE
 } from '../events'
 import {doc} from '../dom'
 import {
@@ -102,11 +103,11 @@ export default {
       this.mmPos = null
     },
     onMousedown(event) {
-      const res = trace(event)
-      if(res instanceof EmptyTraceResult) {return}
-      if(res.tContainer && res.tItem) {
-        this.tRes = res
-        bus.$emit(DND_ITEM_TRACED, new ItemTracedPl(event, res))
+      const traceRes = trace(event)
+      if(traceRes instanceof EmptyTraceResult) {return}
+      if(traceRes.tContainer && traceRes.tItem) {
+        this.tRes = traceRes
+        bus.$emit(DND_ITEM_TRACED, traceRes)
       }
     },
     onItemSelect(itemCtx) {
@@ -127,6 +128,7 @@ export default {
       // Handle mouse down position
       const coords = getEventCoords(event)
       this.mdPos = new Vec2(coords.pageX, coords.pageY)
+      this.mmPos = new Vec2(coords.pageX, coords.pageY)
 
       // Handle current target
       this.curTrg = this.tRes.tContainer
@@ -137,12 +139,17 @@ export default {
     },
     onMousemove(event) {
       // Handle target
-      const res = trace(event)
-      if(res instanceof TraceResult) {
-        if(this.curTrg !== res.tContainer) {
-          bus.$emit(DND_TARGET_SELECTED, res.tContainer)
+      const traceRes = trace(event)
+      if(traceRes instanceof TraceResult) {
+        if(this.curTrg !== traceRes.tContainer) {
+          bus.$emit(DND_TARGET_SELECTED, traceRes.tContainer)
         }
-        this.curTrg = res.tContainer
+        this.curTrg = traceRes.tContainer
+
+        if(traceRes.tItem && traceRes.iIndex) {
+          // Target and item are known -> emit move trace
+          bus.$emit(DND_MOVE_TRACE, traceRes)
+        }
       } else {
         if(this.curTrg) {
           bus.$emit(DND_TARGET_UNSELECTED)
@@ -150,10 +157,9 @@ export default {
         this.curTrg = null
       }
 
-      // Set current mouse position
+      // Update current mouse position
       const coords = getEventCoords(event)
       if(coords) {
-        if(!this.mmPos) {this.mmPos= new Vec2(0,0)}
         this.$set(this.mmPos, 'x', coords.pageX)
         this.$set(this.mmPos, 'y', coords.pageY)
       }

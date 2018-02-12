@@ -22,13 +22,18 @@ export class TraceResult {
  * this method finds the most upper container `tCls` by classname.
  * If a container is found, it also tries to locate a child `iCls` by classname.
  */
-export default function traceEvent(event, tCls='mo-dndContainer', iCls='mo-dndItem') {
+export default function traceEvent(event, mdCls='mo-dndHandle', tCls='mo-dndContainer', iCls='mo-dndItem') {
   const coords = getEventCoords(event)
   if(!coords) {
     return new EmptyTraceResult()
   }
 
   const elemAtPoint = doc.elementFromPoint(coords.pageX, coords.pageY)
+  const isInsideMdWrapper = findAncestorByClassName(elemAtPoint, mdCls)
+  if(!isInsideMdWrapper) {
+    return new EmptyTraceResult()
+  }
+
   const tContainer = findAncestorByClassName(elemAtPoint, tCls)
 
   if(!tContainer) {

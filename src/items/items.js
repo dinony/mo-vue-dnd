@@ -2,22 +2,23 @@ import bus from '../bus'
 import DnDItem from '../item/Item'
 import DnDHandle from '../handle/Handle'
 import {
-  DND_HANDLE_MD,
-  DND_ITEM_SELECT,
-  DND_REQUEST_ITEM,
-  DND_REQUESTED_ITEM,
-  DND_ITEM_SELECTED,
-  DND_ITEM_UNSELECTED,
-  ItemSelectPayload,
-  DND_TARGET_SELECT,
-  DND_TARGET_SELECTED,
-  DND_REQUEST_TARGET,
-  DND_REQUESTED_TARGET,
-  DND_TARGET_UNSELECT,
-  DND_TARGET_UNSELECTED,
-  DND_TARGET_ITEM_CONTEXT,
-  TargetSelectPayload,
-  TargetItemContextPayload
+  DND_ITEM_SELECTED
+  // DND_HANDLE_MD,
+  // DND_ITEM_SELECT,
+  // DND_REQUEST_ITEM,
+  // DND_REQUESTED_ITEM,
+  // DND_ITEM_SELECTED,
+  // DND_ITEM_UNSELECTED,
+  // ItemSelectPayload,
+  // DND_TARGET_SELECT,
+  // DND_TARGET_SELECTED,
+  // DND_REQUEST_TARGET,
+  // DND_REQUESTED_TARGET,
+  // DND_TARGET_UNSELECT,
+  // DND_TARGET_UNSELECTED,
+  // DND_TARGET_ITEM_CONTEXT,
+  // TargetSelectPayload,
+  // TargetItemContextPayload
 } from '../events'
 
 import {
@@ -80,6 +81,7 @@ export default {
     }
   },
   beforeMount() {
+    bus.$on(DND_ITEM_SELECTED, this.onItemSelected)
     // bus.$on(DND_HANDLE_MD, this.onItemSelect)
     // bus.$on(DND_ITEM_SELECTED, this.onSetSelectedItem)
     // bus.$on(DND_REQUESTED_ITEM, this.onSetSelectedItem)
@@ -93,6 +95,7 @@ export default {
     // bus.$emit(DND_REQUEST_TARGET)
   },
   beforeDestroy() {
+    bus.$on(DND_ITEM_SELECTED, this.onItemSelected)
     // console.log('bd')
     // bus.$off(DND_HANDLE_MD, this.onItemSelect)
     // bus.$off(DND_ITEM_SELECTED, this.onSetSelectedItem)
@@ -121,6 +124,11 @@ export default {
     }
   },
   methods: {
+    onItemSelected(payload) {
+      const tContainer = payload.tRes.tContainer
+      if(this.$refs.selfRef !== tContainer) {return}
+      console.log('listener', this.name)
+    },
     onItemSelect(payload) {
       if(this.ownContext !== payload.targetComponentContext) {return}
       const event = payload.event
@@ -205,7 +213,6 @@ export default {
       }
 
       if(!sc) {
-        debugger
         console.log(this.name)
       }
 

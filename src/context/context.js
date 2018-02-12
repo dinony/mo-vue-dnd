@@ -7,7 +7,8 @@ import {
   DND_ITEM_SELECT, DND_ITEM_SELECTED,
   DND_ITEM_UNSELECTED,
   DND_TARGET_SELECTED, DND_TARGET_UNSELECTED,
-  DND_MOVE_TRACE
+  DND_MOVE_TRACE,
+  DND_DROP
 } from '../events'
 import {doc} from '../dom'
 import {
@@ -148,9 +149,13 @@ export default {
       }
     },
     onMouseup(event) {
-      this.setInitState()
-      bus.$emit(DND_ITEM_UNSELECTED)
-      bus.$emit(DND_TARGET_UNSELECTED)
+      if(this.selIt) {
+        bus.$emit(DND_DROP)
+
+        this.setInitState()
+        bus.$emit(DND_ITEM_UNSELECTED)
+        bus.$emit(DND_TARGET_UNSELECTED)
+      }
     }
   },
   watch: {

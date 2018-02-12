@@ -8,3 +8,5 @@ export const DND_TARGET_SELECTED = 'TSD'
 export const DND_TARGET_UNSELECTED = 'TUD'
 
 export const DND_MOVE_TRACE = 'MT'
+
+export const DND_DROP = 'D'

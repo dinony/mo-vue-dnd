@@ -10,7 +10,8 @@ import {
   DND_TARGET_SELECTED,
   DND_TARGET_UNSELECTED,
   DND_ITEM_UNSELECTED,
-  DND_MOVE_TRACE
+  DND_MOVE_TRACE,
+  DND_DROP
 } from '../events'
 
 import {getEventCoords} from '../event'
@@ -64,6 +65,7 @@ export default {
     bus.$on(DND_TARGET_SELECTED, this.onTargetSelected)
     bus.$on(DND_TARGET_UNSELECTED, this.onTargetUnselected)
     bus.$on(DND_MOVE_TRACE, this.onMoveTrace)
+    bus.$on(DND_DROP, this.onDrop)
   },
   beforeDestroy() {
     bus.$off(DND_ITEM_TRACED, this.onItemTraced)
@@ -72,6 +74,7 @@ export default {
     bus.$off(DND_TARGET_SELECTED, this.onTargetSelected)
     bus.$off(DND_TARGET_UNSELECTED, this.onTargetUnselected)
     bus.$off(DND_MOVE_TRACE, this.onMoveTrace)
+    bus.$off(DND_DROP, this.onDrop)
   },
   computed: {
     // Drop result
@@ -171,6 +174,18 @@ export default {
         // New intersection
         this.itInt = cInt
       }
+    },
+    onDrop() {
+      if(this.isTrg) {
+        if(this.origSrcRes) {
+          this.origSrcRes.update()
+        }
+
+        this.dropRes.trgRes.update()
+      }
+    },
+    emitUpdate(payload) {
+      this.$emit('update', payload)
     }
   },
   render() {

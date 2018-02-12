@@ -10,7 +10,8 @@ export class TraceResult {
   // tContainer = targetContainer
   // tItem = targetItem
   // iIndex = targetItemIndex
-  constructor(tContainer, tItem, iIndex) {
+  constructor(event, tContainer, tItem, iIndex) {
+    this.ev = event
     this.tContainer = tContainer
     this.tItem = tItem
     this.iIndex = iIndex
@@ -42,7 +43,7 @@ export default function traceEvent(event, mdCls='mo-dndHandle', tCls='mo-dndCont
     const tItem = findAncestorByClassName(elemAtPoint, iCls)
 
     return tItem ?
-      new TraceResult(tContainer, tItem, indexOf(tItem, tContainer)):
-      new TraceResult(tContainer, null, null)
+      new TraceResult(event, tContainer, tItem, indexOf(tItem, tContainer)):
+      new TraceResult(event, tContainer, null, null)
   }
 }

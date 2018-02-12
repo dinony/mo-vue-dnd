@@ -3,15 +3,19 @@ import {
   DND_ITEM_SELECT,
   DND_ITEM_SELECTED,
   DND_REQUEST_ITEM,
+  DND_REQUESTED_ITEM,
   DND_ITEM_UNSELECTED,
   DND_TARGET_SELECT,
   DND_TARGET_SELECTED,
+  DND_REQUEST_TARGET,
+  DND_REQUESTED_TARGET,
   DND_TARGET_UNSELECT,
   DND_TARGET_UNSELECTED
 } from '../events'
 import {Vec2, CSSPos} from '../vec'
 import {getTouchy} from '../touch'
 import {getEventCoords} from '../event'
+import {doc} from '../dom'
 
 const StateEnum = {
   INIT: 0,
@@ -36,23 +40,26 @@ export default {
       mmPos: null
     }
   },
-  mounted() {
-    bus.$on(DND_ITEM_SELECT, this.setSelectedItem)
-    bus.$on(DND_REQUEST_ITEM, this.sendRequestedItem)
-    bus.$on(DND_TARGET_SELECT, this.setTarget)
-    bus.$on(DND_TARGET_UNSELECT, this.resetTarget)
+  beforeMount() {
+    // bus.$on(DND_ITEM_SELECT, this.setSelectedItem)
+    // bus.$on(DND_REQUEST_ITEM, this.sendRequestedItem)
+    // bus.$on(DND_TARGET_SELECT, this.setTarget)
+    // bus.$on(DND_TARGET_UNSELECT, this.resetTarget)
+    // bus.$on(DND_REQUEST_TARGET, this.sendRequestedTarget)
 
-    document.addEventListener(getTouchy('mousemove'), this.onMousemove)
-    document.addEventListener(getTouchy('mouseup'), this.setInitState)
+    doc.addEventListener(getTouchy('mousedown'), this.onMousedown)
+    // doc.addEventListener(getTouchy('mousemove'), this.onMousemove)
+    // doc.addEventListener(getTouchy('mouseup'), this.setInitState)
   },
   beforeDestroy() {
-    bus.$off(DND_ITEM_SELECT, this.setSelectedItem)
-    bus.$off(DND_REQUEST_ITEM, this.sendRequestedItem)
-    bus.$off(DND_TARGET_SELECT, this.setTarget)
-    bus.$off(DND_TARGET_UNSELECT, this.resetTarget)
+    // bus.$off(DND_ITEM_SELECT, this.setSelectedItem)
+    // bus.$off(DND_REQUEST_ITEM, this.sendRequestedItem)
+    // bus.$off(DND_TARGET_SELECT, this.setTarget)
+    // bus.$off(DND_TARGET_UNSELECT, this.resetTarget)
+    // bus.$off(DND_REQUEST_TARGET, this.sendRequestedTarget)
 
-    document.removeEventListener(getTouchy('mousemove'), this.onMousemove)
-    document.removeEventListener(getTouchy('mouseup'), this.setInitState)
+    // doc.removeEventListener(getTouchy('mousemove'), this.onMousemove)
+    // doc.removeEventListener(getTouchy('mouseup'), this.setInitState)
   },
   computed: {
     mdItemOffset() {
@@ -82,6 +89,9 @@ export default {
     }
   },
   methods: {
+    onMousedown(event) {
+      debugger
+    },
     setSelectedItem(payload) {
       this.state = StateEnum.DRAG
       this.selectionPayload = payload
@@ -97,6 +107,7 @@ export default {
       bus.$emit(DND_ITEM_SELECTED, payload)
     },
     sendRequestedItem() {
+      console.log('rI')
       bus.$emit(DND_REQUESTED_ITEM, this.selectionPayload)
     },
     onMousemove(event) {
@@ -111,12 +122,16 @@ export default {
       }
     },
     setTarget(payload) {
-      this.target = payload.targetElement
+      this.target = payload
       bus.$emit(DND_TARGET_SELECTED, payload)
     },
     resetTarget() {
       this.target = null
       bus.$emit(DND_TARGET_UNSELECTED)
+    },
+    sendRequestedTarget() {
+      console.log('rT')
+      bus.$emit(DND_REQUESTED_TARGET, this.target)
     },
     setInitState() {
       this.state = StateEnum.INIT

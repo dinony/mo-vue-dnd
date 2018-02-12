@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import {
   DnDContext, DnDItems,
-  DnDOptions, DnDHandle
+  DnDOptions
 } from 'mo-vue-dnd'
 import 'mo-vue-dnd/index.scss'
 // import 'mo-vue-dnd/mo-vue-dnd.css'

@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 import {
   DnDContext, DnDItems,
-  DnDOptions, DnDHandle
+  DnDOptions, DnDMdArea
 } from 'mo-vue-dnd'
 import 'mo-vue-dnd/index.scss'
 // import 'mo-vue-dnd/mo-vue-dnd.css'
@@ -31,9 +31,9 @@ new Vue({
   render() {
     const renderDnDItem = props => (
       <div class="dndItem">
-        <DnDHandle componentContext={props.componentContext}>
+        <DnDMdArea>
           <div class="dndItemHandle"></div>
-        </DnDHandle>
+        </DnDMdArea>
         <div class="dndItemContent">Item: {props.item}</div>
       </div>)
     const slots = {default: renderDnDItem}

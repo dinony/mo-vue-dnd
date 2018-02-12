@@ -44,6 +44,7 @@ export class IntermediateNode extends Node {
         <h5>Container</h5>
         <div class="dnd-wrapper">
           <DnDItems
+            name="inner"
             group={RIGHT_GRP}
             items={this.children}
             onUpdate={this.setChildren.bind(this)}

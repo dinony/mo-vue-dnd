@@ -1,4 +1,5 @@
-export default class ItemContext {
+// ItemContext
+export default class ItemCtx {
   constructor(group, container, index, options, updateFn) {
     this.group = group
     this.container = container

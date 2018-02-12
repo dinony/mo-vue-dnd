@@ -12,9 +12,9 @@ export default {
   },
   render(h, context) {
     const cls = {
-      'mo-dndItem': true,
-      'mo-dndItemSelected': context.props.isSelected,
-      'mo-dndItemProjected': context.props.isProjected
+      'dnd-it': true,
+      'dnd-it-sel': context.props.isSelected,
+      'dnd-it-proj': context.props.isProjected
     }
     return <div class={cls}>{context.slots().default}</div>
   }

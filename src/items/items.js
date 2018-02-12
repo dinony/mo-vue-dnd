@@ -1,6 +1,8 @@
 import bus from '../bus'
+
 import DnDItem from '../item/Item'
-import DnDHandle from '../handle/Handle'
+import DnDMdArea from '../mdarea/mdarea'
+
 import {
   DND_ITEM_TRACED,
   DND_ITEM_SELECT,
@@ -9,43 +11,12 @@ import {
   DND_TARGET_UNSELECTED,
   DND_ITEM_UNSELECTED,
   DND_MOVE_TRACE
-  // DND_HANDLE_MD,
-  // DND_ITEM_SELECT,
-  // DND_REQUEST_ITEM,
-  // DND_REQUESTED_ITEM,
-  // DND_ITEM_SELECTED,
-  // DND_ITEM_UNSELECTED,
-  // ItemSelectPayload,
-  // DND_TARGET_SELECT,
-  // DND_TARGET_SELECTED,
-  // DND_REQUEST_TARGET,
-  // DND_REQUESTED_TARGET,
-  // DND_TARGET_UNSELECT,
-  // DND_TARGET_UNSELECTED,
-  // DND_TARGET_ITEM_CONTEXT,
-  // TargetSelectPayload,
-  // TargetItemContextPayload
 } from '../events'
-
-import {
-  indexOfDirectDescendant,
-  findAncestorByClassName,
-  isDescendant,
-  indexOf
-} from '../dom'
 
 import {getEventCoords} from '../event'
 
-import {
-  default as trace,
-  TraceResult, EmptyTraceResult
-} from '../trace'
-
-import attachTouchy from '../touch'
-
 import drop from '../drop/drop'
 
-import ItemsContext from './ItemsContext'
 import ItemCtx from './ItemContext'
 import ItemIntersection from './ItemIntersection'
 import Options from './Options'
@@ -103,15 +74,16 @@ export default {
     bus.$off(DND_MOVE_TRACE, this.onMoveTrace)
   },
   computed: {
-    dropPreviewResult() {
+    // Drop result
+    dropRes() {
       return this.itInt ? this.dropHandler(this.itInt): null
     },
     renderedItems() {
-      return this.dropPreviewResult ? this.dropPreviewResult.targetResult.container: this.items
+      return this.dropRes ? this.dropRes.targetResult.container: this.items
     }
   },
   watch: {
-    dropPreviewResult(dr) {
+    dropRes(dr) {
       if(dr && !dr.sameContext && !this.origSrcRes) {
         this.origSrcRes = dr.sourceResult
       } else if(!dr) {
@@ -122,8 +94,7 @@ export default {
   methods: {
     onItemTraced(traceRes) {
       if(this.$refs.selfRef !== traceRes.tContainer) {return}
-      const itemIndex = traceRes.iIndex
-      bus.$emit(DND_ITEM_SELECT, new ItemCtx(this.group, this.items, itemIndex, this.options, this.emitUpdate))
+      bus.$emit(DND_ITEM_SELECT, new ItemCtx(this.group, this.items, traceRes.iIndex, this.options, this.emitUpdate))
     },
     onItemSelected(itemCtx) {
       this.selIt = itemCtx
@@ -132,7 +103,6 @@ export default {
       this.selIt = null
     },
     onTargetSelected(trgElem) {
-      this.selTrg = trgElem
       if(trgElem === this.$refs.selfRef) {
         this.isTrg = true
       } else {
@@ -141,7 +111,6 @@ export default {
       }
     },
     onTargetUnselected() {
-      this.selTrg = null
       this.isTrg = false
     },
     onMoveTrace(traceResult) {
@@ -150,7 +119,8 @@ export default {
       const trgIndex = traceResult.iIndex
 
       // previous drop result
-      const pDR = this.dropPreviewResult
+      const pDR = this.dropRes
+      // previous target context
       const pTarget = pDR ? pDR.targetContext: null
       let sc = null
       let tc = null
@@ -201,11 +171,12 @@ export default {
     const dndItemSlot = this.$scopedSlots.default
 
     // Current drop result
-    const dr = this.dropPreviewResult
+    const dr = this.dropRes
     const tIndex = dr ? dr.targetContext.index: -1
     const si = this.selectedItem
     const sIndex = si && !dr ? si.index: -1
     const isSelectedContainer = si ? si.container === this.items: false
+
     const items = this.renderedItems.map((item, index) => {
       // An item may be flagged either as selected or projected
       const isProjectedItem = index === tIndex
@@ -221,14 +192,14 @@ export default {
         </DnDItem>)
     })
 
-    const empty = <div class="mo-dndContainerEmpty">Empty</div>
-    const cls = {'mo-dndContainer': true, 'mo-dndTarget': this.isTarget}
+    const empty = <div class="dnd-cont-empty">Empty</div>
+    const cls = {'dnd-cont': true, 'mo-dndTarget': this.isTrg}
     const content = (
       <div ref="selfRef" class={cls}>
-        {this.renderedItems.length > 0 ? items : empty}
+        {this.renderedItems.length > 0 ? items: empty}
       </div>)
 
     return this.renderedItems.length > 0 && this.options.wrapDnDHandle ?
-      <DnDHandle>{content}</DnDHandle>: content
+      <DnDMdArea>{content}</DnDMdArea>: content
   }
 }

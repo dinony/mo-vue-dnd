@@ -4,8 +4,8 @@ import ItemContext from '../items/ItemContext'
 
 export default function drop(itemIntersection) {
   const itemInt = itemIntersection
-  const sc = itemInt.sourceContext
-  const tc = itemInt.targetContext
+  const sc = itemInt.srcCtx
+  const tc = itemInt.trgCtx
 
   const cloneItem = () => sc.options.cloneItemFn(sc.item, tc.group)
   const trgIndex = itemInt.insertBefore ? tc.index: tc.index+1
@@ -15,26 +15,26 @@ export default function drop(itemIntersection) {
     let trgResult = null
     let needsUpdate = false
     if(sc.index === tc.index) {
-      trgResult = sc.container
+      trgResult = sc.cnt
     } else if(sc.index < tc.index) {
       if(itemInt.insertBefore && sc.index === tc.index-1) {
-        trgResult = sc.container
+        trgResult = sc.cnt
       } else {
         needsUpdate = true
-        trgResult = sc.container.slice(0, sc.index)
-          .concat(sc.container.slice(sc.index+1, trgIndex))
+        trgResult = sc.cnt.slice(0, sc.index)
+          .concat(sc.cnt.slice(sc.index+1, trgIndex))
           .concat(cloneItem())
-          .concat(sc.container.slice(trgIndex))
+          .concat(sc.cnt.slice(trgIndex))
       }
     } else {
       if(!itemInt.insertBefore && sc.index === tc.index+1) {
-        trgResult = sc.container
+        trgResult = sc.cnt
       } else {
         needsUpdate = true
-        trgResult = sc.container.slice(0, trgIndex)
+        trgResult = sc.cnt.slice(0, trgIndex)
           .concat(cloneItem())
-          .concat(sc.container.slice(trgIndex, sc.index))
-          .concat(sc.container.slice(sc.index+1))
+          .concat(sc.cnt.slice(trgIndex, sc.index))
+          .concat(sc.cnt.slice(sc.index+1))
       }
     }
 
@@ -53,12 +53,12 @@ export default function drop(itemIntersection) {
     return new DropResult(td, td, tItemContext, true)
   } else {
     const srcResult = sc.options.allowItemRemoval ?
-      sc.container.filter((val, index) => index !== sc.index):
-      sc.container
+      sc.cnt.filter((val, index) => index !== sc.index):
+      sc.cnt
 
-    const trgResult = tc.container.slice(0, trgIndex)
+    const trgResult = tc.cnt.slice(0, trgIndex)
       .concat(cloneItem())
-      .concat(tc.container.slice(trgIndex))
+      .concat(tc.cnt.slice(trgIndex))
 
     const sd = new DropContext(srcResult, sc.updateFn, sc.options.allowItemRemoval)
     const td = new DropContext(trgResult, tc.updateFn, true)

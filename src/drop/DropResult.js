@@ -1,8 +1,8 @@
 export default class DropResult  {
   constructor(sourceResult, targetResult, targetContext, sameContext) {
-    this.sourceResult = sourceResult
-    this.targetResult = targetResult
-    this.targetContext = targetContext
+    this.srcRes = sourceResult
+    this.trgRes = targetResult
+    this.trgCtx = targetContext
     this.sameContext = sameContext
   }
 }

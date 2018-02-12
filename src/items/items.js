@@ -79,13 +79,13 @@ export default {
       return this.itInt ? this.dropHandler(this.itInt): null
     },
     renderedItems() {
-      return this.dropRes ? this.dropRes.targetResult.container: this.items
+      return this.dropRes ? this.dropRes.trgRes.cnt: this.items
     }
   },
   watch: {
     dropRes(dr) {
       if(dr && !dr.sameContext && !this.origSrcRes) {
-        this.origSrcRes = dr.sourceResult
+        this.origSrcRes = dr.srcRes
       } else if(!dr) {
         this.origSrcRes = null
       }
@@ -121,13 +121,13 @@ export default {
       // previous drop result
       const pDR = this.dropRes
       // previous target context
-      const pTarget = pDR ? pDR.targetContext: null
+      const pTarget = pDR ? pDR.trgCtx: null
       let sc = null
       let tc = null
       if(pDR) {
         // Same context
         sc = pTarget
-        tc = new ItemCtx(this.group, pTarget.container, trgIndex, this.options, this.emitUpdate)
+        tc = new ItemCtx(this.group, pTarget.cnt, trgIndex, this.options, this.emitUpdate)
       } else {
         sc = this.selIt
         tc = new ItemCtx(this.group, this.items, trgIndex, this.options, this.emitUpdate)
@@ -172,10 +172,10 @@ export default {
 
     // Current drop result
     const dr = this.dropRes
-    const tIndex = dr ? dr.targetContext.index: -1
+    const tIndex = dr ? dr.trgCtx.index: -1
     const si = this.selectedItem
     const sIndex = si && !dr ? si.index: -1
-    const isSelectedContainer = si ? si.container === this.items: false
+    const isSelectedContainer = si ? si.cnt === this.items: false
 
     const items = this.renderedItems.map((item, index) => {
       // An item may be flagged either as selected or projected
@@ -188,7 +188,7 @@ export default {
         <DnDItem key={key}
           isSelected={isSelectedItem}
           isProjected={isProjectedItem}>
-          {dndItemSlot({item, index, componentContext: this.ownContext})}
+          {dndItemSlot({item, index})}
         </DnDItem>)
     })
 

@@ -2,18 +2,18 @@
 export default class ItemCtx {
   constructor(group, container, index, options, updateFn) {
     this.group = group
-    this.container = container
+    this.cnt = container
     this.index = index
     this.options = options
     this.updateFn = updateFn
   }
 
   get item() {
-    return this.container[this.index]
+    return this.cnt[this.index]
   }
 
-  allowsDrop(sourceContext) {
-    const sc = sourceContext
+  allowsDrop(srcCtx) {
+    const sc = srcCtx
     const tc = this // this has target role
     const sPerms = sc.options.permissions
     const tPerms = tc.options.permissions
@@ -24,7 +24,7 @@ export default class ItemCtx {
 
   equals(other) {
     return this.group === other.group &&
-      this.container === other.container &&
+      this.cnt === other.cnt &&
       this.index === other.index
   }
 }

@@ -80,28 +80,28 @@ export default {
     }
   },
   beforeMount() {
-    bus.$on(DND_HANDLE_MD, this.onItemSelect)
-    bus.$on(DND_ITEM_SELECTED, this.onSetSelectedItem)
-    bus.$on(DND_REQUESTED_ITEM, this.onSetSelectedItem)
-    bus.$on(DND_ITEM_UNSELECTED, this.onResetSelectedItem)
-    bus.$on(DND_TARGET_SELECTED, this.onSetTarget)
-    bus.$on(DND_REQUESTED_TARGET, this.onSetTarget)
-    bus.$on(DND_TARGET_UNSELECTED, this.onResetTarget)
-    bus.$on(DND_TARGET_ITEM_CONTEXT, this.onTargetItemContext)
+    // bus.$on(DND_HANDLE_MD, this.onItemSelect)
+    // bus.$on(DND_ITEM_SELECTED, this.onSetSelectedItem)
+    // bus.$on(DND_REQUESTED_ITEM, this.onSetSelectedItem)
+    // bus.$on(DND_ITEM_UNSELECTED, this.onResetSelectedItem)
+    // bus.$on(DND_TARGET_SELECTED, this.onSetTarget)
+    // bus.$on(DND_REQUESTED_TARGET, this.onSetTarget)
+    // bus.$on(DND_TARGET_UNSELECTED, this.onResetTarget)
+    // bus.$on(DND_TARGET_ITEM_CONTEXT, this.onTargetItemContext)
 
-    bus.$emit(DND_REQUEST_ITEM)
-    bus.$emit(DND_REQUEST_TARGET)
+    // bus.$emit(DND_REQUEST_ITEM)
+    // bus.$emit(DND_REQUEST_TARGET)
   },
   beforeDestroy() {
-    console.log('bd')
-    bus.$off(DND_HANDLE_MD, this.onItemSelect)
-    bus.$off(DND_ITEM_SELECTED, this.onSetSelectedItem)
-    bus.$off(DND_REQUESTED_ITEM, this.onSetSelectedItem)
-    bus.$off(DND_ITEM_UNSELECTED, this.onResetSelectedItem)
-    bus.$off(DND_TARGET_SELECTED, this.onSetTarget)
-    bus.$off(DND_REQUESTED_TARGET, this.onSetTarget)
-    bus.$off(DND_TARGET_UNSELECTED, this.onResetTarget)
-    bus.$off(DND_TARGET_ITEM_CONTEXT, this.onTargetItemContext)
+    // console.log('bd')
+    // bus.$off(DND_HANDLE_MD, this.onItemSelect)
+    // bus.$off(DND_ITEM_SELECTED, this.onSetSelectedItem)
+    // bus.$off(DND_REQUESTED_ITEM, this.onSetSelectedItem)
+    // bus.$off(DND_ITEM_UNSELECTED, this.onResetSelectedItem)
+    // bus.$off(DND_TARGET_SELECTED, this.onSetTarget)
+    // bus.$off(DND_REQUESTED_TARGET, this.onSetTarget)
+    // bus.$off(DND_TARGET_UNSELECTED, this.onResetTarget)
+    // bus.$off(DND_TARGET_ITEM_CONTEXT, this.onTargetItemContext)
   },
   computed: {
     dropPreviewResult() {

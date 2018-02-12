@@ -1,3 +1,5 @@
+export const doc = document
+
 export function indexOf(child, parent) {
   return Array.prototype.indexOf.call(parent.children, child)
 }
@@ -12,6 +14,7 @@ export function indexOfDirectDescendant(parent, child) {
 }
 
 export function findAncestorByClassName(child, clsName) {
+  if(!child) {return}
   if(child.parentNode === document) {
     return null
   } else if(child.className.indexOf(clsName) !== -1) {

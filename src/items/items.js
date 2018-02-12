@@ -79,10 +79,7 @@ export default {
       origSourceResult: null
     }
   },
-  mounted() {
-    bus.$emit(DND_REQUEST_ITEM)
-    bus.$emit(DND_REQUEST_TARGET)
-
+  beforeMount() {
     bus.$on(DND_HANDLE_MD, this.onItemSelect)
     bus.$on(DND_ITEM_SELECTED, this.onSetSelectedItem)
     bus.$on(DND_REQUESTED_ITEM, this.onSetSelectedItem)
@@ -91,8 +88,12 @@ export default {
     bus.$on(DND_REQUESTED_TARGET, this.onSetTarget)
     bus.$on(DND_TARGET_UNSELECTED, this.onResetTarget)
     bus.$on(DND_TARGET_ITEM_CONTEXT, this.onTargetItemContext)
+
+    bus.$emit(DND_REQUEST_ITEM)
+    bus.$emit(DND_REQUEST_TARGET)
   },
   beforeDestroy() {
+    console.log('bd')
     bus.$off(DND_HANDLE_MD, this.onItemSelect)
     bus.$off(DND_ITEM_SELECTED, this.onSetSelectedItem)
     bus.$off(DND_REQUESTED_ITEM, this.onSetSelectedItem)
@@ -201,6 +202,11 @@ export default {
       } else {
         sc = this.selectedItem
         tc = new ItemContext(this.group, this.items, trgIndex, this.options, this.emitUpdate)
+      }
+
+      if(!sc) {
+        debugger
+        console.log(this.name)
       }
 
       if(tc.allowsDrop(sc)) {

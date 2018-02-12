@@ -110,7 +110,10 @@ export default {
       }
     },
     onItemSelect(itemCtx) {
+      // Handle state
       this.state = StateEnum.DRAG
+
+      // Handle selected item
       this.selIt = itemCtx
 
       const itRect = this.tRes.tItem.getBoundingClientRect()
@@ -121,9 +124,15 @@ export default {
         new Vec2(window.pageXOffset, window.pageYOffset),
         new Vec2(itRect.left, itRect.top))
 
+      // Handle mouse down position
       const coords = getEventCoords(event)
       this.mdPos = new Vec2(coords.pageX, coords.pageY)
 
+      // Handle current target
+      this.curTrg = this.tRes.tContainer
+
+      // Notify
+      bus.$emit(DND_TARGET_SELECTED, this.curTrg)
       bus.$emit(DND_ITEM_SELECTED, this.selIt)
     },
     onMousemove(event) {
@@ -153,51 +162,12 @@ export default {
       this.setInitState()
       bus.$emit(DND_ITEM_UNSELECTED)
       bus.$emit(DND_TARGET_UNSELECTED)
-    },
-    // setSelectedItem(payload) {
-    //   this.state = StateEnum.DRAG
-    //   this.selectionPayload = payload
-    //   const clientRect = payload.elem.getBoundingClientRect()
-    //   this.selItRect = clientRect
-    //   // Selected item page coords
-    //   this.selItPos = Vec2.add(
-    //     new Vec2(window.pageXOffset, window.pageYOffset),
-    //     new Vec2(clientRect.left, clientRect.top))
-    //   // Page coords
-    //   const coords = getEventCoords(payload.event)
-    //   this.mdPos = new Vec2(coords.pageX, coords.pageY)
-    //   bus.$emit(DND_ITEM_SELECTED, payload)
-    // },
-    // sendRequestedItem() {
-    //   bus.$emit(DND_REQUESTED_ITEM, this.selectionPayload)
-    // },
-    // // onMousemove(event) {
-    // //   if(!this.selectionPayload) {return}
-    // //   if(this.mmPos === null) {
-    // //     this.mmPos = new Vec2(0, 0)
-    // //   }
-    // //   const coords = getEventCoords(event)
-    // //   if(coords) {
-    // //     this.$set(this.mmPos, 'x', coords.pageX)
-    // //     this.$set(this.mmPos, 'y', coords.pageY)
-    // //   }
-    // // },
-    // setTarget(payload) {
-    //   this.target = payload
-    //   bus.$emit(DND_TARGET_SELECTED, payload)
-    // },
-    // resetTarget() {
-    //   this.target = null
-    //   bus.$emit(DND_TARGET_UNSELECTED)
-    // },
-    // sendRequestedTarget() {
-    //   bus.$emit(DND_REQUESTED_TARGET, this.target)
-    // }
+    }
   },
   watch: {
     selIt(newItem, oldItem) {
       // Only attach mm/mu when there is a selected item
-      if(!oldItem && newItem !== null) {
+      if(!oldItem && newItem) {
         doc.addEventListener(getTouchy('mousemove'), this.onMousemove)
         doc.addEventListener(getTouchy('mouseup'), this.onMouseup)
       } else if(oldItem && !newItem) {

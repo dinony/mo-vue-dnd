@@ -4,10 +4,16 @@ import {getTouchy} from '../touch'
 import {getEventCoords} from '../event'
 import {
   DND_ITEM_TRACED, ItemTracedPl,
-  DND_ITEM_SELECT, DND_ITEM_SELECTED
+  DND_ITEM_SELECT, DND_ITEM_SELECTED,
+  DND_ITEM_UNSELECTED,
+  DND_TARGET_SELECTED, DND_TARGET_UNSELECTED
 } from '../events'
 import {doc} from '../dom'
-import {default as trace, EmptyTraceResult} from '../trace'
+import {
+  default as trace,
+  EmptyTraceResult,
+  TraceResult
+} from '../trace'
 
 const StateEnum = {
   INIT: 0,
@@ -30,7 +36,7 @@ export default {
       selItRect: null, // selected item clientRect
       mdPos: null,
       mmPos: null,
-      // target: null
+      curTrg: null // current target
     }
   },
   beforeMount() {
@@ -62,11 +68,11 @@ export default {
     mdItemOffset() {
       // Vector pointing from mdPos to (left, top) of selected DnDItem
       // Needed for positioning of drag item
-      return this.mdPos && this.selItPos ? this.selItPos.sub(this.mdPos) : null
+      return this.mdPos && this.selItPos ? this.selItPos.sub(this.mdPos): null
     },
     dragItemPos() {
       // Return {x,y} in page coordinates
-      return this.mmPos && this.mdItemOffset ? this.mmPos.add(this.mdItemOffset) : null
+      return this.mmPos && this.mdItemOffset ? this.mmPos.add(this.mdItemOffset): null
     },
     dragItemDim() {
       return {
@@ -88,11 +94,10 @@ export default {
   methods: {
     setInitState() {
       this.state = StateEnum.INIT
-      // this.target = null
-      // this.selectionPayload = null
       this.selIt = null
       this.selItPos = null
       this.selItRect = null
+      this.curTrg = null
       this.mdPos = null
       this.mmPos = null
     },
@@ -122,6 +127,21 @@ export default {
       bus.$emit(DND_ITEM_SELECTED, this.selIt)
     },
     onMousemove(event) {
+      // Handle target
+      const res = trace(event)
+      if(res instanceof TraceResult) {
+        if(this.curTrg !== res.tContainer) {
+          bus.$emit(DND_TARGET_SELECTED, res.tContainer)
+        }
+        this.curTrg = res.tContainer
+      } else {
+        if(this.curTrg) {
+          bus.$emit(DND_TARGET_UNSELECTED)
+        }
+        this.curTrg = null
+      }
+
+      // Set current mouse position
       const coords = getEventCoords(event)
       if(coords) {
         if(!this.mmPos) {this.mmPos= new Vec2(0,0)}
@@ -131,6 +151,8 @@ export default {
     },
     onMouseup(event) {
       this.setInitState()
+      bus.$emit(DND_ITEM_UNSELECTED)
+      bus.$emit(DND_TARGET_UNSELECTED)
     },
     // setSelectedItem(payload) {
     //   this.state = StateEnum.DRAG

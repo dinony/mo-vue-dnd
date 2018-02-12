@@ -35,9 +35,9 @@ export const DND_ITEM_UNSELECTED = 'IUD'
 //   }
 // }
 
-// export const DND_TARGET_SELECTED = 'TSD'
+export const DND_TARGET_SELECTED = 'TSD'
 // export const DND_TARGET_UNSELECT = 'TU'
-// export const DND_TARGET_UNSELECTED = 'TUD'
+export const DND_TARGET_UNSELECTED = 'TUD'
 
 // export const DND_TARGET_ITEM_CONTEXT = 'TIC'
 

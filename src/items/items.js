@@ -92,6 +92,11 @@ export default {
     }
   },
   methods: {
+    setInitState() {
+      this.selIt = null
+      this.isTrg = false
+      this.itInt = false
+    },
     onItemTraced(traceRes) {
       if(this.$refs.selfRef !== traceRes.tContainer) {return}
       bus.$emit(DND_ITEM_SELECT, new ItemCtx(this.group, this.items, traceRes.iIdx, this.options, this.emitUpdate))
@@ -100,7 +105,7 @@ export default {
       this.selIt = itemCtx
     },
     onItemUnselected() {
-      this.selIt = null
+      this.setInitState()
     },
     onTargetSelected(trgElem) {
       if(trgElem === this.$refs.selfRef) {
@@ -112,6 +117,7 @@ export default {
     },
     onTargetUnselected() {
       this.isTrg = false
+      this.itInt = null
     },
     onMoveTrace(traceResult) {
       if(this.$refs.selfRef !== traceResult.tContainer) {return}
@@ -173,7 +179,7 @@ export default {
     // Current drop result
     const dr = this.dropRes
     const tIndex = dr ? dr.trgCtx.idx: -1
-    const si = this.selectedItem
+    const si = this.selIt
     const sIndex = si && !dr ? si.idx: -1
     const isSelectedContainer = si ? si.cnt === this.items: false
 

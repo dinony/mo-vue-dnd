@@ -38,15 +38,15 @@ const microsoft = {
 
 // Note: http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
 export const SUPPORTS_TOUCH = 'ontouchstart' in document.documentElement
-
+const nav = global.navigator
 // Reference:
 // https://github.com/bevacqua/dragula/blob/master/dragula.js#L495
 export default function attachTouchy(obj, event, fn) {
   checkTouchEventName(event)
 
-  if (global.navigator.pointerEnabled) {
+  if (nav.pointerEnabled) {
     obj[pointers[event]] = fn
-  } else if (global.navigator.msPointerEnabled) {
+  } else if (nav.msPointerEnabled) {
     obj[microsoft[event]] = fn
   } else if(SUPPORTS_TOUCH) {
     obj[touch[event]] = fn
@@ -58,9 +58,9 @@ export default function attachTouchy(obj, event, fn) {
 export function getTouchy(event) {
   checkTouchEventName(event)
 
-  if (global.navigator.pointerEnabled) {
+  if (nav.pointerEnabled) {
     return pointers[event]
-  } else if (global.navigator.msPointerEnabled) {
+  } else if (nav.msPointerEnabled) {
     return microsoft[event]
   } else if (SUPPORTS_TOUCH) {
     return touch[event]

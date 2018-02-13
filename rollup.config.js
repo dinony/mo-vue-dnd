@@ -1,15 +1,6 @@
 import babel from 'rollup-plugin-babel'
 import uglify from 'rollup-plugin-uglify'
 import filesize from 'rollup-plugin-filesize'
-import license from 'rollup-plugin-license'
-
-const pkg = require('./package.json')
-
-const banner = `
-mo-vue-dnd v${pkg.version}
-(c) 2018 ${pkg.author}
-License: ${pkg.license}
-`
 
 const configs = {
   plugins: [
@@ -17,9 +8,6 @@ const configs = {
       exclude: 'node_modules/**'
     }),
     uglify(),
-    license({
-      banner,
-    }),
     filesize()
   ],
   external: ['vue']
@@ -47,7 +35,7 @@ export default [{
 }, /*{
   input: 'test-src/test.js',
   output: {
-    file: 'dist/test-out.js',
+    file: 'test-src/dist/out.js',
     format: 'cjs'
   },
   ...configs

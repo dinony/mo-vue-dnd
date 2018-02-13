@@ -8,9 +8,9 @@ import {leftOptions} from '../config'
 const itemCounter = 0
 
 class Item {
-  constructor(label, id) {
+  constructor(label) {
     this.label = label
-    this.id = id === undefined ? `item-${itemCounter++}`: id
+    this.id = `item-${itemCounter++}`
   }
 
   renderFn(h) {
@@ -29,8 +29,8 @@ class Item {
 }
 
 export class LeafItem extends Item {
-  constructor(label, id) {
-    super(label, id)
+  constructor(label) {
+    super(label)
   }
 
   nodeFactory() {
@@ -38,13 +38,13 @@ export class LeafItem extends Item {
   }
 
   clone() {
-    return new LeafItem(this.label, this.id)
+    return new LeafItem(this.label)
   }
 }
 
 export class ContainerItem extends Item {
-  constructor(label, id) {
-    super(label, id)
+  constructor(label) {
+    super(label)
   }
 
   nodeFactory() {
@@ -52,6 +52,6 @@ export class ContainerItem extends Item {
   }
 
   clone() {
-    return new ContainerItem(this.label, this.id)
+    return new ContainerItem(this.label)
   }
 }

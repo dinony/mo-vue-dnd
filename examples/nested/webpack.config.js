@@ -54,10 +54,10 @@ module.exports = {
   resolve: {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      'mo-vue-dnd$': path.resolve(__dirname, '../../src/index.js'),
-      'mo-vue-dnd/index.scss': path.resolve(__dirname, '../../src/index.scss'),
-    //   'mo-vue-dnd$': path.resolve(__dirname, '../../dist/mo-vue-dnd.umd.js'),
-    //   'mo-vue-dnd/mo-vue-dnd.css': path.resolve(__dirname, '../../dist/mo-vue-dnd.css'),
+      // 'mo-vue-dnd$': path.resolve(__dirname, '../../src/index.js'),
+      // 'mo-vue-dnd/index.scss': path.resolve(__dirname, '../../src/index.scss'),
+      'mo-vue-dnd$': path.resolve(__dirname, '../../dist/mo-vue-dnd.esm.js'),
+      'mo-vue-dnd/mo-vue-dnd.css': path.resolve(__dirname, '../../dist/mo-vue-dnd.css'),
     }
   },
   plugins: [],

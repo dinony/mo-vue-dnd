@@ -60,6 +60,7 @@ export default function drop(itemIntersection) {
     let trgResult = null
     let tItemIndex = null
     if(tc.cnt.length === 0) {
+      // target is []
       trgResult = [cloneItem()]
       tItemIndex = 0
     } else {

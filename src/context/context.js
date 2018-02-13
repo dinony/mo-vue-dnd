@@ -126,6 +126,7 @@ export default {
       bus.$emit(DND_ITEM_SELECTED, this.selIt)
     },
     onMousemove(event) {
+      event.preventDefault()
       // Handle target
       const traceRes = trace(event)
       if(traceRes instanceof TraceResult) {
@@ -169,10 +170,10 @@ export default {
     selIt(newItem, oldItem) {
       // Only attach mm/mu when there is a selected item
       if(!oldItem && newItem) {
-        doc.addEventListener(getTouchy('mousemove'), this.onMousemove)
+        doc.addEventListener(getTouchy('mousemove'), this.onMousemove, {passive:false})
         doc.addEventListener(getTouchy('mouseup'), this.onMouseup)
       } else if(oldItem && !newItem) {
-        doc.removeEventListener(getTouchy('mousemove'), this.onMousemove)
+        doc.removeEventListener(getTouchy('mousemove'), this.onMousemove, {passive:false})
         doc.removeEventListener(getTouchy('mouseup'), this.onMouseup)
       }
     }

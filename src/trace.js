@@ -23,7 +23,7 @@ export class TraceResult {
  * this method finds the most upper container `tCls` by classname.
  * If a container is found, it also tries to locate a child `iCls` by classname.
  */
-export default function traceEvent(event, mdCls='dnd-mdarea', tCls='dnd-cont', iCls='dnd-it') {
+export default function traceEvent(event, validAreaCls, tCls='dnd-cont', iCls='dnd-it') {
   const coords = getEventCoords(event)
   if(!coords) {
     return new EmptyTraceResult()
@@ -31,8 +31,8 @@ export default function traceEvent(event, mdCls='dnd-mdarea', tCls='dnd-cont', i
 
   // elementFromPoint works with viewport coords
   const elemAtPoint = doc.elementFromPoint(coords.clientX, coords.clientY)
-  const isInsideMdWrapper = findAncestorByClassName(elemAtPoint, mdCls)
-  if(!isInsideMdWrapper) {
+  const isInsideValidWrapper = findAncestorByClassName(elemAtPoint, validAreaCls)
+  if(!isInsideValidWrapper) {
     return new EmptyTraceResult()
   }
 

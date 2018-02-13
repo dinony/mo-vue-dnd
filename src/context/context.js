@@ -87,7 +87,7 @@ export default {
       this.mmPos = null
     },
     onMousedown(event) {
-      const traceRes = trace(event)
+      const traceRes = trace(event, 'dnd-mdarea')
       if(traceRes instanceof EmptyTraceResult) {return}
       if(traceRes.tContainer && traceRes.tItem &&
         isDescendant(traceRes.tContainer, traceRes.tItem)) {
@@ -125,7 +125,7 @@ export default {
     onMousemove(event) {
       event.preventDefault()
       // Handle target
-      const traceRes = trace(event)
+      const traceRes = trace(event, 'dnd-cont')
       if(traceRes instanceof TraceResult) {
         // Check for self drop in potential inner dnd container
         if(!isDescendant(this.tRes.tItem, traceRes.tContainer)) {

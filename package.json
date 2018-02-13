@@ -1,6 +1,6 @@
 {
   "name": "mo-vue-dnd",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Drag and drop using just Vue.js",
   "main": "dist/mo-vue-dnd.cjs.js",
   "unpkg": "dist/mo-vue-dnd.umd.js",

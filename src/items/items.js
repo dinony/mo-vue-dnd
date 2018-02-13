@@ -209,8 +209,8 @@ export default {
         </DnDItem>)
     })
 
-    const empty = <div class="dnd-cont-empty">Empty</div>
-    const cls = {'dnd-cont': true, 'mo-dndTarget': this.isTrg}
+    const empty = <div class="dnd-empty">Empty</div>
+    const cls = {'dnd-cont': true, 'dnd-trg': this.isTrg}
     const content = (
       <div ref="selfRef" class={cls}>
         {this.renderedItems.length > 0 ? items: empty}

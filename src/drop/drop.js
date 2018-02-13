@@ -52,17 +52,26 @@ export default function drop(itemIntersection) {
     const tItemContext = new ItemContext(tc.grp, trgResult, tItemIndex, tc.options, tc.updateFn)
     return new DropResult(td, td, tItemContext, true)
   } else {
+    // source!==target
     const srcResult = sc.options.allowItemRemoval ?
       sc.cnt.filter((val, index) => index !== sc.idx):
       sc.cnt
 
-    const trgResult = tc.cnt.slice(0, trgIndex)
+    let trgResult = null
+    let tItemIndex = null
+    if(tc.cnt.length === 0) {
+      trgResult = [cloneItem()]
+      tItemIndex = 0
+    } else {
+      trgResult = tc.cnt.slice(0, trgIndex)
       .concat(cloneItem())
       .concat(tc.cnt.slice(trgIndex))
 
+      tItemIndex = itemInt.insBef ? tc.idx: tc.idx+1
+    }
+
     const sd = new DropContext(srcResult, sc.updateFn, sc.options.allowItemRemoval)
     const td = new DropContext(trgResult, tc.updateFn, true)
-    const tItemIndex = itemInt.insBef ? tc.idx: tc.idx+1
     const tItemContext = new ItemContext(tc.grp, trgResult, tItemIndex, tc.options, tc.updateFn)
     return new DropResult(sd, td, tItemContext, false)
   }

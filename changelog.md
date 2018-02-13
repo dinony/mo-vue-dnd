@@ -1,10 +1,14 @@
 # Changelog
 
-# 3.0.2 (2017-02-07)
+# 0.4.0 (2017-02-13)
+
+* Support Pointer, Touch and MouseEvent
+
+# 0.3.2 (2017-02-07)
 
 * Adapt `TargetSelectPayload` to make use of `ItemsContext`
 
-# 3.0.0 (2017-02-07)
+# 0.3.0 (2017-02-07)
 
 * Breaking changes in scoped slot argument of `DnDItems`
 * Breaking changes in `DnDHandle` props.

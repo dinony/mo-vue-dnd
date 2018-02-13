@@ -24,10 +24,6 @@ import Options from './Options'
 
 export default {
   props: {
-    name: {
-      type: String,
-      default: 'outer'
-    },
     items: {
       type: Array,
       required: true

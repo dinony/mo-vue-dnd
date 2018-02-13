@@ -29,7 +29,8 @@ export default function traceEvent(event, mdCls='dnd-mdarea', tCls='dnd-cont', i
     return new EmptyTraceResult()
   }
 
-  const elemAtPoint = doc.elementFromPoint(coords.pageX, coords.pageY)
+  // elementFromPoint works with viewport coords
+  const elemAtPoint = doc.elementFromPoint(coords.clientX, coords.clientY)
   const isInsideMdWrapper = findAncestorByClassName(elemAtPoint, mdCls)
   if(!isInsideMdWrapper) {
     return new EmptyTraceResult()

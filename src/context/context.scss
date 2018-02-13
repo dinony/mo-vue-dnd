@@ -5,10 +5,11 @@
     padding: 10px;
     background-color: lightblue;
     color: white;
-    min-width: 300px;
+    width: 300px;
     min-height: 200px;
     bottom: 0px;
     right: 0px;
+    overflow-y: scroll;
   }
 }
 

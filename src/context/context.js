@@ -127,7 +127,7 @@ export default {
       const traceRes = trace(event)
       if(traceRes instanceof TraceResult) {
         // Check for self drop in potential inner dnd container
-        if(!isDescendant(this.tRes.tContainer, traceRes.tContainer)) {
+        if(!isDescendant(this.tRes.tItem, traceRes.tContainer)) {
           if(this.curTrg !== traceRes.tContainer) {
             bus.$emit(DND_TARGET_SELECTED, traceRes.tContainer)
           }

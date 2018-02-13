@@ -10,7 +10,7 @@ import {
   DND_MOVE_TRACE,
   DND_DROP
 } from '../events'
-import {doc} from '../dom'
+import {doc, isDescendant} from '../dom'
 import {
   default as trace,
   EmptyTraceResult,
@@ -126,14 +126,17 @@ export default {
       // Handle target
       const traceRes = trace(event)
       if(traceRes instanceof TraceResult) {
-        if(this.curTrg !== traceRes.tContainer) {
-          bus.$emit(DND_TARGET_SELECTED, traceRes.tContainer)
-        }
-        this.curTrg = traceRes.tContainer
+        // Check for self drop in potential inner dnd container
+        if(!isDescendant(this.tRes.tContainer, traceRes.tContainer)) {
+          if(this.curTrg !== traceRes.tContainer) {
+            bus.$emit(DND_TARGET_SELECTED, traceRes.tContainer)
+          }
+          this.curTrg = traceRes.tContainer
 
-        if(traceRes.tItem) {
-          // Target and item are known -> emit move trace
-          bus.$emit(DND_MOVE_TRACE, traceRes)
+          if(traceRes.tItem) {
+            // Target and item are known -> emit move trace
+            bus.$emit(DND_MOVE_TRACE, traceRes)
+          }
         }
       } else {
         if(this.curTrg) {

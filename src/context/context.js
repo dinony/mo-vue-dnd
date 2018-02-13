@@ -191,7 +191,7 @@ export default {
       return (
         <div class="dnd-ctx dnd-ctx-drg">
           {content}
-          <div class="dnd-drag-it" style={this.dragItemStyle}>
+          <div class="dnd-drag" style={this.dragItemStyle}>
             {dndItemSlot(slotArg)}
           </div>
         </div>)

@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.4.1 (2017-02-13)
+
+* Bugfix: Empty div class name
+
 # 0.4.0 (2017-02-13)
 
 * Support Pointer, Touch and MouseEvents

@@ -125,9 +125,7 @@ export default {
       this.itInt = null
     },
     onMoveTrace(traceResult) {
-      if(this.$refs.selfRef !== traceResult.tContainer) {return}
-
-      const trgIndex = traceResult.iIdx >= 0 ? traceResult.iIdx: this.items.length-1
+      if(!this.selIt || this.$refs.selfRef !== traceResult.tContainer) {return}
 
       // previous drop result
       const pDR = this.dropRes
@@ -137,9 +135,11 @@ export default {
       let tc = null
       if(pDR) {
         // Same context
+        const trgIndex = traceResult.iIdx >= 0 ? traceResult.iIdx: Math.max(pTarget.cnt.length-1, 0)
         sc = pTarget
         tc = new ItemCtx(this.group, pTarget.cnt, trgIndex, this.options, this.emitUpdate)
       } else {
+        const trgIndex = traceResult.iIdx >= 0 ? traceResult.iIdx: Math.max(this.items.length-1, 0)
         sc = this.selIt
         tc = new ItemCtx(this.group, this.items, trgIndex, this.options, this.emitUpdate)
       }

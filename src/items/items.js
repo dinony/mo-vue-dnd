@@ -64,19 +64,15 @@ export default {
     bus.$on(DND_ITEM_TRACED, this.onItemTraced)
     bus.$on(DND_ITEM_SELECTED, this.onItemSelected)
     bus.$on(DND_ITEM_UNSELECTED, this.onItemUnselected)
-    bus.$on(DND_STATE_REQUESTED, this.onReqRes)
     bus.$on(DND_TARGET_SELECTED, this.onTargetSelected)
     bus.$on(DND_TARGET_UNSELECTED, this.onTargetUnselected)
     bus.$on(DND_MOVE_TRACE, this.onMoveTrace)
     bus.$on(DND_DROP, this.onDrop)
-
-    bus.$emit(DND_REQUEST_STATE)
   },
   beforeDestroy() {
     bus.$off(DND_ITEM_TRACED, this.onItemTraced)
     bus.$off(DND_ITEM_SELECTED, this.onItemSelected)
     bus.$off(DND_ITEM_UNSELECTED, this.onItemUnselected)
-    bus.$off(DND_STATE_REQUESTED, this.onReqRes)
     bus.$off(DND_TARGET_SELECTED, this.onTargetSelected)
     bus.$off(DND_TARGET_UNSELECTED, this.onTargetUnselected)
     bus.$off(DND_MOVE_TRACE, this.onMoveTrace)
@@ -106,20 +102,14 @@ export default {
       this.isTrg = false
       this.itInt = false
     },
-    onReqRes(selectedItem, currentTarget) {
-      this.onTargetSelected(currentTarget)
-      this.selIt = selectedItem
-    },
     onItemTraced(traceRes) {
       if(this.$refs.selfRef !== traceRes.tContainer) {return}
       bus.$emit(DND_ITEM_SELECT, new ItemCtx(this.group, this.items, traceRes.iIdx, this.options, this.emitUpdate))
     },
     onItemSelected(itemCtx) {
-      console.log('set', this.name)
       this.selIt = itemCtx
     },
     onItemUnselected() {
-      console.log('unset', this.name)
       this.setInitState()
     },
     onTargetSelected(trgElem) {
@@ -154,10 +144,6 @@ export default {
         tc = new ItemCtx(this.group, this.items, trgIndex, this.options, this.emitUpdate)
       }
 
-      if(tc === null || sc === null) {
-        console.log('BOOM', this.name)
-        return
-      }
       if(tc.allowsDrop(sc)) {
         // Permissions ok
         const eventCoords = getEventCoords(traceResult.ev)
@@ -223,6 +209,7 @@ export default {
 
       return (
         <DnDItem key={key}
+          keyVal={key}
           isSelected={isSelectedItem}
           isProjected={isProjectedItem}>
           {dndItemSlot({item, index})}

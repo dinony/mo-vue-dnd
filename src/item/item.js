@@ -1,6 +1,9 @@
 export default {
   functional: true,
   props: {
+    keyVal: {
+      required: true
+    },
     isSelected: {
       type: Boolean,
       default: false
@@ -16,6 +19,6 @@ export default {
       'dnd-it-sel': context.props.isSelected,
       'dnd-it-proj': context.props.isProjected
     }
-    return <div class={cls}>{context.slots().default}</div>
+    return <div key={context.props.keyVal} class={cls}>{context.slots().default}</div>
   }
 }

@@ -111,7 +111,7 @@ export default {
         new Vec2(itRect.left, itRect.top))
 
       // Handle mouse down position
-      const coords = getEventCoords(event)
+      const coords = getEventCoords(this.tRes.ev)
       this.mdPos = new Vec2(coords.pageX, coords.pageY)
       this.mmPos = new Vec2(coords.pageX, coords.pageY)
 

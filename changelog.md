@@ -1,8 +1,9 @@
 # Changelog
 
-# 0.4.1 (2017-02-13)
+# 0.4.1+0.4.2 (2017-02-13)
 
 * Bugfix: Empty div class name
+* Bugfix: Undefined variable in context
 
 # 0.4.0 (2017-02-13)
 

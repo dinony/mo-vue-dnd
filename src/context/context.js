@@ -89,7 +89,8 @@ export default {
     onMousedown(event) {
       const traceRes = trace(event)
       if(traceRes instanceof EmptyTraceResult) {return}
-      if(traceRes.tContainer && traceRes.tItem) {
+      if(traceRes.tContainer && traceRes.tItem &&
+        isDescendant(traceRes.tContainer, traceRes.tItem)) {
         this.tRes = traceRes
         bus.$emit(DND_ITEM_TRACED, traceRes)
       }

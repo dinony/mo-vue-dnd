@@ -131,7 +131,7 @@ export default {
         }
         this.curTrg = traceRes.tContainer
 
-        if(traceRes.tItem && traceRes.iIdx !== null && traceRes.iIdx !== -1) {
+        if(traceRes.tItem) {
           // Target and item are known -> emit move trace
           bus.$emit(DND_MOVE_TRACE, traceRes)
         }

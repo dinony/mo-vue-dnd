@@ -127,7 +127,7 @@ export default {
     onMoveTrace(traceResult) {
       if(this.$refs.selfRef !== traceResult.tContainer) {return}
 
-      const trgIndex = traceResult.iIdx
+      const trgIndex = traceResult.iIdx >= 0 ? traceResult.iIdx: this.items.length-1
 
       // previous drop result
       const pDR = this.dropRes
@@ -172,7 +172,6 @@ export default {
         } else if(pInt && pInt.equals(cInt)) {
           return
         }
-
         // New intersection
         this.itInt = cInt
       }

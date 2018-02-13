@@ -2,7 +2,7 @@
 
 # 0.4.0 (2017-02-13)
 
-* Support Pointer, Touch and MouseEvent
+* Support Pointer, Touch and MouseEvents
 
 # 0.3.2 (2017-02-07)
 

@@ -1,5 +1,5 @@
 import {cloneItemFn as defCloneFn} from './clone'
-import {default as Permissions, getPermissions} from './Permissions'
+import {getPermissions} from './Permissions'
 
 export default class Options {
   constructor(

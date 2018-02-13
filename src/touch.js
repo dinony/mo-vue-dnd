@@ -50,7 +50,7 @@ export default function attachTouchy(obj, event, fn) {
     obj[microsoft[event]] = fn
   } else if(SUPPORTS_TOUCH) {
     obj[touch[event]] = fn
-  } else {
+  } else {
     obj[event] = fn
   }
 }

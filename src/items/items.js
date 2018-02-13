@@ -1,7 +1,7 @@
 import bus from '../bus'
 
-import DnDItem from '../item/Item'
-import DnDMdArea from '../mdarea/mdarea'
+import DnDItem from '../item/Item' // eslint-disable-line no-unused-vars
+import DnDMdArea from '../mdarea/mdarea' // eslint-disable-line no-unused-vars
 
 import {
   DND_ITEM_TRACED,
@@ -11,9 +11,7 @@ import {
   DND_TARGET_UNSELECTED,
   DND_ITEM_UNSELECTED,
   DND_MOVE_TRACE,
-  DND_DROP,
-  DND_REQUEST_STATE,
-  DND_STATE_REQUESTED
+  DND_DROP
 } from '../events'
 
 import {getEventCoords} from '../event'
@@ -97,7 +95,7 @@ export default {
     }
   },
   methods: {
-    setInitState() {
+    setInitState() {
       this.selIt = null
       this.isTrg = false
       this.itInt = false
@@ -115,7 +113,7 @@ export default {
     onTargetSelected(trgElem) {
       if(trgElem === this.$refs.selfRef) {
         this.isTrg = true
-      } else {
+      } else {
         this.isTrg = false
         this.itInt = null
       }
@@ -157,7 +155,7 @@ export default {
 
         if(pTarget) {
           // Check whether new intersection would output same drop result
-          const newTargetIndex = null
+          let newTargetIndex = null
           if(sc.idx < tc.idx) {
             newTargetIndex = shouldInsertBefore ? tc.idx-1: tc.idx
           } else if(sc.idx > tc.idx) {

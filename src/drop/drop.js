@@ -19,7 +19,7 @@ export default function drop(itemIntersection) {
     } else if(sc.idx < tc.idx) {
       if(itemInt.insBef && sc.idx === tc.idx-1) {
         trgResult = sc.cnt
-      } else {
+      } else {
         needsUpdate = true
         trgResult = sc.cnt.slice(0, sc.idx)
           .concat(sc.cnt.slice(sc.idx+1, trgIndex))
@@ -65,8 +65,8 @@ export default function drop(itemIntersection) {
       tItemIndex = 0
     } else {
       trgResult = tc.cnt.slice(0, trgIndex)
-      .concat(cloneItem())
-      .concat(tc.cnt.slice(trgIndex))
+        .concat(cloneItem())
+        .concat(tc.cnt.slice(trgIndex))
 
       tItemIndex = itemInt.insBef ? tc.idx: tc.idx+1
     }

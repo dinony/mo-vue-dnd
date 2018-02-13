@@ -153,7 +153,7 @@ export default {
         this.$set(this.mmPos, 'y', coords.pageY)
       }
     },
-    onMouseup(event) {
+    onMouseup() {
       if(this.selIt) {
         bus.$emit(DND_DROP)
 

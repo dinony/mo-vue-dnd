@@ -1,11 +1,11 @@
 export default class ItemIntersection {
-  constructor(sourceContext, targetContext, insertBefore) {
+  constructor(sourceContext, targetContext, insertBefore) {
     this.srcCtx = sourceContext
     this.trgCtx = targetContext
     this.insBef = insertBefore
   }
 
-  get isSameContext() {
+  get isSameContext() {
     return this.srcCtx.cnt === this.trgCtx.cnt
   }
 

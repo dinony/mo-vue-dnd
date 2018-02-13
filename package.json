@@ -6,6 +6,7 @@
   "unpkg": "dist/mo-vue-dnd.umd.js",
   "style": "dist/mo-vue-dnd.css",
   "scripts": {
+    "lint": "eslint src/**/*.js",
     "release": "npm run build:all && npm publish",
     "build:all": "npm run build && npm run build:style",
     "build:style": "gulp scss",
@@ -51,6 +52,7 @@
     "cross-env": "^5.1.3",
     "css-loader": "^0.28.9",
     "cssnano": "^3.10.0",
+    "eslint": "^4.17.0",
     "file-loader": "^1.1.6",
     "gulp": "^3.9.1",
     "gulp-postcss": "^7.0.1",

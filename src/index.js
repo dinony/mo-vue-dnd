@@ -1,4 +1,4 @@
-export {default as DnDContext} from './context/Context'
-export {default as DnDItems} from './items/Items'
+export {default as DnDContext} from './context/context'
+export {default as DnDItems} from './items/items'
 export {default as DnDOptions} from './items/Options'
-export {default as DnDMdArea} from './mdarea/mdarea'
+export {default as DnDMdArea} from './MdArea/MdArea'

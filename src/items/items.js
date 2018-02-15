@@ -44,6 +44,11 @@ export default {
     keyFn: {
       type: Function,
       required: false
+    },
+    permsFn: {
+      type: Function,
+      required: false,
+      default: () => true
     }
   },
   data() {
@@ -138,7 +143,7 @@ export default {
         tc = new ItemCtx(this.group, this.items, trgIndex, this.options, this.emitUpdate)
       }
 
-      if(tc.allowsDrop(sc)) {
+      if(tc.allowsDrop(sc) && this.permsFn(sc, tc)) {
         // Permissions ok
         const eventCoords = getEventCoords(traceResult.ev)
         const itemRect = traceResult.tItem.getBoundingClientRect()
@@ -183,7 +188,7 @@ export default {
       this.$emit('update', payload)
     }
   },
-  render() {
+  render(h) {
     const dndItemSlot = this.$scopedSlots.default
 
     // Current drop result

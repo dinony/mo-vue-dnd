@@ -9,15 +9,16 @@
   "scripts": {
     "lint": "eslint src/**/*.js",
     "lint:demos": "eslint examples/nested/src/*.js",
-    "build:lib": "concurrently \"rollup -c rollup.config.js\" \"gulp nested:scss\"",
+    "build:lib": "concurrently \"rollup -c rollup.config.js --environment NODE_ENV:production\" \"gulp scss:nested\"",
     "release": "npm run build:lib && npm publish",
-    "build:nested": "rollup -c rollup-demo.config.js && gulp nested:scss",
-    "serve:demos": "node tools/serve.js",
     "css:lib": "sass --watch src/index.scss:dist/mo-vue-dnd.css",
+    "css:libdemo": "sass --watch src/index.scss:examples/nested/dist/mo-vue-dnd.css",
+    "build:nested": "rollup -c rollup-demo.config.js --environment NODE_ENV:production && gulp scss:nested && gulp scss:libdemo",
     "js:nested": "rollup -w -c rollup-demo.config.js",
     "css:nested": "sass --watch examples/nested/src/index.scss:examples/nested/dist/index.css",
-    "dev:nested": "concurrently --kill-others-on-fail \"npm run js:nested\" \"npm run css:nested\" \"npm run css:lib\" \"npm run serve:demos\"",
-    "deploy:nested": "npm run nested:build && tools/deploy.sh"
+    "dev:nested": "concurrently --kill-others-on-fail \"npm run js:nested\" \"npm run css:nested\" \"npm run css:libdemo\" \"npm run serve:demos\"",
+    "deploy:nested": "npm run build:nested && tools/deploy.sh",
+    "serve:demos": "node tools/serve.js"
   },
   "files": [
     "dist"

@@ -1,6 +1,7 @@
 import babel from 'rollup-plugin-babel'
 import uglify from 'rollup-plugin-uglify'
 import filesize from 'rollup-plugin-filesize'
+import resolve from 'rollup-plugin-node-resolve'
 
 const configs = {
   plugins: [
@@ -32,11 +33,4 @@ export default [{
     format: 'es'
   }],
   ...configs
-}, /*{
-  input: 'test-src/test.js',
-  output: {
-    file: 'test-src/dist/out.js',
-    format: 'cjs'
-  },
-  ...configs
-}*/]
+}]

@@ -1,13 +1,14 @@
 import babel from 'rollup-plugin-babel'
 import uglify from 'rollup-plugin-uglify'
 import filesize from 'rollup-plugin-filesize'
-import resolve from 'rollup-plugin-node-resolve'
+import buble from 'rollup-plugin-buble'
 
 const configs = {
   plugins: [
     babel({
       exclude: 'node_modules/**'
     }),
+    buble(),
     uglify(),
     filesize()
   ],
@@ -18,7 +19,8 @@ export default [{
   input: 'src/index.js',
   output: [{
     file: 'dist/mo-vue-dnd.cjs.js',
-    format: 'cjs'
+    format: 'cjs',
+    sourcemap: true
   },
   {
     file: 'dist/mo-vue-dnd.umd.js',
@@ -26,11 +28,13 @@ export default [{
     name: 'mo-vue-dnd',
     globals: {
       vue: 'Vue'
-    }
+    },
+    sourcemap: true
   },
   {
     file: 'dist/mo-vue-dnd.esm.js',
-    format: 'es'
+    format: 'es',
+    sourcemap: true
   }],
   ...configs
 }]

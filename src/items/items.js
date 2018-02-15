@@ -188,7 +188,7 @@ export default {
       this.$emit('update', payload)
     }
   },
-  render(h) {
+  render() {
     const dndItemSlot = this.$scopedSlots.default
 
     // Current drop result

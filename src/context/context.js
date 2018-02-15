@@ -175,7 +175,7 @@ export default {
       }
     }
   },
-  render(h) {
+  render() {
     const debugOut = () => (
       <div class="dnd-ctx-db">
         <h4>mo-vue-dnd</h4>

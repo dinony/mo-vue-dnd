@@ -5,7 +5,7 @@ import {
 } from '../right/right'
 import {leftOptions} from '../config'
 
-const itemCounter = 0
+let itemCounter = 0
 
 class Item {
   constructor(label) {

@@ -16,3 +16,10 @@
   padding: 5px;
   border: 2px dashed violet;
 }
+
+body {
+  background-color: red;
+}
+
+@import "left/left";
+@import "right/right";

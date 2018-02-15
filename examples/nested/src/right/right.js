@@ -2,7 +2,7 @@ import {DnDOptions, DnDItems} from 'mo-vue-dnd'
 // import './right.scss'
 import {rightOptions, RIGHT_GRP} from '../config'
 
-const nodeCounter = 0
+let nodeCounter = 0
 
 class Node {
   constructor() {

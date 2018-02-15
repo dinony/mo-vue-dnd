@@ -1,7 +1,7 @@
 import Vue from 'vue'
 // import './index.scss'
 import {
-  DnDContext, DnDItems, DnDOptions
+  DnDContext, DnDItems, DnDOptions // eslint-disable-line no-unused-vars
 } from 'mo-vue-dnd'
 // import 'mo-vue-dnd/index.scss'
 // import 'mo-vue-dnd/mo-vue-dnd.css'
@@ -44,7 +44,7 @@ new Vue({
     getObjId(obj) {
       return obj.id
     },
-    checkRightPerms(sourceContext, targetContext) {
+    checkRightPerms() {
       return true
     }
   },

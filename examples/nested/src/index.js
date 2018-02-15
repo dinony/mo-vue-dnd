@@ -1,9 +1,9 @@
 import Vue from 'vue'
-import './index.scss'
+// import './index.scss'
 import {
   DnDContext, DnDItems, DnDOptions
 } from 'mo-vue-dnd'
-import 'mo-vue-dnd/index.scss'
+// import 'mo-vue-dnd/index.scss'
 // import 'mo-vue-dnd/mo-vue-dnd.css'
 
 import {
@@ -43,6 +43,9 @@ new Vue({
     },
     getObjId(obj) {
       return obj.id
+    },
+    checkRightPerms(sourceContext, targetContext) {
+      return true
     }
   },
   render(h) {
@@ -68,6 +71,7 @@ new Vue({
               options={rightOptions}
               onUpdate={this.updateRight}
               keyFn={this.getObjId}
+              permsFn={this.checkRightPerms}
               scopedSlots={slots}/>
           </div>
         </div>

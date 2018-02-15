@@ -1,5 +1,5 @@
 import {DnDOptions} from 'mo-vue-dnd'
-import './left.scss'
+// import './left.scss'
 import {
   LeafNode, IntermediateNode
 } from '../right/right'

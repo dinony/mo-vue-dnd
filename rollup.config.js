@@ -3,17 +3,16 @@ import uglify from 'rollup-plugin-uglify'
 import filesize from 'rollup-plugin-filesize'
 import buble from 'rollup-plugin-buble'
 
-const configs = {
-  plugins: [
-    babel({
-      exclude: 'node_modules/**'
-    }),
-    buble(),
-    uglify(),
-    filesize()
-  ],
-  external: ['vue']
-}
+const isProd = () => process.env.NODE_ENV === 'production'
+
+const prodPlugins = isProd() ? [uglify(), filesize()]: []
+
+const stdPlugins = [
+  babel({exclude: 'node_modules/**'}),
+  buble()
+]
+
+const plugins = stdPlugins.concat(prodPlugins)
 
 export default [{
   input: 'src/index.js',
@@ -36,5 +35,6 @@ export default [{
     format: 'es',
     sourcemap: true
   }],
-  ...configs
+  plugins,
+  external: ['vue']
 }]

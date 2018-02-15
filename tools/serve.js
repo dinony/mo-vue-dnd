@@ -7,8 +7,8 @@ browserSync({
   reloadDelay: 200,
   reloadDebounce: 500,
   files: [
-    'exmaples/**/*.js', 'exmaples/**/*.css', 'exmaples/**/*.html',
-    'src/**/*.js', 'dist/mo-vue-dnd.css'
+    'examples/nested/dist/bundle.js', 'examples/nested/dist/index.css', 'examples/nested/index.html',
+    'dist/mo-vue-dnd.css'
   ],
   watchOptions: {ignored: 'node_modules'},
   server: {baseDir: './', directory: true}

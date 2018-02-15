@@ -1,8 +1,8 @@
 import babel from 'rollup-plugin-babel'
-import uglify from 'rollup-plugin-uglify'
-import filesize from 'rollup-plugin-filesize'
 import resolve from 'rollup-plugin-node-resolve'
 import alias from 'rollup-plugin-alias'
+// import uglify from 'rollup-plugin-uglify'
+// import filesize from 'rollup-plugin-filesize'
 
 export default [{
   input: 'examples/nested/src/index.js',
@@ -10,6 +10,9 @@ export default [{
     file: 'examples/nested/dist/bundle.js',
     format: 'umd',
     name: 'dnd-nested',
+    globals: {
+      vue: 'Vue'
+    },
     sourcemap: true
   }],
   plugins: [
@@ -22,6 +25,7 @@ export default [{
       'mo-vue-dnd': 'src/index.js'
     }),
     // uglify(),
-    filesize()
-  ]
+    // filesize()
+  ],
+  external: ['vue', 'global']
 }]

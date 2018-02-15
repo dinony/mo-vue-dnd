@@ -1,10 +1,20 @@
 var path = require('path')
 var webpack = require('webpack')
 
+const babelPlugins = [
+  require('babel-plugin-transform-vue-jsx'),
+  require('babel-plugin-transform-es2015-block-scoping'),
+  require('babel-plugin-transform-es2015-classes'),
+  require('babel-plugin-transform-es2015-arrow-functions'),
+  require('babel-plugin-transform-es2015-shorthand-properties'),
+  require('babel-plugin-transform-es2015-parameters'),
+  require('babel-plugin-transform-es2015-template-literals')
+]
+
 module.exports = {
   context: path.resolve(__dirname),
   entry: [
-    'babel-polyfill',
+    // 'babel-polyfill',
     './src/index.js'
   ],
   output: {
@@ -39,8 +49,13 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            plugins: babelPlugins
+          }
+        }
       },
       {
         test: /\.(png|jpg|gif|svg)$/,

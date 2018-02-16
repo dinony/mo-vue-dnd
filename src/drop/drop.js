@@ -1,6 +1,6 @@
 import DropResult from './DropResult'
 import DropContext from './DropContext'
-import ItemContext from '../items/ItemContext'
+import ItemCtx from '../items/ItemContext'
 
 export default function drop(itemIntersection) {
   const itemInt = itemIntersection
@@ -49,7 +49,7 @@ export default function drop(itemIntersection) {
 
     // const sd = td (source = target)
     const td = new DropContext(trgResult, sc.updateFn, needsUpdate)
-    const tItemContext = new ItemContext(tc.grp, trgResult, tItemIndex, tc.options, tc.updateFn)
+    const tItemContext = new ItemCtx(tc.elem, tc.grp, trgResult, tItemIndex, tc.options, tc.updateFn)
     return new DropResult(td, td, tItemContext, true)
   } else {
     // source!==target
@@ -73,7 +73,7 @@ export default function drop(itemIntersection) {
 
     const sd = new DropContext(srcResult, sc.updateFn, sc.options.allowItemRemoval)
     const td = new DropContext(trgResult, tc.updateFn, true)
-    const tItemContext = new ItemContext(tc.grp, trgResult, tItemIndex, tc.options, tc.updateFn)
+    const tItemContext = new ItemCtx(tc.elem, tc.grp, trgResult, tItemIndex, tc.options, tc.updateFn)
     return new DropResult(sd, td, tItemContext, false)
   }
 }

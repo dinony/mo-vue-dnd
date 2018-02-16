@@ -108,7 +108,7 @@ export default {
     },
     onItemTraced(traceRes) {
       if(this.$refs.selfRef !== traceRes.tContainer) {return}
-      const itemCtx = new ItemCtx(this.group, this.items, traceRes.iIdx, this.options, this.emitUpdate)
+      const itemCtx = new ItemCtx(this.$refs.selfRef, this.group, this.items, traceRes.iIdx, this.options, this.emitUpdate)
       if(this.movesFn(itemCtx)) {
         bus.$emit(DND_ITEM_SELECT, itemCtx)
       }
@@ -144,11 +144,11 @@ export default {
         // Same context
         const trgIndex = traceResult.iIdx >= 0 ? traceResult.iIdx: Math.max(pTarget.cnt.length-1, 0)
         sc = pTarget
-        tc = new ItemCtx(this.group, pTarget.cnt, trgIndex, this.options, this.emitUpdate)
+        tc = new ItemCtx(this.$refs.selfRef, this.group, pTarget.cnt, trgIndex, this.options, this.emitUpdate)
       } else {
         const trgIndex = traceResult.iIdx >= 0 ? traceResult.iIdx: Math.max(this.items.length-1, 0)
         sc = this.selIt
-        tc = new ItemCtx(this.group, this.items, trgIndex, this.options, this.emitUpdate)
+        tc = new ItemCtx(this.$refs.selfRef, this.group, this.items, trgIndex, this.options, this.emitUpdate)
       }
 
       if(tc.allowsDrop(sc) && this.permsFn(sc, tc)) {

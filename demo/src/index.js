@@ -44,6 +44,9 @@ new Vue({
     getObjId(obj) {
       return obj.id
     },
+    checkMovesLeft(itemContext) {
+      return itemContext.idx % 2 === 0
+    },
     checkRightPerms(sourceContext, targetContext) {
       return targetContext.cnt.length < 5
     }
@@ -62,7 +65,8 @@ new Vue({
               options={leftOptions}
               onUpdate={this.updateLeft}
               keyFn={this.getObjId}
-              scopedSlots={slots}/>
+              scopedSlots={slots}
+              movesFn={this.checkMovesLeft}/>
           </div>
           <div class="right">
             <DnDItems

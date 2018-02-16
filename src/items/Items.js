@@ -45,6 +45,11 @@ export default {
       type: Function,
       required: false
     },
+    movesFn: {
+      type: Function,
+      required: false,
+      default: () => true
+    },
     permsFn: {
       type: Function,
       required: false,
@@ -103,7 +108,10 @@ export default {
     },
     onItemTraced(traceRes) {
       if(this.$refs.selfRef !== traceRes.tContainer) {return}
-      bus.$emit(DND_ITEM_SELECT, new ItemCtx(this.group, this.items, traceRes.iIdx, this.options, this.emitUpdate))
+      const itemCtx = new ItemCtx(this.group, this.items, traceRes.iIdx, this.options, this.emitUpdate)
+      if(this.movesFn(itemCtx)) {
+        bus.$emit(DND_ITEM_SELECT, itemCtx)
+      }
     },
     onItemSelected(itemCtx) {
       this.selIt = itemCtx

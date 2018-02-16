@@ -4,11 +4,11 @@ import {getPermissions} from './Permissions'
 export default class Options {
   constructor(
     allowItemRemoval=true,
-    wrapDnDHandle=true,
+    wrapMdArea=true,
     permissions=[null, null],
     cloneItemFn=defCloneFn) {
     this.allowItemRemoval = allowItemRemoval
-    this.wrapDnDHandle = wrapDnDHandle
+    this.wrapMdArea = wrapMdArea
     this.cloneItemFn = cloneItemFn
     this.permissions = permissions
   }

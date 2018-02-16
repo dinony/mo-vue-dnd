@@ -229,7 +229,7 @@ export default {
         {this.renderedItems.length > 0 ? items: empty}
       </div>)
 
-    return this.renderedItems.length > 0 && this.options.wrapDnDHandle ?
+    return this.renderedItems.length > 0 && this.options.wrapMdArea ?
       <DnDMdArea>{content}</DnDMdArea>: content
   }
 }

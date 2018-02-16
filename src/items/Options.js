@@ -10,7 +10,7 @@ export default class Options {
     this.allowItemRemoval = allowItemRemoval
     this.wrapMdArea = wrapMdArea
     this.cloneItemFn = cloneItemFn
-    this.permissions = permissions
+    this.perms = permissions
   }
 
   set permissions(perms) {

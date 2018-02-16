@@ -1,3 +1,5 @@
+import {doc} from './dom'
+
 export class InvalidTouchEventNameException extends Error {
   constructor(message) {
     super(message)
@@ -37,7 +39,7 @@ const microsoft = {
 }
 
 // Note: http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
-export const SUPPORTS_TOUCH = 'ontouchstart' in document.documentElement
+export const SUPPORTS_TOUCH = 'ontouchstart' in doc.documentElement
 const nav = window.navigator
 // Reference:
 // https://github.com/bevacqua/dragula/blob/master/dragula.js#L495

@@ -140,23 +140,29 @@ export default {
       const pTarget = pDR ? pDR.trgCtx: null
       let sc = null
       let tc = null
+
+      let trgIndex = traceResult.iIdx
+      if(this.selIt.elem !== traceResult.tContainer && traceResult.iIdx === null) {
+        trgIndex = pDR ? Math.max(pTarget.cnt.length-1, 0): Math.max(this.items.length-1, 0)
+      }
+
       if(pDR) {
         // Same context
-        const trgIndex = traceResult.iIdx >= 0 ? traceResult.iIdx: Math.max(pTarget.cnt.length-1, 0)
         sc = pTarget
         tc = new ItemCtx(this.$refs.selfRef, this.group, pTarget.cnt, trgIndex, this.options, this.emitUpdate)
       } else {
-        const trgIndex = traceResult.iIdx >= 0 ? traceResult.iIdx: Math.max(this.items.length-1, 0)
         sc = this.selIt
         tc = new ItemCtx(this.$refs.selfRef, this.group, this.items, trgIndex, this.options, this.emitUpdate)
       }
 
       if(tc.allowsDrop(sc) && this.permsFn(sc, tc)) {
         // Permissions ok
-        const eventCoords = getEventCoords(traceResult.ev)
-        const itemRect = traceResult.tItem.getBoundingClientRect()
-
-        const shouldInsertBefore = eventCoords.clientY < itemRect.top+itemRect.height/2
+        let shouldInsertBefore = false
+        if(traceResult.tItem) {
+          const eventCoords = getEventCoords(traceResult.ev)
+          const itemRect = traceResult.tItem.getBoundingClientRect()
+          shouldInsertBefore = eventCoords.clientY < itemRect.top+itemRect.height/2
+        }
 
         // Previous intersection and current intersection
         const pInt = this.itInt

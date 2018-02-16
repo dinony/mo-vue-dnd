@@ -1,6 +1,7 @@
 // ItemContext
 export default class ItemCtx {
-  constructor(group, container, index, options, updateFn) {
+  constructor(elem, group, container, index, options, updateFn) {
+    this.elem = elem
     this.grp = group
     this.cnt = container
     this.idx = index
@@ -23,8 +24,7 @@ export default class ItemCtx {
   }
 
   equals(other) {
-    return this.grp === other.grp &&
-      this.cnt === other.cnt &&
+    return this.elem === other.elem &&
       this.idx === other.idx
   }
 }

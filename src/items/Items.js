@@ -1,6 +1,6 @@
 import bus from '../bus'
 
-import DnDItem from '../item/item' // eslint-disable-line no-unused-vars
+import DnDItem from '../item/Item' // eslint-disable-line no-unused-vars
 import DnDMdArea from '../mdarea/MdArea' // eslint-disable-line no-unused-vars
 
 import {

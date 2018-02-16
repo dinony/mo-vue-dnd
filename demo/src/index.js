@@ -44,8 +44,8 @@ new Vue({
     getObjId(obj) {
       return obj.id
     },
-    checkRightPerms() {
-      return true
+    checkRightPerms(sourceContext, targetContext) {
+      return targetContext.cnt.length < 5
     }
   },
   render(h) {

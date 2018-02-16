@@ -15,5 +15,5 @@ const scssFn = (inPath, outPath, outFile) => () => {
 
 gulp.task('scss:lib', scssFn('src/index.scss', 'dist/', 'mo-vue-dnd.css'))
 
-gulp.task('scss:libdemo', scssFn('src/index.scss', 'examples/nested/dist', 'mo-vue-dnd.css'))
-gulp.task('scss:nested', scssFn('examples/nested/src/index.scss', 'examples/nested/dist', 'index.css'))
+gulp.task('scss:libdemo', scssFn('src/index.scss', 'demo/dist', 'mo-vue-dnd.css'))
+gulp.task('scss:demo', scssFn('demo/src/index.scss', 'demo/dist', 'index.css'))

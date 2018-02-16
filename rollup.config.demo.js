@@ -22,9 +22,9 @@ const stdPlugins = [
 const plugins = stdPlugins.concat(prodPlugins)
 
 export default [{
-  input: 'examples/nested/src/index.js',
+  input: 'demo/src/index.js',
   output:[{
-    file: 'examples/nested/dist/bundle.js',
+    file: 'demo/dist/bundle.js',
     format: 'umd',
     name: 'dnd-nested',
     globals: {

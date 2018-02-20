@@ -1,6 +1,5 @@
 export default {
-  functional: true,
-  render(h, context) {
-    return <div class="dnd-mdarea">{context.slots().default}</div>
+  render(h) {
+    return <div class="dnd-mdarea">{this.$slots.default}</div>
   }
 }

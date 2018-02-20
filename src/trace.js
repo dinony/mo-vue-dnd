@@ -2,6 +2,8 @@ import {getEventCoords} from './event'
 
 import {findAncestorByClassName, indexOf, doc} from './dom'
 
+import {binarySearch} from './search'
+
 // EmptyTraceResult
 export class EmptyTraceResult {}
 
@@ -17,6 +19,9 @@ export class TraceResult {
     this.iIdx = iIndex
   }
 }
+
+const getBB = elem => elem.getBoundingClientRect()
+const getCenter = rect => rect.top+rect.height/2
 
 /**
  * For given event: Pointer/Touch/MouseEvent
@@ -42,9 +47,30 @@ export default function traceEvent(event, validAreaCls, tCls='dnd-cont', iCls='d
     return new EmptyTraceResult()
   } else {
     const tItem = findAncestorByClassName(elemAtPoint, iCls)
-
-    return tItem ?
-      new TraceResult(event, tContainer, tItem, indexOf(tItem, tContainer)):
-      new TraceResult(event, tContainer, null, null)
+    if(tItem) {
+      return new TraceResult(event, tContainer, tItem, indexOf(tItem, tContainer))
+    } else {
+      const getterFn = (arr, i) => {
+        if(i < arr.length-1) {
+          const cRect = getBB(arr[i])
+          const nRect = getBB(arr[i+1])
+          const cM = getCenter(cRect)
+          const cL = cM+(getCenter(nRect)-cM/2)
+          console.log(cL)
+          return cL
+        } else {
+          const rect = getBB(tContainer)
+          return rect.bottom
+        }
+      }
+      console.log(coords.clientX)
+      // Search in viewport coordinates
+      const idx = binarySearch(tContainer.children, getterFn, coords.clientX)
+      let searchItem = null
+      if(idx >= 0 && idx < tContainer.children.length){
+        searchItem = tContainer.children[idx]
+      }
+      return new TraceResult(event, tContainer, searchItem, idx)
+    }
   }
 }

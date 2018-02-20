@@ -27,7 +27,7 @@ new Vue({
         new LeafItem('L2'),
       ],
       right: [
-        new LeafNode('R2')
+        // new LeafNode('R2')
       ]
     }
   },

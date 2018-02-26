@@ -31,9 +31,7 @@ new Vue({
   render() {
     const renderDnDItem = props => (
       <div class="dndItem">
-        <DnDMdArea>
-          <div class="dndItemHandle"></div>
-        </DnDMdArea>
+        <DnDMdArea class="dndItemHandle"/>
         <div class="dndItemContent">Item: {props.item}</div>
       </div>)
     const slots = {default: renderDnDItem}

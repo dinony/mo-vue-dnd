@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.4.4 (2018-02-26)
+
+* Use classList instead of className due to different className handling on svg elements
+
 # 0.4.3 (2018-02-20)
 
 * Remove functional flag in MdArea
